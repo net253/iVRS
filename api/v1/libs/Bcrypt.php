@@ -114,3 +114,8 @@ class Bcrypt
           return $output;
      }
 }
+
+// $bcrypt = new Bcrypt(15);
+
+// $hash = $bcrypt->hash('password');
+// $isGood = $bcrypt->verify('password', $hash);
