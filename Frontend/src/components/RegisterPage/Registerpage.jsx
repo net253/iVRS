@@ -19,15 +19,95 @@ import {
 import { FaUser, FaLock } from "react-icons/fa";
 import { MdArrowForwardIos } from "react-icons/md";
 import Swal from "sweetalert2";
-import fakedata from "../../data/businessrole.json";
 import { useNavigate } from "react-router-dom";
 
 const Registerpage = () => {
   const navigate = useNavigate();
   const handleVendor = () => {
     navigate("/vendorlogin");
+    console.log("test");
   };
 
+  const [formInput, setFormInput] = useState({
+    firstname: "",
+    lastname: "",
+    email: "",
+    bsnrole: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const [formError, setFormError] = useState({
+    firstname: "",
+    lastname: "",
+    email: "",
+    bsnrole: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const validateFormInput = (event) => {
+    event.preventDefault();
+    let inputError = {
+      firstname: "",
+      lastname: "",
+      email: "",
+      bsnrole: "",
+      password: "",
+      confirmPassword: "",
+    };
+
+    if (
+      !formInput.email &&
+      !formInput.password &&
+      !formError.firstname &&
+      !formError.lastname
+    ) {
+      setFormError({
+        ...inputError,
+        email: "Enter valid email address",
+        password: "Password should not be empty",
+        firstname: "กรุณาใส่ชื่อ",
+      });
+      return;
+    }
+
+    if (!formInput.email) {
+      setFormError({
+        ...inputError,
+        email: "Enter valid email address",
+      });
+      return;
+    }
+
+    if (formInput.confirmPassword !== formInput.password) {
+      setFormError({
+        ...inputError,
+        confirmPassword: "Password and confirm password should be same",
+      });
+      return;
+    }
+
+    if (!formInput.password) {
+      setFormError({
+        ...inputError,
+        password: "Password should not be empty",
+      });
+      return;
+    }
+
+    setFormError(inputError);
+  };
+  console.log(formInput);
+
+  const Services = [
+    "สินค้าและบริการ",
+    "สินค้าทั่วไป",
+    "สินค้าทั่วไป",
+    "สินค้าทั่วไป",
+    "สินค้าทั่วไป",
+    "สินค้าทั่วไป",
+  ];
   return (
     <>
       <Box bg="#f2f2f2" w="100vw" h="100vh">
@@ -59,12 +139,17 @@ const Registerpage = () => {
                   children={<Icon as={FaUser} />}
                 />
                 <Input
-                  id="username"
+                  id="firstname"
                   type="text"
                   variant="flushed"
                   placeholder="First Name"
+                  value={formInput.firstname}
+                  onChange={({ target: { value: firstname } }) =>
+                    setFormInput({ ...formInput, firstname })
+                  }
                 />
               </InputGroup>
+              <p className="error-message">{formError.firstname}</p>
 
               {/* Password */}
               <FormLabel htmlFor="last-name" mt={4} fontSize="xl">
@@ -80,10 +165,15 @@ const Registerpage = () => {
                   type="text"
                   variant="flushed"
                   placeholder="Last Name"
+                  value={formInput.lastname}
+                  onChange={({ target: { value: lastname } }) =>
+                    setFormInput({ ...formInput, lastname })
+                  }
                 />
               </InputGroup>
+              <p className="error-message">{formError.email}</p>
 
-              <FormLabel htmlFor="last-name" mt={4} fontSize="xl">
+              <FormLabel htmlFor="email" mt={4} fontSize="xl">
                 Email
               </FormLabel>
               <InputGroup>
@@ -96,21 +186,32 @@ const Registerpage = () => {
                   type="text"
                   variant="flushed"
                   placeholder="E-mail"
+                  value={formInput.email}
+                  onChange={({ target: { value: email } }) =>
+                    setFormInput({ ...formInput, email })
+                  }
                 />
               </InputGroup>
+              <p className="error-message">{formError.email}</p>
 
-              <FormLabel htmlFor="password" mt={4} fontSize="xl">
+              <FormLabel htmlFor="business-role" mt={4} fontSize="xl">
                 Business Role
               </FormLabel>
-              <Select>
+              <Select
+                onChange={({ target: { value: bsnrole } }) =>
+                  setFormInput({ ...formInput, bsnrole })
+                }
+              >
                 <option value="">-- Please select Business Role --</option>
-                {fakedata.map((sap, index) => (
-                  <option value={sap.role}>{sap.role}</option>
+                {Services.map((info, i) => (
+                  <option value={info} key={i}>
+                    {info}
+                  </option>
                 ))}
               </Select>
               <HStack w="100%">
                 <Box w="100%">
-                  <FormLabel htmlFor="last-name" mt={4} fontSize="xl">
+                  <FormLabel htmlFor="password" mt={4} fontSize="xl">
                     Password
                   </FormLabel>
                   <InputGroup>
@@ -120,15 +221,20 @@ const Registerpage = () => {
                     />
                     <Input
                       id="password"
-                      type="text"
+                      type="password"
                       variant="flushed"
-                      placeholder="E-mail"
+                      placeholder="password"
+                      value={formInput.password}
+                      onChange={({ target: { value: password } }) =>
+                        setFormInput({ ...formInput, password })
+                      }
                     />
                   </InputGroup>
+                  <p className="error-message">{formError.password}</p>
                 </Box>
                 <Box w="100%">
-                  <FormLabel htmlFor="last-name" mt={4} fontSize="xl">
-                    Repleat Password
+                  <FormLabel htmlFor="rpassword" mt={4} fontSize="xl">
+                    Confirm Password
                   </FormLabel>
                   <InputGroup>
                     <InputLeftElement
@@ -136,12 +242,19 @@ const Registerpage = () => {
                       children={<Icon as={FaUser} />}
                     />
                     <Input
-                      id="email"
+                      id="password2"
                       type="password"
                       variant="flushed"
-                      placeholder="E-mail"
+                      placeholder="password"
+                      value={formInput.confirmPassword}
+                      onChange={({ target: { value: confirmPassword } }) =>
+                        setFormInput({ ...formInput, confirmPassword })
+                      }
                     />
                   </InputGroup>
+                  <Text className="error-message">
+                    {formError.confirmPassword}
+                  </Text>
                 </Box>
               </HStack>
 
@@ -173,7 +286,7 @@ const Registerpage = () => {
                     w="50%"
                     rounded="xl"
                     size="lg"
-                    onClick={() => handleLogin()}
+                    onClick={validateFormInput}
                   >
                     <span className="font-thai">สมัครสมาชิก </span> / Register
                   </Button>

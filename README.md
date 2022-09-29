@@ -10,7 +10,7 @@
   <li>PHP</li>
 </ul>
 
-### Fron-end
+### Front-end
 <ul type="square">
   <li>React.js</li>
 </ul>

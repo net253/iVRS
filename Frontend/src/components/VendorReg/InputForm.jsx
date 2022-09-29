@@ -95,7 +95,7 @@ export default function InputForm({ setReistor, registor }) {
     // console.log(registor, value);
     Swal.fire({
       title: `<p class="font-thai">กำลังค้นหาข้อมูล </p><span>(Searching information)</span>`,
-      html: `<p class="font-thai">กรุณารอสักครู่ ใช้เวลาไม่เกิน 5 นาที <br /> <span>(Please wait until processing completed)</span> </p>`,
+      html: `<p class="font-thai">กรุณารอสักครู่ ใช้เวลาไม่เกิน 1-2 นาที <br /> <span>(Please wait until processing completed)</span> </p>`,
       allowEscapeKey: false,
       allowOutsideClick: false,
       didOpen: () => {
