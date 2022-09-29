@@ -1,7 +1,8 @@
 # iVRS
-DataBase <br> <t>-SQL<br>
+DataBase <br> 
+-SQL<br>
 BackEnd<br>
-  -PHP<br>
+-PHP<br>
 FronEnd<br>
-  -JavaScript<br>
-  -react<br>
+-JavaScript<br>
+-react<br>
