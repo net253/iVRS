@@ -13,12 +13,21 @@ import {
   Button,
   Flex,
   Center,
+  Select,
 } from "@chakra-ui/react";
 import { FaUser, FaLock } from "react-icons/fa";
 import { MdArrowForwardIos } from "react-icons/md";
 import Swal from "sweetalert2";
+import fakedata from "../data/businessrole.json";
+import { useNavigate } from "react-router-dom";
 
 const VendorLogin = () => {
+  const navigate = useNavigate();
+  const handleVendor = () => {
+    navigate("/vendorRegister");
+    console.log("vendorRegister called");
+  };
+
   const handleForgot = () => {
     Swal.fire({
       title: "E-mail address",
@@ -123,6 +132,16 @@ const VendorLogin = () => {
                 />
               </InputGroup>
 
+              {/* <FormLabel htmlFor="password" mt={4} fontSize="xl">
+                Business Role
+              </FormLabel>
+              <Select>
+                <option value="">-- Please select Order ID --</option>
+                {fakedata.map((sap, index) => (
+                  <option value={sap.role}>{sap.role}</option>
+                ))}
+              </Select> */}
+
               {/* Button */}
               <Box
                 mt={10}
@@ -135,7 +154,7 @@ const VendorLogin = () => {
                   rounded="md"
                   size="sm"
                   color="blue.400"
-                  onClick={() => handleForgot()}
+                  onClick={() => handleVendor()}
                 >
                   สมัครสมาชิก <br />
                   Register
