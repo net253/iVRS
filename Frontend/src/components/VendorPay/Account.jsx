@@ -52,23 +52,12 @@ const bankList = [
   "อื่นๆ / Others",
 ];
 
-export default function Account() {
+export default function Account({ bankAccount, setBankAccount }) {
+  console.log(bankAccount);
   const dispatch = useDispatch();
   const payment = useSelector((state) => state.payment);
   const vendor = useSelector((state) => state.vendor);
   const navigate = useNavigate();
-  const [bankAccount, setBankAccount] = useState({
-    accountName: "",
-    accountNo: "",
-    bank: "",
-    otherBank: "",
-    branch: "",
-    contact: "",
-    tel: "",
-    VTel: "",
-    email: "",
-    VEmail: "",
-  });
 
   const handleCancel = () => {
     Swal.fire({
@@ -88,136 +77,6 @@ export default function Account() {
         }).then(() => navigate("/"));
       }
     });
-  };
-
-  const insertPDF = async (formVendor) => {
-    const { pdf, number } = formVendor;
-    let result = [];
-    console.log("Upload PDF.");
-
-    await pdf.slice(0, 6).map((info) => {
-      axios.post(pdfPath, { ...info, number: number }).then(({ data }) => {
-        if (data.state) {
-          result.push(true);
-          console.log("insert: ", info.name);
-        } else {
-          result.push(false);
-          console.log("Not insert: ", info.name);
-        }
-      });
-    });
-
-    Swal.close();
-    if (result.every((v) => v == true)) {
-      Swal.fire({
-        icon: "success",
-        title: `<p class="font-thai">บันทึกสำเร็จ / <span>Completed</span></p>`,
-        html: `<p class="font-thai">ท่านสามารถติดตามผลการดำเนินการได้ทางอีเมลที่ได้ระบุไว้ <br />
-              <span>You can follow up on the progress via the email.</span></p>`,
-      }).then(() => {
-        dispatch(updateShowPayment(false));
-        navigate("/vendor");
-      });
-    } else {
-      Swal.fire({
-        icon: "error",
-        title: data.message,
-        showConfirmButton: false,
-        timer: 5000,
-      });
-    }
-  };
-
-  const handleConfirm = (formVendor) => {
-    Swal.fire({
-      icon: "warning",
-      title: `<p class="font-thai">ยืนยันการบันทึกข้อมูล?  <br /> <span>Confirm to save data?</span></p>`,
-      showCancelButton: true,
-      confirmButtonText: `<p class="font-thai">ใช่ / <span>Yes</span></p>`,
-      cancelButtonText: `<p class="font-thai">ไม่ใช่ / <span>No</span></p>`,
-      confirmButtonColor: "green",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        console.log("Upload Information.");
-        Swal.fire({
-          title: `<p class="font-thai">กำลังบันทึกข้อมูล </p><span>(Saving information)</span>`,
-          html: `<p class="font-thai">กรุณารอสักครู่ ใช้เวลาไม่เกิน 2 นาที <br /> <span>(Please wait until processing completed)</span> </p>`,
-          allowEscapeKey: false,
-          allowOutsideClick: false,
-          didOpen: () => {
-            Swal.showLoading();
-          },
-        });
-        axios.post(regisPath, { ...formVendor }).then(({ data }) => {
-          if (data.state) {
-            insertPDF({ ...formVendor, number: data.number });
-          } else {
-            Swal.fire({
-              icon: "error",
-              title: data.message,
-              showConfirmButton: false,
-              timer: 5000,
-            });
-          }
-        });
-      }
-    });
-  };
-
-  const handleState = () => {
-    const {
-      accountName,
-      accountNo,
-      bank,
-      branch,
-      contact,
-      tel,
-      email,
-      VTel,
-      VEmail,
-      otherBank,
-    } = bankAccount;
-
-    if (
-      accountName == "" ||
-      accountNo == "" ||
-      bank == "" ||
-      branch == "" ||
-      contact == "" ||
-      tel == "" ||
-      email == ""
-    ) {
-      handleError(`<b class="font-thai">กรุณากรอกข้อมูลบัญชีธนาคารให้ครบถ้วน <br />
-        <span>Please complete the bank account information.</span></b>`);
-    } else if (bank == "อื่นๆ / Others" && otherBank == "") {
-      handleError(
-        `<b class="font-thai">กรุณาใส่ชื่อธนาคาร <br /><span>Please enter bank name.</span></b>`
-      );
-    } else if (VTel != tel || VEmail != email) {
-      handleError(
-        `<b class="font-thai">กรุณายืนยันเบอร์ติดต่อและอีเมลให้ถูกต้อง <br /><span>Please make sure your contact number and email address are correct.</span></b>`
-      );
-    } else {
-      const formVendor = {
-        ...vendor,
-        bankAccount: [
-          {
-            accountName: accountName,
-            accountNo: accountNo,
-            bank: bank,
-            otherBank: otherBank,
-            branch: branch,
-            contact: contact,
-            tel: tel,
-            email: email,
-          },
-        ],
-        level: "0",
-        status: "pending",
-      };
-
-      handleConfirm(formVendor);
-    }
   };
 
   const handleError = (text) => {

@@ -30,97 +30,29 @@ const Uploadfile = (props) => {
   const payment = useSelector((state) => state.payment);
   const vendor = useSelector((state) => state.vendor);
   const { bankAccount } = props;
+  console.log(bankAccount);
   const handleState = () => {
-    const {
-      accountName,
-      accountNo,
-      bank,
-      branch,
-      contact,
-      tel,
-      email,
-      VTel,
-      VEmail,
-      otherBank,
-    } = bankAccount;
-
-    if (
-      accountName == "" ||
-      accountNo == "" ||
-      bank == "" ||
-      branch == "" ||
-      contact == "" ||
-      tel == "" ||
-      email == ""
+    if (bankAccount == "") {
+      handleError(`<b class="font-thai">กรุณาเลือกบริษัทที่ต้องการขึ้นทะเบียน <br />
+        <span>Please select the company you want to register.</span></b>`);
+    } else if (
+      bankAccount.accountName == "" ||
+      bankAccount.accountNo == "" ||
+      bankAccount.bank == "" ||
+      bankAccount.otherBank == "" ||
+      bankAccount.branch == "" ||
+      bankAccount.contract == "" ||
+      bankAccount.tel == "" ||
+      bankAccount.VTel == "" ||
+      bankAccount.email == "" ||
+      bankAccount.Vemail == ""
     ) {
-      handleError(`<b class="font-thai">กรุณากรอกข้อมูลบัญชีธนาคารให้ครบถ้วน <br />
-        <span>Please complete the bank account information.</span></b>`);
-    } else if (bank == "อื่นๆ / Others" && otherBank == "") {
-      handleError(
-        `<b class="font-thai">กรุณาใส่ชื่อธนาคาร <br /><span>Please enter bank name.</span></b>`
-      );
-    } else if (VTel != tel || VEmail != email) {
-      handleError(
-        `<b class="font-thai">กรุณายืนยันเบอร์ติดต่อและอีเมลให้ถูกต้อง <br /><span>Please make sure your contact number and email address are correct.</span></b>`
-      );
-    } else {
-      const formVendor = {
-        ...vendor,
-        bankAccount: [
-          {
-            accountName: accountName,
-            accountNo: accountNo,
-            bank: bank,
-            otherBank: otherBank,
-            branch: branch,
-            contact: contact,
-            tel: tel,
-            email: email,
-          },
-        ],
-        level: "0",
-        status: "pending",
-      };
-
-      handleConfirm(formVendor);
+      console.log("no");
+      handleError(`<b class="font-thai">กรุณากรอกรายละเอียดบริษัทให้ครบถ้วน <br />
+        <span>Please complete the company details.</span></b>`);
     }
   };
 
-  const handleConfirm = (formVendor) => {
-    Swal.fire({
-      icon: "warning",
-      title: `<p class="font-thai">ยืนยันการบันทึกข้อมูล?  <br /> <span>Confirm to save data?</span></p>`,
-      showCancelButton: true,
-      confirmButtonText: `<p class="font-thai">ใช่ / <span>Yes</span></p>`,
-      cancelButtonText: `<p class="font-thai">ไม่ใช่ / <span>No</span></p>`,
-      confirmButtonColor: "green",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        console.log("Upload Information.");
-        Swal.fire({
-          title: `<p class="font-thai">กำลังบันทึกข้อมูล </p><span>(Saving information)</span>`,
-          html: `<p class="font-thai">กรุณารอสักครู่ ใช้เวลาไม่เกิน 2 นาที <br /> <span>(Please wait until processing completed)</span> </p>`,
-          allowEscapeKey: false,
-          allowOutsideClick: false,
-          didOpen: () => {
-            Swal.showLoading();
-          },
-        });
-        axios.post(regisPath, { ...formVendor }).then(({ data }) => {
-          if (data.state) {
-            insertPDF({ ...formVendor, number: data.number });
-          } else {
-            Swal.fire({
-              icon: "error",
-              title: data.message,
-              showConfirmButton: false,
-              timer: 5000,
-            });
-          }
-        });
-      }
-    });
-  };
   const handleCancel = () => {
     Swal.fire({
       icon: "error",
@@ -138,6 +70,15 @@ const Uploadfile = (props) => {
           timer: 2000,
         }).then(() => navigate("/"));
       }
+    });
+  };
+
+  const handleError = (text) => {
+    Swal.fire({
+      icon: "warning",
+      html: text,
+      timer: 4000,
+      showConfirmButton: false,
     });
   };
 

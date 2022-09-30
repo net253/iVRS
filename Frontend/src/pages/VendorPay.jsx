@@ -23,7 +23,7 @@ export default function VendorPay() {
       </Text>
       <HeaderPay />
       <Account bankAccount={bankAccount} setBankAccount={setBankAccount} />
-      <Uploadvendor />
+      <Uploadvendor bankAccount={bankAccount} />
     </>
   );
 }
