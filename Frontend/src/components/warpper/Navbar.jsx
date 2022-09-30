@@ -65,7 +65,7 @@ export default function Navbar({ page: Page }) {
         <Image
           src={logo}
           w={{ md: "5vw", base: "8vw", lg: "4vw" }}
-          fallbackSrc="./assets/logo.63ae820a.png"
+          // fallbackSrc="./assets/logo.63ae820a.png"
         />
 
         <Spacer />

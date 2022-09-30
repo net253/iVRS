@@ -14,6 +14,8 @@ import {
   Link,
 } from "@chakra-ui/react";
 import { TiTimes, TiMediaPlay } from "react-icons/ti";
+import { useSelector, useDispatch } from "react-redux";
+import Swal from "sweetalert2";
 
 const textOption = [
   {
@@ -23,7 +25,122 @@ const textOption = [
   },
 ];
 
-const Uploadfile = () => {
+const Uploadfile = (props) => {
+  const dispatch = useDispatch();
+  const payment = useSelector((state) => state.payment);
+  const vendor = useSelector((state) => state.vendor);
+  const { bankAccount } = props;
+  const handleState = () => {
+    const {
+      accountName,
+      accountNo,
+      bank,
+      branch,
+      contact,
+      tel,
+      email,
+      VTel,
+      VEmail,
+      otherBank,
+    } = bankAccount;
+
+    if (
+      accountName == "" ||
+      accountNo == "" ||
+      bank == "" ||
+      branch == "" ||
+      contact == "" ||
+      tel == "" ||
+      email == ""
+    ) {
+      handleError(`<b class="font-thai">กรุณากรอกข้อมูลบัญชีธนาคารให้ครบถ้วน <br />
+        <span>Please complete the bank account information.</span></b>`);
+    } else if (bank == "อื่นๆ / Others" && otherBank == "") {
+      handleError(
+        `<b class="font-thai">กรุณาใส่ชื่อธนาคาร <br /><span>Please enter bank name.</span></b>`
+      );
+    } else if (VTel != tel || VEmail != email) {
+      handleError(
+        `<b class="font-thai">กรุณายืนยันเบอร์ติดต่อและอีเมลให้ถูกต้อง <br /><span>Please make sure your contact number and email address are correct.</span></b>`
+      );
+    } else {
+      const formVendor = {
+        ...vendor,
+        bankAccount: [
+          {
+            accountName: accountName,
+            accountNo: accountNo,
+            bank: bank,
+            otherBank: otherBank,
+            branch: branch,
+            contact: contact,
+            tel: tel,
+            email: email,
+          },
+        ],
+        level: "0",
+        status: "pending",
+      };
+
+      handleConfirm(formVendor);
+    }
+  };
+
+  const handleConfirm = (formVendor) => {
+    Swal.fire({
+      icon: "warning",
+      title: `<p class="font-thai">ยืนยันการบันทึกข้อมูล?  <br /> <span>Confirm to save data?</span></p>`,
+      showCancelButton: true,
+      confirmButtonText: `<p class="font-thai">ใช่ / <span>Yes</span></p>`,
+      cancelButtonText: `<p class="font-thai">ไม่ใช่ / <span>No</span></p>`,
+      confirmButtonColor: "green",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        console.log("Upload Information.");
+        Swal.fire({
+          title: `<p class="font-thai">กำลังบันทึกข้อมูล </p><span>(Saving information)</span>`,
+          html: `<p class="font-thai">กรุณารอสักครู่ ใช้เวลาไม่เกิน 2 นาที <br /> <span>(Please wait until processing completed)</span> </p>`,
+          allowEscapeKey: false,
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
+        axios.post(regisPath, { ...formVendor }).then(({ data }) => {
+          if (data.state) {
+            insertPDF({ ...formVendor, number: data.number });
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: data.message,
+              showConfirmButton: false,
+              timer: 5000,
+            });
+          }
+        });
+      }
+    });
+  };
+  const handleCancel = () => {
+    Swal.fire({
+      icon: "error",
+      title: `<p class="font-thai">ยกเลิกการบันทึกใช่หรือไม่?  <br /> <span>Cancel?</span></p>`,
+      showCancelButton: true,
+      confirmButtonText: `<p class="font-thai">ใช่ / <span>Yes</span></p>`,
+      cancelButtonText: `<p class="font-thai">ไม่ใช่ / <span>No</span></p>`,
+      confirmButtonColor: "red",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          icon: "success",
+          title: `<p class="font-thai">ยกเลิกสำเร็จ / <span>Cancel success</span></p>`,
+          showConfirmButton: false,
+          timer: 2000,
+        }).then(() => navigate("/"));
+      }
+    });
+  };
+
   return (
     <>
       <HStack mt={5}>
@@ -72,19 +189,7 @@ const Uploadfile = () => {
                 size="sm"
                 onChange={(e) => handleUpload(info.value, e.target.files)}
               />
-              {info.thai == "แผนที่บริษัท" ? (
-                <Input
-                  placeholder="Google Map Link => https://goo.gl/maps/DbHkSj8ZUHu88p9M7"
-                  size="sm"
-                  mt={3}
-                  w="80%"
-                  onChange={({ target: { value: mapLink } }) =>
-                    setUpload({ ...upload, mapLink })
-                  }
-                />
-              ) : (
-                ""
-              )}
+              <Text color="red">*หมายเหตุ: ต้องมีการเซ็นรับรอง</Text>
             </Stack>
           ))}
         </GridItem>
