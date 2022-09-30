@@ -15,7 +15,7 @@ import {
   InputGroup,
 } from "@chakra-ui/react";
 import { TiTimes, TiMediaPlay } from "react-icons/ti";
-import { CheckIcon } from "@chakra-ui/icons";
+import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
 import Swal from "sweetalert2";
 import { updateShowPayment } from "../../store/slices/showPaymentSlice";
 
@@ -237,7 +237,7 @@ export default function Account() {
 
   useEffect(() => {
     const initPage = setTimeout(() => {
-      getPage();
+      // getPage();
     }, 100);
     return () => {
       clearTimeout(initPage);
@@ -256,7 +256,7 @@ export default function Account() {
         </Text>
         <Spacer />
         <Text fontWeight="light" fontSize="sm">
-          Step 5 of 5
+          Step 5 of 6
         </Text>
       </HStack>
 
@@ -276,7 +276,7 @@ export default function Account() {
         <GridItem w="100%" colSpan={2}>
           <Input
             variant="filled"
-            placeholder="Account name"
+            placeholder="ชื่อบัญชี / Account Name"
             size="sm"
             onChange={({ target: { value: accountName } }) =>
               setBankAccount({ ...bankAccount, accountName })
@@ -303,7 +303,7 @@ export default function Account() {
         </GridItem>
         <GridItem w="100%" colSpan={2}>
           <Select
-            placeholder=" "
+            placeholder="กรุณาระบุธนาคาร / Please enter Bank."
             size="sm"
             variant="filled"
             onChange={({ target: { value: bank } }) =>
@@ -338,6 +338,7 @@ export default function Account() {
         <GridItem w="100%" colSpan={2}>
           <Input
             variant="filled"
+            placeholder="สาขา / Branch"
             size="sm"
             onChange={({ target: { value: branch } }) =>
               setBankAccount({ ...bankAccount, branch })
@@ -365,6 +366,7 @@ export default function Account() {
         <GridItem w="100%">
           <Input
             variant="filled"
+            placeholder="เบอร์โทรศัพท์ / Tel No."
             size="sm"
             type="number"
             onChange={({ target: { value: tel } }) =>
@@ -376,7 +378,7 @@ export default function Account() {
           <InputGroup>
             <Input
               variant="filled"
-              placeholder="ยืนยันเบอร์ติดต่อ / Verify Tel No."
+              placeholder="ยืนยันเบอร์โทรศัพท์ / Verify Tel No."
               size="sm"
               type="number"
               onChange={({ target: { value: VTel } }) =>
@@ -402,6 +404,7 @@ export default function Account() {
         <GridItem w="100%">
           <Input
             variant="filled"
+            placeholder="อีเมล / E-mail"
             size="sm"
             type="email"
             onChange={({ target: { value: email } }) =>
@@ -433,36 +436,6 @@ export default function Account() {
           </InputGroup>
         </GridItem>
       </Grid>
-
-      <Text className="font-thai" fontSize={{ base: "sm", sm: "md" }} mt={5}>
-        ทางบริษัทฯ
-        ขอขอบคุณในการให้ร่วมมือจากท่านและหวังเป็นอย่างยิ่งว่าจะได้ร่วมงานกับท่านด้วยดีเช่นนี้ต่อไป
-      </Text>
-
-      {/* Button */}
-      <HStack justifyContent="end" gap={8} mb={8} mt={4}>
-        <Button
-          w={{ base: "50%", md: "20%" }}
-          rightIcon={<Icon as={TiTimes} />}
-          colorScheme="red"
-          rounded="xl"
-          className="font-thai"
-          onClick={() => handleCancel()}
-        >
-          ยกเลิก / Cancel
-        </Button>
-
-        <Button
-          w={{ base: "50%", md: "20%" }}
-          rightIcon={<Icon as={TiMediaPlay} />}
-          colorScheme="green"
-          rounded="xl"
-          className="font-thai"
-          onClick={() => handleState()}
-        >
-          ยืนยัน / Confirm
-        </Button>
-      </HStack>
     </>
   );
 }

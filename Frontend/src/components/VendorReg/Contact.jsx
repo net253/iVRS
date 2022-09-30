@@ -77,7 +77,7 @@ export default function Contact({ setContact, contact }) {
         </Text>
         <Spacer />
         <Text fontWeight="light" fontSize="sm">
-          Step 2 of 5
+          Step 2 of 6
         </Text>
       </HStack>
 

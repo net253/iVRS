@@ -17,6 +17,9 @@ import {
   HStack,
 } from "@chakra-ui/react";
 import { FaUser, FaLock } from "react-icons/fa";
+import { BsPeopleFill } from "react-icons/bs";
+import { MdEmail } from "react-icons/md";
+import { RiLockPasswordFill } from "react-icons/ri";
 import { MdArrowForwardIos } from "react-icons/md";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
@@ -101,12 +104,16 @@ const Registerpage = () => {
   console.log(formInput);
 
   const Services = [
-    "สินค้าและบริการ",
-    "สินค้าทั่วไป",
-    "สินค้าทั่วไป",
-    "สินค้าทั่วไป",
-    "สินค้าทั่วไป",
-    "สินค้าทั่วไป",
+    "วัตถุดิบ**",
+    "วัสดุสิ้นเปลืองโรงงาน",
+    "วัสดุสำนักงาน",
+    "งานรับเหมา,จ้างทำ",
+    "ขนส่ง",
+    "เบ็ดเตล็ด/อุปกรณ์โรงงาน",
+    "เบ็ดเตล็ด/อุปกรณ์สำนักงาน",
+    "สารเคมี,เชื้อเพลิง",
+    "เครื่องจักร",
+    "Others",
   ];
   return (
     <>
@@ -179,7 +186,7 @@ const Registerpage = () => {
               <InputGroup>
                 <InputLeftElement
                   pointerEvents="none"
-                  children={<Icon as={FaUser} />}
+                  children={<Icon as={MdEmail} />}
                 />
                 <Input
                   id="email"
@@ -217,7 +224,7 @@ const Registerpage = () => {
                   <InputGroup>
                     <InputLeftElement
                       pointerEvents="none"
-                      children={<Icon as={FaUser} />}
+                      children={<Icon as={RiLockPasswordFill} />}
                     />
                     <Input
                       id="password"
@@ -239,7 +246,7 @@ const Registerpage = () => {
                   <InputGroup>
                     <InputLeftElement
                       pointerEvents="none"
-                      children={<Icon as={FaUser} />}
+                      children={<Icon as={RiLockPasswordFill} />}
                     />
                     <Input
                       id="password2"

@@ -93,7 +93,7 @@ export default function Standard({ setCertificate, certificate }) {
         </Text>
         <Spacer />
         <Text fontWeight="light" fontSize="sm">
-          Step 3 of 5
+          Step 3 of 6
         </Text>
       </HStack>
 
@@ -190,6 +190,9 @@ For example, place a 30% deposit when opening an order. And the next installment
           >
             <option value="บาท / THB">บาท / THB</option>
             <option value="ดอลลาร์สหรัฐ / USD">ดอลลาร์สหรัฐ / USD</option>
+            <option value="เยน / JPY">เยน / JPY</option>
+            <option value="หยวน / CNY">หยวน / CNY</option>
+            <option value="ยูโร / EUR">ยูโร / EUR</option>
           </Select>
         </GridItem>
 

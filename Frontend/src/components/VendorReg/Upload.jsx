@@ -37,6 +37,11 @@ const textOption = [
     value: "map",
   },
   {
+    thai: "เอกสารงบการเงิน",
+    eng: "Financial",
+    value: "finance",
+  },
+  {
     thai: "เอกสารอื่นๆ",
     eng: "Other Documents",
     value: "other",
@@ -77,6 +82,7 @@ export default function Upload(props) {
     affidavit: "",
     map: "",
     mapLink: "",
+    finance: "",
     other: "",
   });
   const [userName, setUserName] = useState("");
@@ -139,6 +145,8 @@ export default function Upload(props) {
       setUpload({ ...upload, affidavit: file });
     } else if (text == "map") {
       setUpload({ ...upload, map: file });
+    } else if (text == "finance") {
+      setUpload({ ...upload, finance: file });
     } else {
       setUpload({ ...upload, other: file });
     }
@@ -151,6 +159,7 @@ export default function Upload(props) {
       { pdf: upload.vat[0], name: "vatPdf" },
       { pdf: upload.affidavit[0], name: "affidavitPdf" },
       { pdf: upload.map[0], name: "mapPdf" },
+      { pdf: upload.finance[0], name: "financePdf" },
       { pdf: upload.other[0], name: "otherPdf" },
     ];
 
@@ -322,7 +331,7 @@ export default function Upload(props) {
         </Text>
         <Spacer />
         <Text fontWeight="light" fontSize="sm">
-          Step 4 of 5
+          Step 4 of 6
         </Text>
       </HStack>
 

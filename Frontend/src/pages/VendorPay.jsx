@@ -1,6 +1,6 @@
 import React from "react";
 import { Text } from "@chakra-ui/react";
-import { HeaderPay, Account } from "../components/VendorPay";
+import { HeaderPay, Account, Uploadvendor } from "../components/VendorPay";
 
 export default function VendorPay() {
   return (
@@ -10,6 +10,7 @@ export default function VendorPay() {
       </Text>
       <HeaderPay />
       <Account />
+      <Uploadvendor />
     </>
   );
 }

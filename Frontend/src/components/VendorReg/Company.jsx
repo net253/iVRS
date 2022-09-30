@@ -22,7 +22,7 @@ export default function Company({ setCompany, company }) {
         </Text>
         <Spacer />
         <Text fontWeight="light" fontSize="sm">
-          Step 1 of 5
+          Step 1 of 6
         </Text>
       </HStack>
 

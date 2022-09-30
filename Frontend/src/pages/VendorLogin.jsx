@@ -18,7 +18,6 @@ import {
 import { FaUser, FaLock } from "react-icons/fa";
 import { MdArrowForwardIos } from "react-icons/md";
 import Swal from "sweetalert2";
-import fakedata from "../data/businessrole.json";
 import { useNavigate } from "react-router-dom";
 
 const VendorLogin = () => {
@@ -85,16 +84,16 @@ const VendorLogin = () => {
             <VStack>
               <Text className="font-thai" textAlign="center">
                 <b className="font-thai" style={{ color: "red" }}>
-                  พนักงานบริษัท เอส เอ็น ซี ฟอร์เมอร์ จำกัด (มหาชน)
-                  และบริษัทในเครือ
+                  สำหรับผู้ขายที่ต้องการเสนอขายสินค้ากับทาง บริษัท เอส เอ็น ซี
+                  ฟอร์เมอร์ จำกัด (มหาชน) และบริษัทในเครือ
                 </b>
                 <br />
                 กรุณาลงชื่อเข้าใช้เพื่อเริ่มใช้งาน
               </Text>
-              <Text>
+              {/* <Text>
                 <b style={{ color: "red" }}>SNC Group</b> please log in to start
                 your session
-              </Text>
+              </Text> */}
             </VStack>
 
             <FormControl mt={3} isRequired p={5}>
@@ -131,16 +130,6 @@ const VendorLogin = () => {
                   placeholder="Type your password"
                 />
               </InputGroup>
-
-              {/* <FormLabel htmlFor="password" mt={4} fontSize="xl">
-                Business Role
-              </FormLabel>
-              <Select>
-                <option value="">-- Please select Order ID --</option>
-                {fakedata.map((sap, index) => (
-                  <option value={sap.role}>{sap.role}</option>
-                ))}
-              </Select> */}
 
               {/* Button */}
               <Box
