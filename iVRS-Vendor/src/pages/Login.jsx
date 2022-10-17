@@ -40,6 +40,8 @@ const Login = () => {
         showConfirmButton: false,
         timer: 2000,
       }).then(() => {
+        window.localStorage.setItem("isLoggedIn", true);
+        window.localStorage.setItem("username", formlogin.username);
         navigate("/Vendor");
       });
     }
@@ -67,7 +69,7 @@ const Login = () => {
             iVRS Vendor Registation
           </Heading>
 
-          <FormControl>
+          <FormControl isRequired>
             <FormLabel>ชื่อผู้ใช้(Username)</FormLabel>
             <InputGroup>
               <InputLeftElement pointerEvents="none">

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Box,
   Flex,
@@ -14,8 +14,43 @@ import {
 } from "@chakra-ui/react";
 import { BsChevronDown } from "react-icons/bs";
 import logo from "../assets/image/logo.png";
+import { useNavigate } from "react-router-dom";
 
 export default function Simple() {
+  const navigate = useNavigate();
+  const logout = () => {
+    window.localStorage.clear();
+    navigate("/");
+  };
+
+  const checklocalstorafe = () => {
+    if (!window.localStorage.isLoggedIn) {
+      setTimeout(() => navigate("/"), 500);
+    }
+  };
+
+  var waitTime = 30 * 60 * 1000; // = 30min
+  if (window.localStorage.isLoggedIn) {
+    setTimeout(function () {
+      console.log("clear");
+      window.localStorage.clear();
+      setTimeout(() => navigate("/"), 1000);
+    }, waitTime);
+  }
+
+  useEffect(() => {
+    const initPage = setTimeout(() => {
+      checklocalstorafe();
+    }, 100);
+    const timer1m = setInterval(() => {
+      checklocalstorafe();
+    }, 2000);
+    return () => {
+      clearTimeout(initPage);
+      clearInterval(timer1m);
+    };
+  }, []);
+
   return (
     <>
       <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
@@ -60,7 +95,7 @@ export default function Simple() {
               </MenuButton>
               <MenuList>
                 <MenuItem>Reset Password</MenuItem>
-                <MenuItem>Logout</MenuItem>
+                <MenuItem onClick={logout}>Logout</MenuItem>
               </MenuList>
             </Menu>
           </Flex>

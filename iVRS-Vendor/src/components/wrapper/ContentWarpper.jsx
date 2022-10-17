@@ -1,6 +1,7 @@
 import React from "react";
 import { Box } from "@chakra-ui/react";
 import { motion } from "framer-motion";
+import { Navbar, Footer } from "../../components";
 
 export default function ContentWarpper({ content: Content, page: Page }) {
   const pageTransition = {
@@ -11,7 +12,8 @@ export default function ContentWarpper({ content: Content, page: Page }) {
   return (
     <>
       <Box bg="#eee" height="100vh" w="100vw">
-        <Box h="100vh">
+        {window.localStorage.isLoggedIn ? <Navbar page={Page} /> : ""}
+        <Box h={`${window.localStorage.isLoggedIn ? "90vh" : ""}`}>
           <Box bg="white" h="100%" shadow="md" overflowY="auto">
             <motion.div
               initial={{ opacity: 0, y: "1%" }}
@@ -23,6 +25,7 @@ export default function ContentWarpper({ content: Content, page: Page }) {
             </motion.div>
           </Box>
         </Box>
+        {window.localStorage.isLoggedIn ? <Footer /> : ""}
       </Box>
     </>
   );
