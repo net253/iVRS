@@ -7,8 +7,8 @@ import {
   Stack,
   Input,
   Spacer,
-  Checkbox,
-  CheckboxGroup,
+  Radio,
+  RadioGroup,
   Textarea,
   Select,
 } from "@chakra-ui/react";
@@ -100,7 +100,7 @@ export default function Standard() {
           </Text>
         </GridItem>
         <GridItem w="100%" colSpan={3} fontSize={{ base: "sm", sm: "sm" }}>
-          <CheckboxGroup colorScheme="green">
+          <RadioGroup colorScheme="green">
             <Grid
               templateColumns={{ base: "repeat(2,1fr)", md: "repeat(5,1fr)" }}
               gap={2}
@@ -113,9 +113,9 @@ export default function Standard() {
                   display="flex"
                   colSpan={info == "Other" ? "2" : "1"}
                 >
-                  <Checkbox key={i} value={info}>
+                  <Radio key={i} value={info}>
                     {info}
-                  </Checkbox>
+                  </Radio>
                   {info == "Other" ? (
                     <Input placeholder="Other certificate" ml={5} size="sm" />
                   ) : (
@@ -125,7 +125,7 @@ export default function Standard() {
               ))}
               <GridItem></GridItem>
             </Grid>
-          </CheckboxGroup>
+          </RadioGroup>
         </GridItem>
 
         <GridItem w="100%" colSpan={3}>
@@ -134,7 +134,7 @@ export default function Standard() {
           </Text>
         </GridItem>
         <GridItem w="100%" colSpan={3} fontSize={{ base: "sm", sm: "sm" }}>
-          <CheckboxGroup colorScheme="green">
+          <RadioGroup colorScheme="green">
             <Grid
               templateColumns={{ base: "repeat(2,1fr)", md: "repeat(5,1fr)" }}
               gap={2}
@@ -147,9 +147,9 @@ export default function Standard() {
                   display="flex"
                   colSpan={info == "Other" ? "2" : "1"}
                 >
-                  <Checkbox key={i} value={info}>
+                  <Radio key={i} value={info}>
                     {info}
-                  </Checkbox>
+                  </Radio>
                   {info == "Other" ? (
                     <Input placeholder="Other certificate" ml={5} size="sm" />
                   ) : (
@@ -159,7 +159,7 @@ export default function Standard() {
               ))}
               <GridItem></GridItem>
             </Grid>
-          </CheckboxGroup>
+          </RadioGroup>
         </GridItem>
 
         {/* Q2 */}
@@ -171,7 +171,7 @@ export default function Standard() {
             <Text fontWeight={"bold"} py="10px">
               3.1 Credit Term / <span>ระยะเวลาการให้สินเชื่อ</span>
             </Text>
-            <CheckboxGroup colorScheme="green">
+            <RadioGroup colorScheme="green">
               <Grid
                 templateColumns={{ base: "repeat(2,1fr)", md: "repeat(5,1fr)" }}
                 gap={2}
@@ -184,9 +184,9 @@ export default function Standard() {
                     display="flex"
                     colSpan={info == "Other" ? "2" : "1"}
                   >
-                    <Checkbox key={i} value={info}>
+                    <Radio key={i} value={info}>
                       {info}
-                    </Checkbox>
+                    </Radio>
                     {info == "Other" ? (
                       <Input placeholder="Other certificate" ml={5} size="sm" />
                     ) : (
@@ -196,7 +196,7 @@ export default function Standard() {
                 ))}
                 <GridItem></GridItem>
               </Grid>
-            </CheckboxGroup>
+            </RadioGroup>
           </GridItem>
           <Textarea
             placeholder=" - กรุณาระบุเงื่อนไขการชำระเงินให้ชัดเจน เช่น Credit Terms (วัน) หรือ เงินสดภายในกี่วัน หรือ ต้องการมัดจำจำนวนกี่เปอร์เซ็นต์ (%) / 
