@@ -42,14 +42,18 @@ const Registerpage = () => {
       formInput.password == "" ||
       formInput.confirmPassword == ""
     ) {
-      setErrorMsg({ ...errorMsg, msg: "กรุณาระบุข้อมูลให้ครบถ้วน" });
+      setErrorMsg({ ...errorMsg, msg: "**กรุณาระบุข้อมูลให้ครบถ้วน**" });
     } else {
-      Swal.fire({
-        icon: "success",
-        title: "เข้าสู่ระบบสำเร็จ",
-        showConfirmButton: false,
-        timer: 2000,
-      });
+      if (formInput.password == formInput.confirmPassword) {
+        Swal.fire({
+          icon: "success",
+          title: "เข้าสู่ระบบสำเร็จ",
+          showConfirmButton: false,
+          timer: 2000,
+        });
+      } else {
+        setErrorMsg({ ...errorMsg, msg: "**กรุณาระบบรหัสผ่านให้ตรงกัน**" });
+      }
     }
   };
 
@@ -96,10 +100,7 @@ const Registerpage = () => {
           <FormControl my={3}>
             <FormLabel>นามสุกล (Last Name)</FormLabel>
             <InputGroup>
-              <InputLeftElement
-                pointerEvents="none"
-                // children={[<Icon as={FaUserAlt} color="gray.300" />]}
-              >
+              <InputLeftElement pointerEvents="none">
                 <Icon as={FaUserAlt} color="gray.300" />
               </InputLeftElement>
               <Input
@@ -115,10 +116,7 @@ const Registerpage = () => {
           <FormControl my={3}>
             <FormLabel>Email (Email@gmail.com)</FormLabel>
             <InputGroup>
-              <InputLeftElement
-                pointerEvents="none"
-                // children={[<Icon as={FaUserAlt} color="gray.300" />]}
-              >
+              <InputLeftElement pointerEvents="none">
                 <Icon as={MdEmail} color="gray.300" />
               </InputLeftElement>
               <Input
@@ -162,7 +160,7 @@ const Registerpage = () => {
             </InputGroup>
           </FormControl>
           <Text py="10px" fontSize={"14px"} color="red">
-            **{errorMsg.msg}**
+            {errorMsg.msg}
           </Text>
           <Flex w="100%" justifyContent={"space-between"}>
             <Text fontSize={"12px"} className={"cursor"}></Text>

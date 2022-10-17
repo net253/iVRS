@@ -1,4 +1,5 @@
 import React from "react";
+import { useState } from "react";
 import {
   Center,
   Box,
@@ -16,8 +17,33 @@ import {
 import bg from "../assets/image/bg.png";
 import { FaUserAlt, FaLock } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const Login = () => {
+  const [formlogin, setFormlogin] = useState({
+    username: "",
+    password: "",
+  });
+
+  const [errorMsg, setErrorMsg] = useState({
+    msg: "",
+  });
+
+  const handleclick = () => {
+    if (formlogin.username == "" || formlogin.password == "") {
+      console.log("Please enter your username");
+      setErrorMsg({ ...errorMsg, msg: "**กรุณาระบุข้อมูลให้ครบถ้วน**" });
+    } else {
+      Swal.fire({
+        icon: "success",
+        title: "เข้าสู่ระบบสำเร็จ",
+        showConfirmButton: false,
+        timer: 2000,
+      }).then(() => {
+        navigate("/Vendor");
+      });
+    }
+  };
   const navigate = useNavigate();
   return (
     <>
@@ -44,28 +70,40 @@ const Login = () => {
           <FormControl>
             <FormLabel>ชื่อผู้ใช้(Username)</FormLabel>
             <InputGroup>
-              <InputLeftElement
-                pointerEvents="none"
-                // children={[<Icon as={FaUserAlt} color="gray.300" />]}
-                children={[<Icon as={FaUserAlt} color="gray.300" />]}
+              <InputLeftElement pointerEvents="none">
+                <Icon as={FaUserAlt} color="gray.300" />
+              </InputLeftElement>
+              <Input
+                type="text"
+                placeholder="Type your username"
+                onChange={({ target: { value: username } }) =>
+                  setFormlogin({ ...formlogin, username })
+                }
               />
-              <Input type="text" placeholder="Type your username" />
             </InputGroup>
           </FormControl>
 
           <FormControl my={3}>
             <FormLabel>รหัสผ่าน(Password)</FormLabel>
             <InputGroup>
-              <InputLeftElement
-                pointerEvents="none"
-                children={<Icon as={FaLock} color="gray.300" />}
+              <InputLeftElement pointerEvents="none">
+                <Icon as={FaLock} color="gray.300" />
+              </InputLeftElement>
+              <Input
+                type="password"
+                placeholder="Type your password"
+                onChange={({ target: { value: password } }) =>
+                  setFormlogin({ ...formlogin, password })
+                }
               />
-              <Input type="password" placeholder="Type your password" />
             </InputGroup>
           </FormControl>
+          <Text fontSize={"12px"} color="red" pb="10px">
+            {errorMsg.msg}
+          </Text>
           <Flex w="100%" justifyContent={"space-between"}>
             <Text fontSize={"12px"} className={"cursor"}>
-              ลืมรหัสผ่าน
+              ลืมรหัสผ่าน?
             </Text>
             <Text
               fontSize={"12px"}
@@ -83,6 +121,7 @@ const Login = () => {
             mt={5}
             colorScheme="messenger"
             rounded="full"
+            onClick={handleclick}
           >
             เข้าสู่ระบบ(Login)
           </Button>
