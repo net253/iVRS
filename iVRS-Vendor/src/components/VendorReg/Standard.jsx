@@ -26,17 +26,6 @@ const chkText = [
   "Other",
 ];
 
-// const currency = [
-//   {
-//     Name: "USD",
-//     value: "USD",
-//   },
-//   {
-//     Name: "EUR",
-//     value: "EUR",
-//   },
-// ];
-
 const bnf = ["BOI", "Flow", "อื่นๆ / Others", "ไม่มี"];
 const creditterm = [
   "Cash",
