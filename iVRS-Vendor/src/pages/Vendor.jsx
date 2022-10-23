@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Header,
   Company,
@@ -18,7 +18,7 @@ const vendor = () => {
     }
   };
 
-  var waitTime = 30 * 60 * 1000; // = 30min
+  var waitTime = 30 * 60 * 1000;
   if (window.localStorage.isLoggedIn) {
     setTimeout(function () {
       console.log("clear");
@@ -40,13 +40,25 @@ const vendor = () => {
     };
   }, []);
 
+  const [certificate, setCertificate] = useState({
+    cerArray: [],
+    other: "",
+    payment: "",
+    limit: "",
+    currency: "",
+    stdPacking: "",
+    moq: "",
+    stdPdf: [],
+    moqPdf: [],
+  });
+
   return (
     <>
       <Header />
       <Inputform />
       <Company />
       <Contact />
-      <Statdard />
+      <Statdard certificate={certificate} setCertificate={setCertificate} />
     </>
   );
 };

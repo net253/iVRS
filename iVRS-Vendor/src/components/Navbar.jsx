@@ -15,12 +15,26 @@ import {
 import { BsChevronDown } from "react-icons/bs";
 import logo from "../assets/image/logo.png";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 export default function Simple() {
   const navigate = useNavigate();
   const logout = () => {
-    window.localStorage.clear();
-    navigate("/");
+    Swal.fire({
+      title: "ต้องการออกจากระบบ ใช่ หรือ ไม่",
+      // text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "ใช่",
+      cancelButtonText: "ไม่",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.localStorage.clear();
+        navigate("/");
+      }
+    });
   };
 
   const checklocalstorafe = () => {

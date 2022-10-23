@@ -13,7 +13,7 @@ const Footer = () => {
         >
           <Box>
             <Text fontSize={"9px"} fontWeight={"semibold"}>
-              © SNC Former Public Company Limeted 2022
+              Copyright &copy; SNC Former Public Company Limited 2022
             </Text>
           </Box>
           <HStack alignItems={"center"}>

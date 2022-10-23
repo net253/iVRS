@@ -22,8 +22,8 @@ import Swal from "sweetalert2";
 
 const Registerpage = () => {
   const [formInput, setFormInput] = useState({
-    firstname: "",
-    lastname: "",
+    name: "",
+    username: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -36,8 +36,8 @@ const Registerpage = () => {
 
   const handleClick = () => {
     if (
-      formInput.firstname == "" ||
-      formInput.lastname == "" ||
+      formInput.name == "" ||
+      formInput.username == "" ||
       formInput.email == "" ||
       formInput.password == "" ||
       formInput.confirmPassword == ""
@@ -52,7 +52,7 @@ const Registerpage = () => {
           timer: 2000,
         });
       } else {
-        setErrorMsg({ ...errorMsg, msg: "**กรุณาระบบรหัสผ่านให้ตรงกัน**" });
+        setErrorMsg({ ...errorMsg, msg: "**กรุณาระบุรหัสผ่านให้ตรงกัน**" });
       }
     }
   };
@@ -81,7 +81,7 @@ const Registerpage = () => {
           </Heading>
 
           <FormControl my={3}>
-            <FormLabel>ชื่อ (First Name)</FormLabel>
+            <FormLabel>ชื่อ-นามสกุล (Name)</FormLabel>
             <InputGroup>
               <InputLeftElement pointerEvents="none">
                 <Icon as={FaUserAlt} color="gray.300" />
@@ -89,25 +89,25 @@ const Registerpage = () => {
               <Input
                 required={true}
                 type="text"
-                placeholder="ชื่อ"
-                onChange={({ target: { value: firstname } }) =>
-                  setFormInput({ ...formInput, firstname })
+                placeholder="ชื่อ-นามสกุล"
+                onChange={({ target: { value: name } }) =>
+                  setFormInput({ ...formInput, name })
                 }
               />
             </InputGroup>
           </FormControl>
 
           <FormControl my={3}>
-            <FormLabel>นามสุกล (Last Name)</FormLabel>
+            <FormLabel>ชื่อผู้ใช้ (UserName)</FormLabel>
             <InputGroup>
               <InputLeftElement pointerEvents="none">
                 <Icon as={FaUserAlt} color="gray.300" />
               </InputLeftElement>
               <Input
                 type="text"
-                placeholder="นามสกุล"
-                onChange={({ target: { value: lastname } }) =>
-                  setFormInput({ ...formInput, lastname })
+                placeholder="ชื่อผู้ใช้"
+                onChange={({ target: { value: username } }) =>
+                  setFormInput({ ...formInput, username })
                 }
               />
             </InputGroup>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Text,
   Grid,
@@ -7,6 +7,8 @@ import {
   Stack,
   Input,
   Spacer,
+  Checkbox,
+  CheckboxGroup,
   Radio,
   RadioGroup,
   Textarea,
@@ -53,7 +55,27 @@ const question = [
   },
 ];
 
-export default function Standard() {
+export default function Standard({ setCertificate, certificate }) {
+  const [moq, setMoq] = useState(false);
+  const [std, setStd] = useState(false);
+
+  const handleQuest = (text, value) => {
+    if (text == "stdPacking") {
+      setCertificate({ ...certificate, stdPacking: value });
+      if (value == "Yes") {
+        setStd(true);
+      } else {
+        setStd(false);
+      }
+    } else {
+      setCertificate({ ...certificate, moq: value });
+      if (value == "Yes") {
+        setMoq(true);
+      } else {
+        setMoq(false);
+      }
+    }
+  };
   return (
     <>
       <HStack mt={5} px="10px">
@@ -89,7 +111,7 @@ export default function Standard() {
           </Text>
         </GridItem>
         <GridItem w="100%" colSpan={3} fontSize={{ base: "sm", sm: "sm" }}>
-          <RadioGroup colorScheme="green">
+          <CheckboxGroup colorScheme="green">
             <Grid
               templateColumns={{ base: "repeat(2,1fr)", md: "repeat(5,1fr)" }}
               gap={2}
@@ -102,9 +124,9 @@ export default function Standard() {
                   display="flex"
                   colSpan={info == "Other" ? "2" : "1"}
                 >
-                  <Radio key={i} value={info}>
+                  <Checkbox key={i} value={info}>
                     {info}
-                  </Radio>
+                  </Checkbox>
                   {info == "Other" ? (
                     <Input placeholder="Other certificate" ml={5} size="sm" />
                   ) : (
@@ -114,7 +136,7 @@ export default function Standard() {
               ))}
               <GridItem></GridItem>
             </Grid>
-          </RadioGroup>
+          </CheckboxGroup>
         </GridItem>
 
         <GridItem w="100%" colSpan={3}>
@@ -123,7 +145,7 @@ export default function Standard() {
           </Text>
         </GridItem>
         <GridItem w="100%" colSpan={3} fontSize={{ base: "sm", sm: "sm" }}>
-          <RadioGroup colorScheme="green">
+          <CheckboxGroup colorScheme="green">
             <Grid
               templateColumns={{ base: "repeat(2,1fr)", md: "repeat(5,1fr)" }}
               gap={2}
@@ -136,9 +158,9 @@ export default function Standard() {
                   display="flex"
                   colSpan={info == "Other" ? "2" : "1"}
                 >
-                  <Radio key={i} value={info}>
+                  <Checkbox key={i} value={info}>
                     {info}
-                  </Radio>
+                  </Checkbox>
                   {info == "Other" ? (
                     <Input placeholder="Other certificate" ml={5} size="sm" />
                   ) : (
@@ -148,7 +170,7 @@ export default function Standard() {
               ))}
               <GridItem></GridItem>
             </Grid>
-          </RadioGroup>
+          </CheckboxGroup>
         </GridItem>
 
         {/* Q2 */}
@@ -157,10 +179,10 @@ export default function Standard() {
             3. เงื่อนไขการชำระเงิน / <span>Term of payment</span>
           </Text>
           <GridItem w="100%" colSpan={3} fontSize={{ base: "sm", sm: "sm" }}>
-            <Text fontWeight={"bold"} py="10px">
+            <Text fontWeight={"bold"} py="10px" px="1.2rem">
               3.1 Credit Term / <span>ระยะเวลาการให้สินเชื่อ</span>
             </Text>
-            <RadioGroup colorScheme="green">
+            <RadioGroup colorScheme="green" px="1.2rem">
               <Grid
                 templateColumns={{ base: "repeat(2,1fr)", md: "repeat(5,1fr)" }}
                 gap={2}
@@ -187,18 +209,25 @@ export default function Standard() {
               </Grid>
             </RadioGroup>
           </GridItem>
+          <Text className="font-thai" fontWeight="bold" px="1.2rem">
+            3.2 การวางมัดจำ / <span>Earnest</span>
+          </Text>
           <Textarea
-            placeholder=" - กรุณาระบุเงื่อนไขการชำระเงินให้ชัดเจน เช่น Credit Terms (วัน) หรือ เงินสดภายในกี่วัน หรือ ต้องการมัดจำจำนวนกี่เปอร์เซ็นต์ (%) / 
-Please specify the payment terms clearly such as Credit Terms (days) or how many days to pay with cash or how many percent deposit is required (%)
-- ตัวอย่างเช่น วางมัดจำ 30% เมื่อเปิดใบสั่งซื้อ และงวดถัดๆไปมี Credit Terms 60 วัน / 
+            placeholder="- ตัวอย่างเช่น วางมัดจำ 30% เมื่อเปิดใบสั่งซื้อ และงวดถัดๆไปมี Credit Terms 60 วัน / 
 For example, place a 30% deposit when opening an order. And the next installment has 60 days Credit Terms."
             size="sm"
-            rows={5}
+            rows={3}
+            px="1.2rem"
           />
         </GridItem>
         <GridItem w="100%" colSpan={{ base: "3", md: "1" }}>
-          <Text className="font-thai" fontSize={{ base: "sm", sm: "sm" }}>
-            วงเงินอนุมัติ / <span>Approval limit</span>
+          <Text
+            className="font-thai"
+            fontSize={{ base: "sm", sm: "sm" }}
+            fontWeight={"bold"}
+            px="1.2rem"
+          >
+            3.3 วงเงินอนุมัติ / <span>Approval limit</span>
           </Text>
         </GridItem>
         <GridItem w="100%" colSpan={{ base: "2", md: "1" }}>
@@ -230,36 +259,31 @@ For example, place a 30% deposit when opening an order. And the next installment
             </GridItem>
             <GridItem w="100%" colSpan={3}>
               <HStack spacing={10} justifyContent="center">
-                <input
-                  name={text.value}
-                  id={`${text.value}No`}
-                  type="radio"
-                  value="No"
-                />
-                <label
-                  htmlFor={`${text.value}No`}
-                  style={{ marginLeft: "10px" }}
-                >
-                  ไม่มี / No
-                </label>
-                <input
-                  name={text.value}
-                  id={`${text.value}Yes`}
-                  type="radio"
-                  value="Yes"
-                />
-                <label
-                  htmlFor={`${text.value}Yes`}
-                  style={{ marginLeft: "10px" }}
-                >
-                  มี / Yes
-                </label>
-
+                <RadioGroup>
+                  <Stack direction="row">
+                    <Radio
+                      name={text.value}
+                      value="No"
+                      px="1rem"
+                      onChange={(e) => handleQuest(text.value, e.target.value)}
+                    >
+                      ไม่มี / No
+                    </Radio>
+                    <Radio
+                      value="Yes"
+                      name={text.value}
+                      onChange={(e) => handleQuest(text.value, e.target.value)}
+                    >
+                      มี / Yes
+                    </Radio>
+                  </Stack>
+                </RadioGroup>
                 <Stack>
                   <Text className="font-thai" fontSize="small">
                     แนบเอกสาร / <span>Attach file</span>
                   </Text>
                   <Input
+                    isDisabled={text.value == "stdPacking" ? !std : !moq}
                     type="file"
                     accept=".pdf"
                     variant="unstyled"
