@@ -44,12 +44,12 @@ const creditterm = [
 
 const question = [
   {
-    thai: "3. คุณมีมาตรฐานการบรรจุหรือไม่",
+    thai: "4. คุณมีมาตรฐานการบรรจุหรือไม่",
     eng: "Do you have standard packing?",
     value: "stdPacking",
   },
   {
-    thai: "4. คุณมีจำนวนการสั่งซื้อขั้นต่ำหรือไม่",
+    thai: "5. คุณมีจำนวนการสั่งซื้อขั้นต่ำหรือไม่",
     eng: "Do you have minimum order quantity (MOQ)?",
     value: "moq",
   },

@@ -11,13 +11,22 @@ import {
   useColorModeValue,
   Text,
   Image,
+  Link,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { BsChevronDown } from "react-icons/bs";
 import logo from "../assets/image/logo.png";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import { Resetpassword } from "./modal";
 
 export default function Simple() {
+  const {
+    isOpen: isOpenResetpassword,
+    onOpen: onOpenResetpassword,
+    onClose: onCloseResetpassword,
+  } = useDisclosure();
+
   const navigate = useNavigate();
   const logout = () => {
     Swal.fire({
@@ -88,6 +97,12 @@ export default function Simple() {
             </Box>
           </HStack>
           <Flex alignItems={"center"}>
+            <HStack px="2rem">
+              <Link px="1rem" fontWeight={"semibold"}>
+                หน้าหลัก
+              </Link>
+              <Link fontWeight={"semibold"}>ประวัติ</Link>
+            </HStack>
             <Menu>
               <MenuButton>
                 <Flex alignItems="center">
@@ -108,13 +123,20 @@ export default function Simple() {
                 </Flex>
               </MenuButton>
               <MenuList>
-                <MenuItem>Reset Password</MenuItem>
+                <MenuItem onClick={onOpenResetpassword}>
+                  Reset Password
+                </MenuItem>
                 <MenuItem onClick={logout}>Logout</MenuItem>
               </MenuList>
             </Menu>
           </Flex>
         </Flex>
       </Box>
+      <Resetpassword
+        isOpen={isOpenResetpassword}
+        onOpen={onOpenResetpassword}
+        onClose={onCloseResetpassword}
+      />
     </>
   );
 }

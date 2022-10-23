@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import {
   Text,
   Grid,
@@ -17,8 +16,6 @@ import {
 } from "@chakra-ui/react";
 import { TiTimes, TiMediaPlay } from "react-icons/ti";
 import Swal from "sweetalert2";
-import { updateVendorInfo } from "../../store/slices/vendorSlice";
-import { updateShowPayment } from "../../store/slices/showPaymentSlice";
 
 const textOption = [
   {
@@ -48,33 +45,7 @@ const textOption = [
   },
 ];
 
-function onUploadFileChange(info) {
-  return new Promise((resolve, reject) => {
-    const fileToBase64 = (file, cb) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-
-      reader.onload = function () {
-        cb(null, reader.result);
-      };
-      reader.onerror = function (error) {
-        cb(error, null);
-      };
-    };
-
-    if (!info.pdf) {
-      resolve({ name: info.name, base64: "-", fileName: "-" });
-    }
-    fileToBase64(info.pdf, (err, result) => {
-      let results = result.split(",").slice(1).toLocaleString();
-
-      resolve({ name: info.name, base64: results, fileName: info.pdf.name });
-    });
-  });
-}
-
 export default function Upload(props) {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [time, setTime] = useState("");
   const [upload, setUpload] = useState({
@@ -127,7 +98,6 @@ export default function Upload(props) {
       confirmButtonColor: "green",
     }).then((result) => {
       if (result.isConfirmed) {
-        dispatch(updateShowPayment(true));
         Swal.fire({
           icon: "success",
           title: `<p class="font-thai">บันทึกสำเร็จ / <span>Success</span></p>`,
@@ -152,73 +122,7 @@ export default function Upload(props) {
     }
   };
 
-  const handlePdf = async () => {
-    const formPdf = [
-      { pdf: certificate.stdPdf[0], name: "stdPackingPdf" },
-      { pdf: certificate.moqPdf[0], name: "moqPdf" },
-      { pdf: upload.vat[0], name: "vatPdf" },
-      { pdf: upload.affidavit[0], name: "affidavitPdf" },
-      { pdf: upload.map[0], name: "mapPdf" },
-      { pdf: upload.finance[0], name: "financePdf" },
-      { pdf: upload.other[0], name: "otherPdf" },
-    ];
-
-    // Encode PDF to base64
-    const base64File = formPdf.map(
-      async (info) => await onUploadFileChange(info)
-    );
-
-    Promise.all(base64File).then((values) => {
-      // console.log(values);
-      const formAxios = {
-        companyName: company.engCompany,
-        companyRegister: registor,
-        companyDetails: [company],
-        contactParson: [
-          {
-            sale: [
-              {
-                name: contact.salesName,
-                email: contact.salesEmail,
-                tel: contact.salesTel,
-              },
-            ],
-            saleManager: [
-              {
-                name: contact.managerName,
-                email: contact.managerEmail,
-                tel: contact.managerTel,
-              },
-            ],
-            other: [
-              {
-                name: contact.othersName,
-                email: contact.othersEmail,
-                tel: contact.othersTel,
-              },
-            ],
-          },
-        ],
-        stdCertificate: [
-          {
-            certificate: [...certificate.cerArray, certificate.other],
-            payment: [
-              certificate.payment,
-              certificate.limit,
-              certificate.currency,
-            ],
-            stdPacking: certificate.stdPacking,
-            moq: certificate.moq,
-          },
-        ],
-        userName: userName,
-        pdf: [...values, { name: "mapLink", link: upload.mapLink }],
-      };
-
-      dispatch(updateVendorInfo(formAxios));
-      handleNext();
-    });
-  };
+  const handlePdf = async () => {};
 
   const handleState = () => {
     if (registor == "") {
@@ -265,22 +169,7 @@ export default function Upload(props) {
     ) {
       handleError(`<b class="font-thai">กรุณากรอกรายละเอียดมาตรฐานและการรองรับให้ครบถ้วน <br />
         <span>Please complete the current standards and certifications.</span></b>`);
-    }
-    // else if (
-    //   certificate.stdPacking == "Yes" &&
-    //   certificate.stdPdf.length == 0
-    // ) {
-    //   handleError(`<b class="font-thai">กรุณาอัพโหลดเอกสารการบรรจุ <br />
-    //     <span>Please upload packing documents.</span></b>`);
-    // } else if (certificate.moqPdf.length == 0 && certificate.moq == "Yes") {
-    //   handleError(`<b class="font-thai">กรุณาอัพโหลดเอกสารจำนวนการสั่งซื้อขั้นต่ำ <br />
-    //     <span>Please upload MOQ documents.</span></b>`);
-    // }
-    // else if (upload.vat == "" || upload.affidavit == "" || upload.map == "") {
-    //   handleError(`<b class="font-thai">กรุณาอัพโหลดเอกสารให้ครบถ้วน <br />
-    //     <span>Please upload documents.</span></b>`);
-    // }
-    else if (upload.map == "") {
+    } else if (upload.map == "") {
       handleError(`<b class="font-thai">กรุณาอัพโหลดเอกสารให้ครบถ้วน <br />
         <span>Please upload documents.</span></b>`);
     } else if (upload.mapLink == "") {
@@ -317,11 +206,11 @@ export default function Upload(props) {
 
   return (
     <>
-      <HStack mt={5}>
+      <HStack mt={5} px="10px">
         <Text
           className="font-thai"
           fontWeight="bold"
-          fontSize={{ base: "sm", sm: "xl" }}
+          fontSize={{ base: "sm", sm: "md" }}
         >
           อัพโหลดเอกสาร / <span>Upload Documents</span>
         </Text>
@@ -343,7 +232,8 @@ export default function Upload(props) {
         borderColor="blackAlpha.600"
         py={3}
         my={1}
-        fontSize={{ base: "sm", sm: "md" }}
+        fontSize={{ base: "sm", sm: "sm" }}
+        px="10px"
       >
         {/* Upload */}
         <GridItem
@@ -384,7 +274,7 @@ export default function Upload(props) {
 
         {/* Certify */}
         <GridItem w="100%" px={5} textAlign="center">
-          <Text className="font-thai" fontSize="lg">
+          <Text className="font-thai" fontSize="sm">
             ข้าพเจ้าขอรับรองว่าข้อความและเอกสารข้างต้นเป็นความจริงทุกประการ
           </Text>
           <Text>
@@ -401,20 +291,22 @@ export default function Upload(props) {
             <Checkbox
               onChange={() => setCheck(!check)}
               mt={3}
-              textAlign="start"
               ml={12}
+              textAlign={"start"}
             >
-              ข้าพเจ้าได้ศึกษาและยอมรับ
-              <Link
-                color="blue"
-                href="https://www.sncformer.com/th/privacy-policy"
-                target="_blank"
-              >
-                นโยบายการคุ้มครองข้อมูลส่วนบุคคล
-              </Link>
-              <br />
-              ของทางบริษัท เอส เอ็น ซี ฟอร์เมอร์ จำกัด (มหาชน)
-              และบริษัทในเครือเรียบร้อยแล้ว
+              <Text fontSize="sm">
+                ข้าพเจ้าได้ศึกษาและยอมรับ{" "}
+                <Link
+                  color={"blue"}
+                  href="https://www.sncformer.com/th/privacy-policy"
+                  target="_blank"
+                >
+                  นโยบายการคุ้มครองข้อมูลส่วนบุคคล
+                </Link>{" "}
+                <br />
+                ของทางบริษัท เอส เอ็น ซี ฟอร์เมอร์ จำกัด (มหาชน)
+                และบริษัทในเครือเรียบร้อยแล้ว
+              </Text>
             </Checkbox>
 
             <Input
@@ -422,6 +314,7 @@ export default function Upload(props) {
               textAlign="center"
               placeholder="กรุณาระบุคำนำหน้า / Please specify name title"
               my={5}
+              fontSize={"sm"}
               onChange={({ target: { value: name } }) => setUserName(name)}
             />
           </FormControl>

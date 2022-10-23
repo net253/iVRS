@@ -1,5 +1,6 @@
 import React from "react";
 import { Text, Grid, GridItem, Select, Button } from "@chakra-ui/react";
+import Swal from "sweetalert2";
 
 const optionText = [
   {
@@ -59,7 +60,38 @@ const mapText = [
   },
 ];
 
-export default function InputForm() {
+export default function InputForm({ setReistor, registor }) {
+  const dataURItoBlob = (dataURI) => {
+    const byteString = window.atob(dataURI);
+    const arrayBuffer = new ArrayBuffer(byteString.length);
+    const int8Array = new Uint8Array(arrayBuffer);
+    for (let i = 0; i < byteString.length; i++) {
+      int8Array[i] = byteString.charCodeAt(i);
+    }
+    const blob = new Blob([int8Array], { type: "application/pdf" });
+    return blob;
+  };
+
+  // const handleDownload = (base64) => {
+  //   const blob = dataURItoBlob(base64);
+  //   const url = URL.createObjectURL(blob);
+
+  //   Swal.close();
+  //   window.open(url, "_blank");
+  // };
+
+  const getPdf = () => {
+    Swal.fire({
+      title: `<p class="font-thai">กำลังค้นหาข้อมูล </p><span>(Searching information)</span>`,
+      html: `<p class="font-thai">กรุณารอสักครู่ ใช้เวลาไม่เกิน 1-2 นาที <br /> <span>(Please wait until processing completed)</span> </p>`,
+      allowEscapeKey: false,
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+  };
+
   return (
     <>
       <Grid
@@ -101,6 +133,9 @@ export default function InputForm() {
           <Select
             placeholder="Select the company you want to register."
             fontSize={"sm"}
+            onChange={({ target: { value: companyRegister } }) =>
+              setReistor(companyRegister)
+            }
           >
             {optionText.map((info, i) => (
               <option key={i} value={info.value}>
@@ -113,7 +148,7 @@ export default function InputForm() {
         {/* Button */}
         <GridItem w="100%" colSpan={{ base: "3", md: "3" }}>
           <Grid
-            templateColumns={{ base: "repeat(2, 1fr)", lg: "repeat(3, 1fr)" }}
+            templateColumns={{ base: "repeat(3, 1fr)", lg: "repeat(3, 1fr)" }}
             gap={3}
           >
             {buttonText.map((info, i) => (
@@ -122,8 +157,9 @@ export default function InputForm() {
                   w="100%"
                   className="font-thai"
                   fontSize={{ base: ".6rem", sm: "sm" }}
-                  bgColor="#4adede"
+                  bgColor="#E6C327"
                   shadow="md"
+                  onClick={() => getPdf(info.value)}
                 >
                   {info.thai} <br /> {info.eng}
                 </Button>
@@ -135,8 +171,9 @@ export default function InputForm() {
                   w="100%"
                   className="font-thai"
                   fontSize={{ base: ".6rem", sm: "sm" }}
-                  bgColor="#4adede"
+                  bgColor="#E6C327"
                   shadow="md"
+                  onClick={() => window.open(info.link, "_blank")}
                 >
                   {info.thai} <br /> {info.eng}
                 </Button>
