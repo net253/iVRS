@@ -34,9 +34,19 @@ const textOption = [
     value: "map",
   },
   {
-    thai: "เอกสารงบการเงิน",
-    eng: "Financial",
-    value: "finance",
+    thai: "เอกสารหน้าบัญชีธนาคาร",
+    eng: "Book Bank",
+    value: "BookBank",
+  },
+  {
+    thai: "สำเนากรรมการผู้จัดการ",
+    eng: "Copy of Managing Director",
+    value: "ManagingDirector",
+  },
+  {
+    thai: "เอกสารงบการเงิน 5 ปี",
+    eng: "Finance",
+    value: "Finance",
   },
   {
     thai: "เอกสารอื่นๆ",
@@ -220,7 +230,7 @@ export default function Upload(props) {
         </Text>
         <Spacer />
         <Text fontWeight="light" fontSize="sm">
-          Step 4 of 6
+          Step 6 of 6
         </Text>
       </HStack>
 

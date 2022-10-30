@@ -22,3 +22,22 @@
 .cursor {
   cursor: pointer;
 }
+
+.blink-class {
+  animation: blink 1.5s linear infinite;
+}
+
+@keyframes blink {
+  25% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0;
+  }
+  75% {
+    opacity: 0.5;
+  }
+}
+.css-1zts0j {
+  width: 20px !important;
+}

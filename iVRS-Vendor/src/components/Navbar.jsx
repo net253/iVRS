@@ -31,7 +31,6 @@ export default function Simple() {
   const logout = () => {
     Swal.fire({
       title: "ต้องการออกจากระบบ ใช่ หรือ ไม่",
-      // text: "You won't be able to revert this!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -76,32 +75,35 @@ export default function Simple() {
 
   return (
     <>
-      <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
+      <Box bg={useColorModeValue("gray.100", "gray.900")} px={"1rem"}>
         <Flex h={"6vh"} alignItems={"center"} justifyContent={"space-between"}>
-          <HStack
-            spacing={{ base: "10px", xl: "20px", sm: "5px", md: "5px" }}
-            alignItems={"center"}
-            className="textclick"
+          <Flex
+            flexDirection={"column"}
+            alignItems={"flex-start"}
+            justifyContent={"center"}
+            cursor={"pointer"}
+            px="10px"
+            onClick={() => navigate("/Home")}
           >
             <Image
               src={logo}
-              alt="React Logo"
+              alt="SNC Logo"
               h={{ base: "1rem", xl: "1.5rem" }}
             />
             <Box
               fontWeight="semibold"
-              fontSize={{ base: "10px", xl: "20px", sm: "10px", md: "10px" }}
+              fontSize={{ base: "5px", xl: "5px", sm: "5px", md: "5px" }}
             >
               {" "}
-              iVRS Vendor Registation
+              บริษัท เอส เอ็น ซี ฟอร์เมอร์ จำกัด (มหาชน) และบริษัทในเครือ
             </Box>
-          </HStack>
+          </Flex>
           <Flex alignItems={"center"}>
             <HStack px="2rem">
               <Link px="1rem" fontWeight={"semibold"}>
                 หน้าหลัก
               </Link>
-              <Link fontWeight={"semibold"}>ประวัติ</Link>
+              {/* <Link fontWeight={"semibold"}>ประวัติ</Link> */}
             </HStack>
             <Menu>
               <MenuButton>

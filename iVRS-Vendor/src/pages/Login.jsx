@@ -42,7 +42,7 @@ const Login = () => {
       }).then(() => {
         window.localStorage.setItem("isLoggedIn", true);
         window.localStorage.setItem("username", formlogin.username);
-        navigate("/Vendor");
+        navigate("/Home");
       });
     }
   };

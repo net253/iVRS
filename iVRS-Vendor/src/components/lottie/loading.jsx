@@ -3,7 +3,8 @@ import loading from "./loading.json";
 import React from "react";
 
 const style = {
-  height: 300,
+  height: "50vh",
+  width: "100%",
 };
 
 const Loading = () => {

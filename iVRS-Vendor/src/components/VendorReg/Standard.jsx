@@ -4,7 +4,6 @@ import {
   Grid,
   GridItem,
   HStack,
-  Stack,
   Input,
   Spacer,
   Checkbox,
@@ -24,11 +23,10 @@ const chkText = [
   "OHSAS 18001:2007",
   "ISO 26000",
   "มรท. 8001-2546",
-  "BOI",
-  "Other",
+  "อื่นๆ",
 ];
 
-const bnf = ["BOI", "Flow", "อื่นๆ / Others", "ไม่มี"];
+const bnf = ["BOI", "Free Zone", "JTEPA", "อื่นๆ", "ไม่มี สิทธิประโยชน์ใดๆ"];
 const creditterm = [
   "Cash",
   "0 วัน",
@@ -42,40 +40,22 @@ const creditterm = [
   "150 วัน",
 ];
 
-const question = [
-  {
-    thai: "4. คุณมีมาตรฐานการบรรจุหรือไม่",
-    eng: "Do you have standard packing?",
-    value: "stdPacking",
-  },
-  {
-    thai: "5. คุณมีจำนวนการสั่งซื้อขั้นต่ำหรือไม่",
-    eng: "Do you have minimum order quantity (MOQ)?",
-    value: "moq",
-  },
-];
+export default function Standard() {
+  const [checkedItems, setCheckedItems] = useState({});
+  const [checkedItemsBenefits, setCheckedItemsBenefits] = useState({});
 
-export default function Standard({ setCertificate, certificate }) {
-  const [moq, setMoq] = useState(false);
-  const [std, setStd] = useState(false);
+  function onChangecheckbox(e) {
+    const item = e.target.name;
+    const isChecked = e.target.checked;
+    setCheckedItems({ ...checkedItems, [item]: isChecked });
+  }
+  function onChangecheckboxBenefits(e) {
+    const item = e.target.name;
+    const isChecked = e.target.checked;
+    setCheckedItemsBenefits({ ...checkedItemsBenefits, [item]: isChecked });
+  }
 
-  const handleQuest = (text, value) => {
-    if (text == "stdPacking") {
-      setCertificate({ ...certificate, stdPacking: value });
-      if (value == "Yes") {
-        setStd(true);
-      } else {
-        setStd(false);
-      }
-    } else {
-      setCertificate({ ...certificate, moq: value });
-      if (value == "Yes") {
-        setMoq(true);
-      } else {
-        setMoq(false);
-      }
-    }
-  };
+  console.log(checkedItems);
   return (
     <>
       <HStack mt={5} px="10px">
@@ -122,13 +102,23 @@ export default function Standard({ setCertificate, certificate }) {
                   key={i}
                   w="100%"
                   display="flex"
-                  colSpan={info == "Other" ? "2" : "1"}
+                  colSpan={info == "อื่นๆ" ? "2" : "1"}
                 >
-                  <Checkbox key={i} value={info}>
+                  <Checkbox
+                    key={i}
+                    value={info}
+                    name={info}
+                    onChange={onChangecheckbox}
+                  >
                     {info}
                   </Checkbox>
-                  {info == "Other" ? (
-                    <Input placeholder="Other certificate" ml={5} size="sm" />
+                  {info == "อื่นๆ" ? (
+                    <Input
+                      placeholder="โปรดระบุ"
+                      ml={5}
+                      size="sm"
+                      isDisabled={!checkedItems[info]}
+                    />
                   ) : (
                     ""
                   )}
@@ -156,13 +146,24 @@ export default function Standard({ setCertificate, certificate }) {
                   key={i}
                   w="100%"
                   display="flex"
-                  colSpan={info == "Other" ? "2" : "1"}
+                  colSpan={checkedItemsBenefits[info] ? "2" : "1"}
                 >
-                  <Checkbox key={i} value={info}>
+                  <Checkbox
+                    key={i}
+                    value={info}
+                    name={info}
+                    onChange={onChangecheckboxBenefits}
+                  >
                     {info}
                   </Checkbox>
-                  {info == "Other" ? (
-                    <Input placeholder="Other certificate" ml={5} size="sm" />
+                  {info == "อื่นๆ" ? (
+                    <Input
+                      placeholder="โปรดระบุ"
+                      ml={5}
+                      size="sm"
+                      display={checkedItemsBenefits[info] ? "block" : "none"}
+                      isDisabled={!checkedItemsBenefits[info]}
+                    />
                   ) : (
                     ""
                   )}
@@ -193,12 +194,12 @@ export default function Standard({ setCertificate, certificate }) {
                     key={i}
                     w="100%"
                     display="flex"
-                    colSpan={info == "Other" ? "2" : "1"}
+                    colSpan={info == "อื่นๆ" ? "2" : "1"}
                   >
                     <Radio key={i} value={info}>
                       {info}
                     </Radio>
-                    {info == "Other" ? (
+                    {info == "อื่นๆ" ? (
                       <Input placeholder="Other certificate" ml={5} size="sm" />
                     ) : (
                       ""
@@ -248,52 +249,6 @@ For example, place a 30% deposit when opening an order. And the next installment
             ))}
           </Select>
         </GridItem>
-
-        {/* Q3+4 */}
-        {question.map((text, i) => (
-          <React.Fragment key={i}>
-            <GridItem w="100%" colSpan={3}>
-              <Text className="font-thai" fontWeight="bold">
-                {text.thai} /<span> {text.eng}</span>
-              </Text>
-            </GridItem>
-            <GridItem w="100%" colSpan={3}>
-              <HStack spacing={10} justifyContent="center">
-                <RadioGroup>
-                  <Stack direction="row">
-                    <Radio
-                      name={text.value}
-                      value="No"
-                      px="1rem"
-                      onChange={(e) => handleQuest(text.value, e.target.value)}
-                    >
-                      ไม่มี / No
-                    </Radio>
-                    <Radio
-                      value="Yes"
-                      name={text.value}
-                      onChange={(e) => handleQuest(text.value, e.target.value)}
-                    >
-                      มี / Yes
-                    </Radio>
-                  </Stack>
-                </RadioGroup>
-                <Stack>
-                  <Text className="font-thai" fontSize="small">
-                    แนบเอกสาร / <span>Attach file</span>
-                  </Text>
-                  <Input
-                    isDisabled={text.value == "stdPacking" ? !std : !moq}
-                    type="file"
-                    accept=".pdf"
-                    variant="unstyled"
-                    size="sm"
-                  />
-                </Stack>
-              </HStack>
-            </GridItem>
-          </React.Fragment>
-        ))}
       </Grid>
     </>
   );

@@ -10,6 +10,8 @@ import {
   InputRightElement,
   InputGroup,
 } from "@chakra-ui/react";
+import { BsCheck2All } from "react-icons/bs";
+import Paycpn from "./paylist/paycomponents";
 
 const bankList = [
   "ธนาคารกสิกรไทย / Kasikornbank Public Company Limited",
@@ -70,6 +72,12 @@ const Account = ({ setBankAccount, bankAccount }) => {
         px="10px"
       >
         <GridItem w="100%">
+          <Text className="font-thai" fontWeight="bold">
+            1. ข้อมูลบัญชีธนาคาร
+          </Text>
+        </GridItem>
+        <GridItem w="100%" colSpan={2}></GridItem>
+        <GridItem w="100%" px="10px">
           <Text className="font-thai">ชื่อบัญชี / Account Name</Text>
         </GridItem>
         <GridItem w="100%" colSpan={2}>
@@ -83,7 +91,7 @@ const Account = ({ setBankAccount, bankAccount }) => {
           />
         </GridItem>
 
-        <GridItem w="100%">
+        <GridItem w="100%" px="10px">
           <Text className="font-thai">เลขบัญชี / Account No.</Text>
         </GridItem>
         <GridItem w="100%" colSpan={2}>
@@ -97,7 +105,7 @@ const Account = ({ setBankAccount, bankAccount }) => {
           />
         </GridItem>
 
-        <GridItem w="100%">
+        <GridItem w="100%" px="10px">
           <Text className="font-thai">ธนาคาร / Bank</Text>
         </GridItem>
         <GridItem w="100%" colSpan={2}>
@@ -131,7 +139,7 @@ const Account = ({ setBankAccount, bankAccount }) => {
           )}
         </GridItem>
 
-        <GridItem w="100%">
+        <GridItem w="100%" px="10px">
           <Text className="font-thai">สาขา / Branch</Text>
         </GridItem>
         <GridItem w="100%" colSpan={2}>
@@ -145,7 +153,7 @@ const Account = ({ setBankAccount, bankAccount }) => {
           />
         </GridItem>
 
-        <GridItem w="100%">
+        <GridItem w="100%" px="10px">
           <Text className="font-thai">ชื่อผู้ติดต่อ / Contact Person</Text>
         </GridItem>
         <GridItem w="100%" colSpan={2}>
@@ -159,7 +167,7 @@ const Account = ({ setBankAccount, bankAccount }) => {
           />
         </GridItem>
 
-        <GridItem w="100%" colSpan={{ base: "2", md: "1" }}>
+        <GridItem w="100%" colSpan={{ base: "2", md: "1" }} px="10px">
           <Text className="font-thai">เบอร์โทรศัพท์ / Tel No.</Text>
         </GridItem>
         <GridItem w="100%">
@@ -197,7 +205,7 @@ const Account = ({ setBankAccount, bankAccount }) => {
           </InputGroup>
         </GridItem>
 
-        <GridItem w="100%" colSpan={{ base: "2", md: "1" }}>
+        <GridItem w="100%" colSpan={{ base: "2", md: "1" }} px="10px">
           <Text className="font-thai">อีเมล / E-mail</Text>
         </GridItem>
         <GridItem w="100%">
@@ -222,19 +230,18 @@ const Account = ({ setBankAccount, bankAccount }) => {
                 setBankAccount({ ...bankAccount, VEmail })
               }
             />
-            <InputRightElement
-            // children={
-            //   bankAccount.VEmail != "" &&
-            //   bankAccount.VEmail == bankAccount.email ? (
-            //     <CheckIcon color="green.500" />
-            //   ) : (
-            //     ""
-            //   )
-            // }
-            />
+            {bankAccount.VEmail != "" &&
+            bankAccount.VEmail == bankAccount.email ? (
+              <InputRightElement>
+                <BsCheck2All color="green.500" />
+              </InputRightElement>
+            ) : (
+              ""
+            )}
           </InputGroup>
         </GridItem>
       </Grid>
+      <Paycpn />
     </div>
   );
 };

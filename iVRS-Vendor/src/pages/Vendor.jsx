@@ -6,12 +6,31 @@ import {
   Contact,
   Statdard,
   Upload,
+  Actionpolicy,
+  SubmitDraft,
 } from "../components/VendorReg";
+import { Account, Headerpay } from "../components/Vendorpay";
 import { useNavigate } from "react-router-dom";
 import { Loadinglottie } from "../components/lottie";
 
 const vendor = () => {
   const navigate = useNavigate();
+
+  //create function detect refresh show confirm
+  async function detectRefresh() {
+    const isRefresh = confirm("Do you want to refresh?");
+    if (isRefresh) {
+      navigate("/vendor");
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener("beforeunload", detectRefresh);
+    return () => {
+      window.removeEventListener("beforeunload", detectRefresh);
+    };
+  }, []);
+
   const checklocalstorafe = () => {
     if (!window.localStorage.isLoggedIn) {
       setTimeout(() => navigate("/"), 1000);
@@ -83,6 +102,19 @@ const vendor = () => {
     othersVTel: "",
   });
 
+  const [bankAccount, setBankAccount] = useState({
+    accountName: "",
+    accountNo: "",
+    bank: "",
+    otherBank: "",
+    branch: "",
+    contact: "",
+    tel: "",
+    VTel: "",
+    email: "",
+    VEmail: "",
+  });
+
   return (
     <>
       <Header />
@@ -90,12 +122,16 @@ const vendor = () => {
       <Company setCompany={setCompany} company={company} />
       <Contact setContact={setContact} contact={contact} />
       <Statdard certificate={certificate} setCertificate={setCertificate} />
+      <Actionpolicy />
+      <Headerpay />
+      <Account bankAccount={bankAccount} setBankAccount={setBankAccount} />
       <Upload
         registor={registor}
         company={company}
         contact={contact}
         certificate={certificate}
       />
+      <SubmitDraft />
     </>
   );
 };

@@ -9,6 +9,7 @@ import {
   Th,
   Td,
   TableContainer,
+  Flex,
 } from "@chakra-ui/react";
 
 const sizeForRes = { base: "sm", md: "sm" };
@@ -17,14 +18,25 @@ const Headerpay = () => {
     <div>
       {" "}
       <Box py={3} mb={5} px="10px">
-        <Text
-          fontWeight="bold"
-          fontSize={{ base: "sm", md: "md" }}
-          className="font-thai"
-          textAlign="center"
+        <Flex
+          w="100%"
+          borderBottom="2px"
+          py={1}
+          my={1}
+          borderColor="blackAlpha.600"
+          justifyContent={"space-between"}
         >
-          รูปแบบการชำระเงิน
-        </Text>
+          <Text
+            fontWeight="bold"
+            fontSize={{ base: "sm", md: "md" }}
+            className="font-thai"
+          >
+            รูปแบบการชำระเงิน
+          </Text>
+          <Text fontWeight="light" fontSize="sm">
+            Step 4 of 6
+          </Text>
+        </Flex>
 
         {/* Document */}
         <Text my={5} fontSize={sizeForRes}>

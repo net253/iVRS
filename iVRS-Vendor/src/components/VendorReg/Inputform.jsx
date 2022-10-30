@@ -60,17 +60,17 @@ const mapText = [
   },
 ];
 
-export default function InputForm({ setReistor, registor }) {
-  const dataURItoBlob = (dataURI) => {
-    const byteString = window.atob(dataURI);
-    const arrayBuffer = new ArrayBuffer(byteString.length);
-    const int8Array = new Uint8Array(arrayBuffer);
-    for (let i = 0; i < byteString.length; i++) {
-      int8Array[i] = byteString.charCodeAt(i);
-    }
-    const blob = new Blob([int8Array], { type: "application/pdf" });
-    return blob;
-  };
+export default function InputForm({ setReistor }) {
+  // const dataURItoBlob = (dataURI) => {
+  //   const byteString = window.atob(dataURI);
+  //   const arrayBuffer = new ArrayBuffer(byteString.length);
+  //   const int8Array = new Uint8Array(arrayBuffer);
+  //   for (let i = 0; i < byteString.length; i++) {
+  //     int8Array[i] = byteString.charCodeAt(i);
+  //   }
+  //   const blob = new Blob([int8Array], { type: "application/pdf" });
+  //   return blob;
+  // };
 
   // const handleDownload = (base64) => {
   //   const blob = dataURItoBlob(base64);
@@ -157,7 +157,7 @@ export default function InputForm({ setReistor, registor }) {
                   w="100%"
                   className="font-thai"
                   fontSize={{ base: ".6rem", sm: "sm" }}
-                  bgColor="#E6C327"
+                  bgColor="#c1c1c1"
                   shadow="md"
                   onClick={() => getPdf(info.value)}
                 >
@@ -171,7 +171,7 @@ export default function InputForm({ setReistor, registor }) {
                   w="100%"
                   className="font-thai"
                   fontSize={{ base: ".6rem", sm: "sm" }}
-                  bgColor="#E6C327"
+                  bgColor="#c1c1c1"
                   shadow="md"
                   onClick={() => window.open(info.link, "_blank")}
                 >
