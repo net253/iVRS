@@ -23,13 +23,20 @@ const chkText = [
   "OHSAS 18001:2007",
   "ISO 26000",
   "มรท. 8001-2546",
+  "ไม่มี",
   "อื่นๆ",
 ];
 
-const bnf = ["BOI", "Free Zone", "JTEPA", "อื่นๆ", "ไม่มี สิทธิประโยชน์ใดๆ"];
+const bnf = [
+  "BOI",
+  "Free Zone",
+  "JTEPA",
+  "อื่นๆ",
+  "ไม่ได้รับ สิทธิประโยชน์ใดๆ",
+];
 const creditterm = [
   "Cash",
-  "0 วัน",
+  "7 วัน",
   "15 วัน",
   "30 วัน",
   "45 วัน",
@@ -146,7 +153,7 @@ export default function Standard() {
                   key={i}
                   w="100%"
                   display="flex"
-                  colSpan={checkedItemsBenefits[info] ? "2" : "1"}
+                  colSpan={checkedItemsBenefits.อื่นๆ ? "2" : "1"}
                 >
                   <Checkbox
                     key={i}
@@ -181,7 +188,7 @@ export default function Standard() {
           </Text>
           <GridItem w="100%" colSpan={3} fontSize={{ base: "sm", sm: "sm" }}>
             <Text fontWeight={"bold"} py="10px" px="1.2rem">
-              3.1 Credit Term / <span>ระยะเวลาการให้สินเชื่อ</span>
+              3.1 การชำระเงิน การให้เครดิตเทอม / <span>Credit Term</span>
             </Text>
             <RadioGroup colorScheme="green" px="1.2rem">
               <Grid
@@ -214,8 +221,7 @@ export default function Standard() {
             3.2 การวางมัดจำ / <span>Earnest</span>
           </Text>
           <Textarea
-            placeholder="- ตัวอย่างเช่น วางมัดจำ 30% เมื่อเปิดใบสั่งซื้อ และงวดถัดๆไปมี Credit Terms 60 วัน / 
-For example, place a 30% deposit when opening an order. And the next installment has 60 days Credit Terms."
+            placeholder="กรุณาระบบเงื่อนไขการชำระสินค้า เช่น ชำระเงินสด 30% เมื่อยืนยันการสั่งซื้อ และชำระส่วนที่เหลือเมื่อจัดส่งสินค้าเสร็จสมบูรณ์"
             size="sm"
             rows={3}
             px="1.2rem"
@@ -228,7 +234,7 @@ For example, place a 30% deposit when opening an order. And the next installment
             fontWeight={"bold"}
             px="1.2rem"
           >
-            3.3 วงเงินอนุมัติ / <span>Approval limit</span>
+            วงเงินอนุมัติ / <span>Approval limit</span>
           </Text>
         </GridItem>
         <GridItem w="100%" colSpan={{ base: "2", md: "1" }}>

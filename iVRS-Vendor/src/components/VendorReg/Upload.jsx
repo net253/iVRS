@@ -13,19 +13,20 @@ import {
   FormControl,
   Checkbox,
   Link,
+  Box,
 } from "@chakra-ui/react";
 import { TiTimes, TiMediaPlay } from "react-icons/ti";
 import Swal from "sweetalert2";
 
 const textOption = [
   {
-    thai: "ภพ.20",
-    eng: "Vat License",
+    thai: "หมายเหตุ: สำเนา ภพ.20",
+    eng: "Copy of Vat License",
     value: "vat",
   },
   {
-    thai: "หนังสือรับรองบริษัท",
-    eng: "Company Affidavit",
+    thai: "หมายเหตุ: สำเนาหนังสือรับรองบริษัทฉบับล่าสุด",
+    eng: "Copy of Lasted Company Affidavit",
     value: "affidavit",
   },
   {
@@ -34,28 +35,30 @@ const textOption = [
     value: "map",
   },
   {
-    thai: "เอกสารหน้าบัญชีธนาคาร",
-    eng: "Book Bank",
+    thai: "หมายเหตุ: สำเนาหน้าบัญชีธนาคาร",
+    eng: "Copy of Book Bank",
     value: "BookBank",
   },
   {
-    thai: "สำเนากรรมการผู้จัดการ",
+    thai: "หมายเหตุ: สำเนากรรมการผู้จัดการ",
     eng: "Copy of Managing Director",
     value: "ManagingDirector",
   },
   {
-    thai: "เอกสารงบการเงิน 5 ปี",
-    eng: "Finance",
+    thai: "หมายเหตุ: สำเนาเอกสารงบการเงินย้อยหลัง 5 ปี",
+    eng: "Copy of Lasted 5 Yrs. Financial Document",
     value: "Finance",
   },
   {
-    thai: "เอกสารอื่นๆ",
-    eng: "Other Documents",
+    thai: "หมายเหตุ: เอกสารอื่นๆ (ถ้ามี)",
+    eng: "Other Document (if any)",
     value: "other",
   },
 ];
 
 export default function Upload(props) {
+  const [accept, setAccept] = useState(false);
+  console.log(accept);
   const navigate = useNavigate();
   const [time, setTime] = useState("");
   const [upload, setUpload] = useState({
@@ -225,8 +228,8 @@ export default function Upload(props) {
           อัพโหลดเอกสาร / <span>Upload Documents</span>
         </Text>
         <Text color="red">
-          *หมายเหตุ: ไฟล์ PDF ที่มีขนาดมากกว่า 900KB กรุณาส่งทางอีเมล
-          (Sittipong-hit@sncformer.com)
+          หมายเหตุ: รองรับไฟล์ PDF ขนาดไม่เกิน 900KB เท่านั้น (Maximum PDF size
+          is 900KB)
         </Text>
         <Spacer />
         <Text fontWeight="light" fontSize="sm">
@@ -237,7 +240,6 @@ export default function Upload(props) {
       <Grid
         templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)" }}
         gap={3}
-        alignItems="center"
         borderTop="2px"
         borderColor="blackAlpha.600"
         py={3}
@@ -253,9 +255,28 @@ export default function Upload(props) {
           borderColor="blackAlpha.600"
           px={2}
         >
+          <Box>
+            <Checkbox
+              onChange={(e) => {
+                setAccept(e.target.checked);
+              }}
+              alignItems={"start"}
+              py="2rem"
+            >
+              <Text className="font-thai" fontSize={"sm"} textAlign={"start"}>
+                เอกสารสำเนาทุกฉบับจะต้อง
+                ลงรายมือชื่อรับรองสำเนาถูกต้องโดยผู้มีอำนาจตามกฎหมาย
+                และประทับตราบริษัททุกครั้ง{" "}
+                <span>
+                  (Certified true copy by legal authority person and affixed
+                  with company seal all copy documents)
+                </span>
+              </Text>
+            </Checkbox>
+          </Box>
           {textOption.map((info, i) => (
             <Stack key={i} mb={8}>
-              <Text className="font-thai">
+              <Text className="font-thai" isDisabled={!accept}>
                 {i + 1}. {info.thai} /<span> {info.eng}</span>
               </Text>
               <Input
@@ -263,6 +284,8 @@ export default function Upload(props) {
                 accept=".pdf"
                 variant="unstyled"
                 size="sm"
+                isDisabled={!accept}
+                bgColor={upload[info.value] ? "green.100" : "white"}
                 onChange={(e) => handleUpload(info.value, e.target.files)}
               />
               {info.thai == "แผนที่บริษัท" ? (
@@ -299,12 +322,11 @@ export default function Upload(props) {
             }}
           >
             <Checkbox
+              py="1rem"
               onChange={() => setCheck(!check)}
-              mt={3}
-              ml={12}
-              textAlign={"start"}
+              alignItems={"start"}
             >
-              <Text fontSize="sm">
+              <Text fontSize="sm" textAlign={"start"}>
                 ข้าพเจ้าได้ศึกษาและยอมรับ{" "}
                 <Link
                   color={"blue"}
@@ -336,18 +358,20 @@ export default function Upload(props) {
           {/* Button */}
           <HStack justifyContent="center" gap={8}>
             <Button
-              w={{ base: "50%", md: "30%" }}
+              w={{ base: "50%", md: "40%" }}
               rightIcon={<Icon as={TiTimes} />}
               colorScheme="red"
               rounded="xl"
               className="font-thai"
+              px={15}
               onClick={() => handleCancel()}
             >
               ยกเลิก / Cancel
             </Button>
 
             <Button
-              w={{ base: "50%", md: "30%" }}
+              px={8}
+              w={{ base: "55%", md: "40%" }}
               rightIcon={<Icon as={TiMediaPlay} />}
               colorScheme="green"
               rounded="xl"
@@ -355,9 +379,24 @@ export default function Upload(props) {
               onClick={() => handleState()}
               disabled={!check || userName == ""}
             >
-              ต่อไป / Next
+              ยืนยันขึ้นทะเบียน / Confirm
             </Button>
           </HStack>
+          <Text py="2rem" textAlign={"start"}>
+            <span className="customers">หมายเหตุ:</span> หลังจากที่ท่านกด
+            &quot;ยืนยันการขึ้นทะเบียน&quot; เรียบร้อยแล้ว
+            ท่านสามารถติดตามผลการขึ้นทะเบียนได้จากสถานะเอกสารในหน้า{""}
+            <Link
+              color={"blue"}
+              onClick={() => {
+                navigate("/Home");
+              }}
+              target="_blank"
+            >
+              Home Page
+            </Link>{" "}
+            หรือทาง Email ที่ท่านแจ้งไว้
+          </Text>
         </GridItem>
       </Grid>
     </>

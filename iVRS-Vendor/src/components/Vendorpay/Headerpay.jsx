@@ -67,19 +67,19 @@ const Headerpay = () => {
             <Tbody>
               <Tr>
                 <Td fontSize={sizeForRes}>โอนเงินภายในธนาคารกสิกร</Td>
-                <Td fontSize={sizeForRes}>ไม่เกิน 30,000,000 บาท / รายการ</Td>
+                <Td fontSize={sizeForRes}></Td>
                 <Td fontSize={sizeForRes}>8 บาท / รายการ</Td>
               </Tr>
               <Tr>
                 <Td fontSize={sizeForRes}>โอนเงินต่างธนาคารกสิกร</Td>
-                <Td fontSize={sizeForRes}>ไม่เกิน 30,000,000 บาท / รายการ</Td>
+                <Td fontSize={sizeForRes}>ไม่เกิน 2,000,000 บาท / รายการ</Td>
                 <Td fontSize={sizeForRes}>10 บาท / รายการ</Td>
               </Tr>
               <Tr>
                 <Td fontSize={sizeForRes}>โอนเงินบาทเน็ต</Td>
-                <Td fontSize={sizeForRes}>ไม่เกิน 30,000,000 บาท / รายการ</Td>
+                <Td fontSize={sizeForRes}></Td>
                 <Td fontSize={sizeForRes}>
-                  ขั้นต่ำ 150 บาท / รายการ <br /> สูงสุดไม่เกิน 750 บาท / รายการ
+                  ขั้นต่ำ 150 บาท / รายการ <br /> สูงสุดไม่เกิน 950 บาท / รายการ
                 </Td>
               </Tr>
             </Tbody>

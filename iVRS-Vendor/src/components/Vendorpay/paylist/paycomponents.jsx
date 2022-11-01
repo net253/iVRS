@@ -6,7 +6,6 @@ import {
   Grid,
   Radio,
   RadioGroup,
-  Stack,
   Box,
   Flex,
 } from "@chakra-ui/react";
@@ -23,7 +22,7 @@ const paycomponents = () => {
       >
         <GridItem w="100%" colSpan={3}>
           <Text className="font-thai" fontWeight="bold">
-            2. นโยบายการเงิน
+            2. นโยบายการเงิน / Monetary Policy
           </Text>
         </GridItem>
         {paylist.map((info, i) => (
@@ -42,25 +41,25 @@ const paycomponents = () => {
               </Box>
               <Grid colSpan={3} w="100%" px="10rem">
                 <RadioGroup>
-                  <Stack direction="row" colSpan={3}>
-                    <GridItem w="10rem">
+                  <Grid templateColumns="repeat(3, 1fr)" gap={3}>
+                    <GridItem w={"14rem"}>
                       <Radio value="1">{info.isRadioGroup.isRadio1}</Radio>
                     </GridItem>
-                    <GridItem w="10rem">
-                      <Radio
-                        value="2"
-                        display={`${
-                          info.isRadioGroup.isRadio2 == "yy" ? "none" : ""
-                        }`}
-                      >
-                        {" "}
-                        {info.isRadioGroup.isRadio2}
-                      </Radio>
+                    <GridItem w="14rem">
+                      {info.isRadioGroup.isRadio2 == "" ? (
+                        ""
+                      ) : (
+                        <Radio value="2">{info.isRadioGroup.isRadio2}</Radio>
+                      )}
                     </GridItem>
-                    <GridItem w="10rem">
-                      <Radio value="3"> {info.isRadioGroup.isRadio3}</Radio>
+                    <GridItem w="14rem">
+                      {info.isRadioGroup.isRadio3 == "" ? (
+                        ""
+                      ) : (
+                        <Radio value="2">{info.isRadioGroup.isRadio3}</Radio>
+                      )}
                     </GridItem>
-                  </Stack>
+                  </Grid>
                 </RadioGroup>
               </Grid>
             </Flex>

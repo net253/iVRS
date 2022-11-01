@@ -1,5 +1,4 @@
 import React from "react";
-import { useState } from "react";
 import {
   Center,
   Box,
@@ -18,35 +17,54 @@ import bg from "../assets/image/bg.png";
 import { FaUserAlt, FaLock } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import { useLogin } from "../store/Login/useLogin";
+import { fetchlogin } from "../services/feth-api";
+import { toastMixin } from "../libs/swalCustom";
 
 const Login = () => {
-  const [formlogin, setFormlogin] = useState({
-    username: "",
-    password: "",
-  });
+  const navigate = useNavigate();
+  const { LoginDetail, updateLoginDetail, updateLoginStatus } = useLogin();
 
-  const [errorMsg, setErrorMsg] = useState({
-    msg: "",
-  });
+  const handleonChange = (e) => {
+    const { name, value } = e.target;
+    updateLoginDetail(name, value);
+  };
 
-  const handleclick = () => {
-    if (formlogin.username == "" || formlogin.password == "") {
-      console.log("Please enter your username");
-      setErrorMsg({ ...errorMsg, msg: "**กรุณาระบุข้อมูลให้ครบถ้วน**" });
-    } else {
+  const handleLogin = () => {
+    if (LoginDetail.Username === "" || LoginDetail.Password === "") {
       Swal.fire({
-        icon: "success",
-        title: "เข้าสู่ระบบสำเร็จ",
-        showConfirmButton: false,
-        timer: 2000,
-      }).then(() => {
-        window.localStorage.setItem("isLoggedIn", true);
-        window.localStorage.setItem("username", formlogin.username);
-        navigate("/Home");
+        icon: "error",
+        title: "Oops...",
+        text: "กรุณากรอกข้อมูลให้ครบถ้วน",
+      });
+    } else {
+      fetchlogin(LoginDetail).then((data) => {
+        if (data.state) {
+          toastMixin
+            .fire({
+              icon: "success",
+              title: data.msg,
+              showConfirmButton: false,
+              timer: 1500,
+            })
+            .then(() => {
+              updateLoginStatus(true);
+              window.localStorage.setItem("isLoggedIn", true);
+              window.localStorage.setItem("username", LoginDetail.Username);
+              window.localStorage.setItem("token", data.token);
+              navigate("/home");
+            });
+        } else {
+          toastMixin.fire({
+            icon: "error",
+            title: data.msg,
+            text: "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง",
+          });
+        }
       });
     }
   };
-  const navigate = useNavigate();
+
   return (
     <>
       <Center
@@ -59,7 +77,7 @@ const Login = () => {
         <Box
           bgColor="#fff"
           shadow="xl"
-          p={8}
+          p={9}
           w="25%"
           rounded="2xl"
           minW="400px"
@@ -70,7 +88,7 @@ const Login = () => {
           </Heading>
 
           <FormControl isRequired>
-            <FormLabel>ชื่อผู้ใช้(Username)</FormLabel>
+            <FormLabel>ชื่อผู้ใช้ (Username)</FormLabel>
             <InputGroup>
               <InputLeftElement pointerEvents="none">
                 <Icon as={FaUserAlt} color="gray.300" />
@@ -78,32 +96,41 @@ const Login = () => {
               <Input
                 type="text"
                 placeholder="Type your username"
-                onChange={({ target: { value: username } }) =>
-                  setFormlogin({ ...formlogin, username })
-                }
+                name="Username"
+                onChange={handleonChange}
+                onKeyUp={(e) => {
+                  if (e.key === "Enter") {
+                    handleLogin();
+                  }
+                }}
               />
             </InputGroup>
           </FormControl>
 
           <FormControl my={3}>
-            <FormLabel>รหัสผ่าน(Password)</FormLabel>
+            <FormLabel>รหัสผ่าน (Password)</FormLabel>
             <InputGroup>
               <InputLeftElement pointerEvents="none">
                 <Icon as={FaLock} color="gray.300" />
               </InputLeftElement>
               <Input
+                name="Password"
                 type="password"
+                onChange={handleonChange}
                 placeholder="Type your password"
-                onChange={({ target: { value: password } }) =>
-                  setFormlogin({ ...formlogin, password })
-                }
+                onKeyUp={(e) => {
+                  if (e.key === "Enter") {
+                    handleLogin();
+                  }
+                }}
               />
             </InputGroup>
           </FormControl>
-          <Text fontSize={"12px"} color="red" pb="10px">
-            {errorMsg.msg}
+          <Text fontSize={"12px"} color="red">
+            หมายเหตุ: เพื่อประสิทธิภาพสูงสุด แนะนำใช้งานเว็บไซต์ผ่าน Web Browser
+            on PC
           </Text>
-          <Flex w="100%" justifyContent={"space-between"}>
+          <Flex w="100%" justifyContent={"space-between"} py="10px">
             <Text fontSize={"12px"} className={"cursor"}>
               ลืมรหัสผ่าน?
             </Text>
@@ -123,7 +150,7 @@ const Login = () => {
             mt={5}
             colorScheme="messenger"
             rounded="full"
-            onClick={handleclick}
+            onClick={handleLogin}
           >
             เข้าสู่ระบบ(Login)
           </Button>

@@ -11,7 +11,7 @@ const Buttoncomponents = () => {
         w="100%"
         h="5vh"
         justifyContent={"flex-end"}
-        px="2rem"
+        px="1rem"
         borderTop={"1px solid #E2E8F0"}
         py="3px"
       >
@@ -20,7 +20,7 @@ const Buttoncomponents = () => {
           px="2rem"
           onClick={() => navigate("/vendor")}
         >
-          ลงทะเบียน
+          ขึ้นทะเบียนผู้ขายใหม่ (New Vendor Registation)
         </Button>
       </Flex>
     </>

@@ -5,7 +5,6 @@
   margin: 0;
   box-sizing: border-box;
   font-family: "Sarabun", sans-serif !important;
-  //font-family: "Noto Sans Thai", sans-serif;
 }
 ::-webkit-scrollbar {
   width: 5px;
@@ -40,4 +39,10 @@
 }
 .css-1zts0j {
   width: 20px !important;
+}
+.chakra-input css-555pte {
+  background-color: aqua;
+}
+.customers {
+  font-weight: bold;
 }

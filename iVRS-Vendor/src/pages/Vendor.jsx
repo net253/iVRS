@@ -17,19 +17,21 @@ const vendor = () => {
   const navigate = useNavigate();
 
   //create function detect refresh show confirm
-  async function detectRefresh() {
-    const isRefresh = confirm("Do you want to refresh?");
-    if (isRefresh) {
-      navigate("/vendor");
-    }
-  }
+  // async function detectRefresh(e) {
+  //   e.preventDefault();
+  //   return (e.returnValue = "Are you sure you want to leave?");
+  // }
 
-  useEffect(() => {
-    window.addEventListener("beforeunload", detectRefresh);
-    return () => {
-      window.removeEventListener("beforeunload", detectRefresh);
-    };
-  }, []);
+  // useEffect(() => {
+  //   window.addEventListener("beforeunload", detectRefresh, {
+  //     capture: true,
+  //   });
+  //   return () => {
+  //     window.removeEventListener("beforeunload", detectRefresh, {
+  //       capture: true,
+  //     });
+  //   };
+  // }, []);
 
   const checklocalstorafe = () => {
     if (!window.localStorage.isLoggedIn) {

@@ -8,8 +8,17 @@ import {
   Spacer,
   Textarea,
 } from "@chakra-ui/react";
+import useStoreCompany from "../../store/useStoreCompany";
 
-export default function Company({ setCompany, company }) {
+export default function Company() {
+  const { CompanyDetail, updateCompanyDetail } = useStoreCompany();
+  console.log(CompanyDetail);
+
+  const handleCompany = (e) => {
+    const { name, value } = e.target;
+    updateCompanyDetail(name, value);
+  };
+
   return (
     <>
       <HStack mt={5} px="10px">
@@ -44,9 +53,8 @@ export default function Company({ setCompany, company }) {
           <Input
             placeholder="Company Name (English)"
             size="sm"
-            onChange={({ target: { value: engCompany } }) =>
-              setCompany({ ...company, engCompany })
-            }
+            name="engCompany"
+            onChange={handleCompany}
           />
         </GridItem>
 
@@ -57,9 +65,8 @@ export default function Company({ setCompany, company }) {
           <Input
             placeholder="Company Name (Thai)"
             size="sm"
-            onChange={({ target: { value: thaiCompany } }) =>
-              setCompany({ ...company, thaiCompany })
-            }
+            name="thaiCompany"
+            onChange={handleCompany}
           />
         </GridItem>
 
@@ -70,9 +77,8 @@ export default function Company({ setCompany, company }) {
           <Textarea
             placeholder="Address (English)"
             size="sm"
-            onChange={({ target: { value: engAddress } }) =>
-              setCompany({ ...company, engAddress })
-            }
+            name="engAddress"
+            onChange={handleCompany}
           />
         </GridItem>
 
@@ -81,9 +87,8 @@ export default function Company({ setCompany, company }) {
           <Textarea
             placeholder="Address (Thai)"
             size="sm"
-            onChange={({ target: { value: thaiAddress } }) =>
-              setCompany({ ...company, thaiAddress })
-            }
+            name="thaiAddress"
+            onChange={handleCompany}
           />
         </GridItem>
 
@@ -94,9 +99,8 @@ export default function Company({ setCompany, company }) {
           <Input
             placeholder="Nature of Business"
             size="sm"
-            onChange={({ target: { value: natureBusiness } }) =>
-              setCompany({ ...company, natureBusiness })
-            }
+            name="natureBusiness"
+            onChange={handleCompany}
           />
         </GridItem>
 
@@ -105,9 +109,8 @@ export default function Company({ setCompany, company }) {
           <Input
             placeholder="Company Website"
             size="sm"
-            onChange={({ target: { value: companyWeb } }) =>
-              setCompany({ ...company, companyWeb })
-            }
+            name="companyWeb"
+            onChange={handleCompany}
           />
         </GridItem>
 
@@ -118,9 +121,8 @@ export default function Company({ setCompany, company }) {
             type="number"
             size="sm"
             maxLength={10}
-            onChange={({ target: { value: tel } }) =>
-              setCompany({ ...company, tel })
-            }
+            name="tel"
+            onChange={handleCompany}
           />
         </GridItem>
 
@@ -130,9 +132,19 @@ export default function Company({ setCompany, company }) {
             placeholder="Fax No."
             type="number"
             size="sm"
-            onChange={({ target: { value: fax } }) =>
-              setCompany({ ...company, fax })
-            }
+            name="fax"
+            onChange={handleCompany}
+          />
+        </GridItem>
+        <GridItem w="100%">
+          <Text className="font-thai">เลขนิติบุคคล / Juristic ID</Text>
+          <Input
+            placeholder="Juristic ID"
+            type="number"
+            max={13}
+            size="sm"
+            name="fax"
+            onChange={handleCompany}
           />
         </GridItem>
       </Grid>

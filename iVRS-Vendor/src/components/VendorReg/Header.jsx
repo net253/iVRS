@@ -22,30 +22,6 @@ export default function Header() {
           (Please fill up all the sections in this form and attach the document
           files)
         </Text>
-
-        {/* Document */}
-        <Box
-          display={{ lg: "flex" }}
-          fontWeight="bold"
-          justifyContent="center"
-          gap={4}
-          py={1}
-          fontSize={{ base: "sm", md: "sm" }}
-        >
-          <Text className="font-thai">
-            1. ภพ.20 /<span> Vat License</span>
-          </Text>
-          <Text className="font-thai">
-            2. หนังสือรับรอง / <span>Company Affidavit</span>
-          </Text>
-          <Text className="font-thai">
-            3. แผนที่บริษัท / <span>Company Map</span>
-          </Text>
-          <Text className="font-thai">
-            4. เอกสารอื่นๆ / <span>Other Documents</span>
-          </Text>
-        </Box>
-
         {/* Note */}
         <Box
           display={{ lg: "flex" }}
@@ -55,8 +31,8 @@ export default function Header() {
           pt={1}
         >
           <Text className="font-thai">
-            หมายเหตุ : ไฟล์ที่อัพโหลดต้องเป็นไฟล์ .pdf เท่านั้น /
-            <span> Note: The uploaded file must be a .pdf file only.</span>
+            หมายเหตุ : ระบบรองรับไฟล์ PDF เท่านั้น /
+            <span> (PDF file only)</span>
           </Text>
         </Box>
       </Box>

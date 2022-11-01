@@ -1,6 +1,5 @@
 import React from "react";
-import { Box, Text, Flex, Image, HStack } from "@chakra-ui/react";
-import Logo from "../assets/image/logo.png";
+import { Box, Text, Flex, HStack } from "@chakra-ui/react";
 const Footer = () => {
   return (
     <>
@@ -17,7 +16,6 @@ const Footer = () => {
             </Text>
           </Box>
           <HStack alignItems={"center"}>
-            <Image src={Logo} w={{ md: "2vw", base: "3vw" }} h={"auto"} />
             <Text fontSize={"9px"} fontWeight={"semibold"}>
               IIoT-Center
             </Text>

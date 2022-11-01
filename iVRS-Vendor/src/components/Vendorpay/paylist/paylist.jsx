@@ -1,11 +1,11 @@
 export const paylist = [
   {
     id: 1,
-    title: "แจ้งระเบียบวางบิล รับเช็ค",
+    title: "ศึกษารายละเอียดการวางบิล",
     isRadioGroup: {
-      isRadio1: "แจ้ง",
-      isRadio2: "yy",
-      isRadio3: "ไม่แจ้ง",
+      isRadio1: "ศึกษารายละเอียดและรับทราบ",
+      isRadio2: "",
+      isRadio3: "",
     },
   },
   {
@@ -13,7 +13,7 @@ export const paylist = [
     title: "งบการเงิน 5 ปี",
     isRadioGroup: {
       isRadio1: "มี",
-      isRadio2: "yy",
+      isRadio2: "",
       isRadio3: "ไม่มี",
     },
   },
@@ -40,7 +40,7 @@ export const paylist = [
     title: "ภ.พ 20",
     isRadioGroup: {
       isRadio1: "มี",
-      isRadio2: "yy",
+      isRadio2: "",
       isRadio3: "ไม่มี",
     },
   },
@@ -49,7 +49,7 @@ export const paylist = [
     title: "หนังสือรับรอง 3 เดือน",
     isRadioGroup: {
       isRadio1: "มี",
-      isRadio2: "yy",
+      isRadio2: "",
       isRadio3: "ไม่มี",
     },
   },
@@ -58,7 +58,7 @@ export const paylist = [
     title: "ความสัมพันธ์กับบุคคลใน SNC",
     isRadioGroup: {
       isRadio1: "มี",
-      isRadio2: "yy",
+      isRadio2: "",
       isRadio3: "ไม่มี",
     },
   },

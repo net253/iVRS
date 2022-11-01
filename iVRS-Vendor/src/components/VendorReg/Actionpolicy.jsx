@@ -15,13 +15,13 @@ import {
 import { Bnflist } from "./Actionpolicycomponent/Bnflist";
 const question = [
   {
-    thai: "5. คุณมีมาตรฐานการบรรจุหรือไม่",
+    thai: "5. มีการกำหนดมาตรฐานการบรรจุ (Standard Packing) หรือไม่",
     eng: "Do you have standard packing?",
     value: "stdPacking",
   },
   {
-    thai: "6. คุณมีจำนวนการสั่งซื้อขั้นต่ำหรือไม่",
-    eng: "Do you have minimum order quantity (MOQ)?",
+    thai: "6. มีการกำหนดจำนวนการสั่งซื้อ (MOQ) หรือไม่",
+    eng: "Do you have MOQ?",
     value: "moq",
   },
 ];
@@ -57,7 +57,7 @@ const Actionpolicy = () => {
       >
         <GridItem w="100%" colSpan={3}>
           <Text className="font-thai" fontWeight="bold">
-            4. นโยบายการดำเนินการ / <span>Benefits</span>
+            4. นโยบายการดำเนินการ / <span>Operation Policy</span>
           </Text>
         </GridItem>
         {Bnflist.map((info, i) => (
@@ -74,14 +74,18 @@ const Actionpolicy = () => {
                   4.{i + 1} {info.title}
                 </Text>
               </Box>
-              <RadioGroup px="10px">
-                <Stack direction="row">
-                  <Radio value="1" px="5rem">
-                    มี / Yes
-                  </Radio>
-                  <Radio value="2"> ไม่มี / No</Radio>
-                </Stack>
-              </RadioGroup>
+              <Grid colSpan={3} w="100%" px="10rem">
+                <RadioGroup>
+                  <Stack direction="row" colSpan={3}>
+                    <GridItem w="14rem">
+                      <Radio value="1">{info.isRadio1}</Radio>
+                    </GridItem>
+                    <GridItem w="14rem">
+                      <Radio value="2"> {info.isRadio2}</Radio>
+                    </GridItem>
+                  </Stack>
+                </RadioGroup>
+              </Grid>
             </Flex>
           </GridItem>
         ))}
@@ -103,14 +107,14 @@ const Actionpolicy = () => {
                     px="1rem"
                     onChange={(e) => handleQuest(text.value, e.target.value)}
                   >
-                    ไม่มี / No
+                    ไม่มี
                   </Radio>
                   <Radio
                     value="Yes"
                     name={text.value}
                     onChange={(e) => handleQuest(text.value, e.target.value)}
                   >
-                    มี / Yes
+                    มี
                   </Radio>
                 </Stack>
               </RadioGroup>

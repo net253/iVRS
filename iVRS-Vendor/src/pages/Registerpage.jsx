@@ -1,5 +1,4 @@
 import React from "react";
-import { useState } from "react";
 import {
   Center,
   Box,
@@ -13,51 +12,96 @@ import {
   Button,
   Text,
   Flex,
+  InputRightElement,
 } from "@chakra-ui/react";
 import bg from "../assets/image/bg.png";
 import { FaUserAlt, FaLock } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import { useRegister } from "../store/Register";
+import { FaExclamationCircle, FaCheckCircle } from "react-icons/fa";
+import { fetchregister } from "../services/feth-api";
+import { toastMixin } from "../libs/swalCustom";
+import {
+  validateEmail,
+  validatePassword,
+  validateUsername,
+  validateNameThaiAndEnglish,
+} from "../libs/Validate";
 
 const Registerpage = () => {
-  const [formInput, setFormInput] = useState({
-    name: "",
-    username: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
-  console.log(formInput);
+  const navigate = useNavigate();
+  const { RegisterDetail, updateRegisterDetail } = useRegister();
 
-  const [errorMsg, setErrorMsg] = useState({
-    msg: "",
-  });
+  const handleonChange = (e) => {
+    const { name, value } = e.target;
+    updateRegisterDetail(name, value);
+  };
 
-  const handleClick = () => {
+  const handleRegister = () => {
     if (
-      formInput.name == "" ||
-      formInput.username == "" ||
-      formInput.email == "" ||
-      formInput.password == "" ||
-      formInput.confirmPassword == ""
+      RegisterDetail.Email === "" ||
+      RegisterDetail.Password === "" ||
+      RegisterDetail.Name === "" ||
+      RegisterDetail.Username === ""
     ) {
-      setErrorMsg({ ...errorMsg, msg: "**กรุณาระบุข้อมูลให้ครบถ้วน**" });
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "กรุณากรอกข้อมูลให้ครบถ้วน",
+      });
+    } else if (!validateEmail(RegisterDetail.Email)) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "รูปแบบอีเมล์ไม่ถูกต้อง",
+      });
+    } else if (!validatePassword(RegisterDetail.Password)) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "รูปแบบรหัสผ่านไม่ถูกต้อง",
+      });
+    } else if (!validateNameThaiAndEnglish(RegisterDetail.Name)) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "รูปแบบชื่อไม่ถูกต้อง",
+      });
+    } else if (!validateUsername(RegisterDetail.Username)) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "รูปแบบชื่อผู้ใช้ไม่ถูกต้อง",
+      });
     } else {
-      if (formInput.password == formInput.confirmPassword) {
-        Swal.fire({
-          icon: "success",
-          title: "เข้าสู่ระบบสำเร็จ",
-          showConfirmButton: false,
-          timer: 2000,
-        });
-      } else {
-        setErrorMsg({ ...errorMsg, msg: "**กรุณาระบุรหัสผ่านให้ตรงกัน**" });
-      }
+      fetchregister(RegisterDetail).then((data) => {
+        if (data.state) {
+          toastMixin
+            .fire({
+              icon: "success",
+              title: "สมัครสมาชิกสำเร็จ",
+            })
+            .then(() => {
+              updateRegisterDetail("Email", "");
+              updateRegisterDetail("Password", "");
+              updateRegisterDetail("Name", "");
+              updateRegisterDetail("Username", "");
+              updateRegisterDetail("ComfirmPassword", "");
+            });
+          navigate("/");
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "มีบางอย่างผิดพลาด",
+          });
+        }
+      });
     }
   };
 
-  const navigate = useNavigate();
   return (
     <>
       <Center
@@ -74,7 +118,11 @@ const Registerpage = () => {
           w="30vw"
           rounded="2xl"
           minW="400px"
-          // onKeyPress={(e) => e.code == "Enter"}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              handleRegister();
+            }
+          }}
         >
           <Heading mb={5} textAlign="center" fontSize={"30px"}>
             iVRS Vendor Registation
@@ -89,16 +137,24 @@ const Registerpage = () => {
               <Input
                 required={true}
                 type="text"
+                name="Name"
                 placeholder="ชื่อ-นามสกุล"
-                onChange={({ target: { value: name } }) =>
-                  setFormInput({ ...formInput, name })
-                }
+                onChange={handleonChange}
               />
+              {validateNameThaiAndEnglish(RegisterDetail.Name) ? (
+                <InputRightElement>
+                  <Icon as={FaCheckCircle} color="green.500" />
+                </InputRightElement>
+              ) : (
+                <InputRightElement>
+                  <Icon as={FaExclamationCircle} color="red.500" />
+                </InputRightElement>
+              )}
             </InputGroup>
           </FormControl>
 
           <FormControl my={3}>
-            <FormLabel>ชื่อผู้ใช้ (UserName)</FormLabel>
+            <FormLabel>ชื่อผู้ใช้ (Username)</FormLabel>
             <InputGroup>
               <InputLeftElement pointerEvents="none">
                 <Icon as={FaUserAlt} color="gray.300" />
@@ -106,15 +162,28 @@ const Registerpage = () => {
               <Input
                 type="text"
                 placeholder="ชื่อผู้ใช้"
-                onChange={({ target: { value: username } }) =>
-                  setFormInput({ ...formInput, username })
-                }
+                name="Username"
+                onChange={handleonChange}
               />
+              {validateUsername(RegisterDetail.Username) ? (
+                <InputRightElement>
+                  <Icon as={FaCheckCircle} color="green.500" />
+                </InputRightElement>
+              ) : (
+                <InputRightElement>
+                  <Icon as={FaExclamationCircle} color="red.500" />
+                </InputRightElement>
+              )}
             </InputGroup>
           </FormControl>
 
           <FormControl my={3}>
-            <FormLabel>Email (Email@gmail.com)</FormLabel>
+            <FormLabel>Email (@gmail.com)</FormLabel>
+            <Text>
+              <Text ml={2} fontSize="10px" color={"red"}>
+                หมายเหตุ: กรุณาใช้อีเมล์ที่ใช้งานจริง เพื่อใช้ในการรับรหัสผ่าน
+              </Text>
+            </Text>
             <InputGroup>
               <InputLeftElement pointerEvents="none">
                 <Icon as={MdEmail} color="gray.300" />
@@ -122,15 +191,26 @@ const Registerpage = () => {
               <Input
                 type="email@gmail.com"
                 placeholder="Email"
-                onChange={({ target: { value: email } }) =>
-                  setFormInput({ ...formInput, email })
-                }
+                onChange={handleonChange}
+                name="Email"
               />
+              {validateEmail(RegisterDetail.Email) ? (
+                <InputRightElement>
+                  <Icon as={FaCheckCircle} color="green.500" />
+                </InputRightElement>
+              ) : (
+                <InputRightElement>
+                  <Icon as={FaExclamationCircle} color="red.500" />
+                </InputRightElement>
+              )}
             </InputGroup>
           </FormControl>
 
           <FormControl my={3}>
             <FormLabel>รหัสผ่าน (Password)</FormLabel>
+            <Text color={"red"} fontSize={"10px"}>
+              หมายเหตุ: รหัสผ่านต้องมีอย่างน้อย 8 ตัว และมีตัวอักษรและตัวเลข
+            </Text>
             <InputGroup>
               <InputLeftElement pointerEvents="none">
                 <Icon as={FaLock} color="gray.300" />
@@ -138,14 +218,22 @@ const Registerpage = () => {
               <Input
                 type="password"
                 placeholder="Password"
-                onChange={({ target: { value: password } }) =>
-                  setFormInput({ ...formInput, password })
-                }
+                onChange={handleonChange}
+                name="Password"
               />
+              {validatePassword(RegisterDetail.Password) ? (
+                <InputRightElement>
+                  <Icon as={FaCheckCircle} color="green.500" />
+                </InputRightElement>
+              ) : (
+                <InputRightElement>
+                  <Icon as={FaExclamationCircle} color="red.500" />
+                </InputRightElement>
+              )}
             </InputGroup>
           </FormControl>
           <FormControl my={3}>
-            <FormLabel>ยืนยันรหัสผ่าน(Confirm Password)</FormLabel>
+            <FormLabel>ยืนยันรหัสผ่าน (Confirm Password)</FormLabel>
             <InputGroup>
               <InputLeftElement pointerEvents="none">
                 <Icon as={FaLock} color="gray.300" />
@@ -153,15 +241,22 @@ const Registerpage = () => {
               <Input
                 type="password"
                 placeholder="Confirm Password"
-                onChange={({ target: { value: confirmPassword } }) =>
-                  setFormInput({ ...formInput, confirmPassword })
-                }
+                onChange={handleonChange}
+                name="ConfirmPassword"
               />
+              {RegisterDetail.Password === RegisterDetail.ConfirmPassword &&
+              RegisterDetail.ConfirmPassword != "" ? (
+                <InputRightElement>
+                  <Icon as={FaCheckCircle} color="green.500" />
+                </InputRightElement>
+              ) : (
+                <InputRightElement>
+                  <Icon as={FaExclamationCircle} color="red.500" />
+                </InputRightElement>
+              )}
             </InputGroup>
           </FormControl>
-          <Text py="10px" fontSize={"14px"} color="red">
-            {errorMsg.msg}
-          </Text>
+          <Text py="10px" fontSize={"14px"} color="red"></Text>
           <Flex w="100%" justifyContent={"space-between"}>
             <Text fontSize={"12px"} className={"cursor"}></Text>
             <Text
@@ -182,9 +277,9 @@ const Registerpage = () => {
               mt={5}
               colorScheme="messenger"
               rounded="md"
-              onClick={handleClick}
+              onClick={handleRegister}
             >
-              ลงทะเบียน(Registation)
+              ลงทะเบียน (Registation)
             </Button>
           </Center>
         </Box>

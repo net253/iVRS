@@ -37,7 +37,7 @@ const Home = () => {
                 </Tab>
               </Flex>
               <Flex>
-                <InputGroup py="5px" size={"md"}>
+                <InputGroup py="5px" size={"sm"} rounded={"md"}>
                   <InputLeftAddon>
                     <BiSearch />
                   </InputLeftAddon>

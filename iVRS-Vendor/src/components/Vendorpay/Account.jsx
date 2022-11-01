@@ -10,8 +10,8 @@ import {
   InputRightElement,
   InputGroup,
 } from "@chakra-ui/react";
-import { BsCheck2All } from "react-icons/bs";
 import Paycpn from "./paylist/paycomponents";
+import { CheckCircleIcon } from "@chakra-ui/icons";
 
 const bankList = [
   "ธนาคารกสิกรไทย / Kasikornbank Public Company Limited",
@@ -73,7 +73,7 @@ const Account = ({ setBankAccount, bankAccount }) => {
       >
         <GridItem w="100%">
           <Text className="font-thai" fontWeight="bold">
-            1. ข้อมูลบัญชีธนาคาร
+            1. ข้อมูลบัญชีธนาคาร / Bank Account Information
           </Text>
         </GridItem>
         <GridItem w="100%" colSpan={2}></GridItem>
@@ -82,7 +82,6 @@ const Account = ({ setBankAccount, bankAccount }) => {
         </GridItem>
         <GridItem w="100%" colSpan={2}>
           <Input
-            variant="filled"
             placeholder="ชื่อบัญชี / Account Name"
             size="sm"
             onChange={({ target: { value: accountName } }) =>
@@ -96,7 +95,6 @@ const Account = ({ setBankAccount, bankAccount }) => {
         </GridItem>
         <GridItem w="100%" colSpan={2}>
           <Input
-            variant="filled"
             placeholder="กรุณาระบุตัวเลขเท่านั้น / Please enter numbers only."
             size="sm"
             onChange={({ target: { value: accountNo } }) =>
@@ -112,7 +110,6 @@ const Account = ({ setBankAccount, bankAccount }) => {
           <Select
             placeholder="กรุณาระบุธนาคาร / Please enter Bank."
             size="sm"
-            variant="filled"
             onChange={({ target: { value: bank } }) =>
               setBankAccount({ ...bankAccount, bank })
             }
@@ -127,7 +124,6 @@ const Account = ({ setBankAccount, bankAccount }) => {
           {bankAccount.bank == "อื่นๆ / Others" ? (
             <Input
               mt={2}
-              variant="filled"
               placeholder="กรุณาระบุธนาคาร / Please enter Bank."
               size="sm"
               onChange={({ target: { value: otherBank } }) =>
@@ -144,7 +140,6 @@ const Account = ({ setBankAccount, bankAccount }) => {
         </GridItem>
         <GridItem w="100%" colSpan={2}>
           <Input
-            variant="filled"
             placeholder="สาขา / Branch"
             size="sm"
             onChange={({ target: { value: branch } }) =>
@@ -158,7 +153,6 @@ const Account = ({ setBankAccount, bankAccount }) => {
         </GridItem>
         <GridItem w="100%" colSpan={2}>
           <Input
-            variant="filled"
             placeholder="กรุณาระบุคำนำหน้า / Please specify name title"
             size="sm"
             onChange={({ target: { value: contact } }) =>
@@ -172,7 +166,6 @@ const Account = ({ setBankAccount, bankAccount }) => {
         </GridItem>
         <GridItem w="100%">
           <Input
-            variant="filled"
             placeholder="เบอร์โทรศัพท์ / Tel No."
             size="sm"
             type="number"
@@ -184,23 +177,12 @@ const Account = ({ setBankAccount, bankAccount }) => {
         <GridItem w="100%">
           <InputGroup>
             <Input
-              variant="filled"
               placeholder="ยืนยันเบอร์โทรศัพท์ / Verify Tel No."
               size="sm"
               type="number"
               onChange={({ target: { value: VTel } }) =>
                 setBankAccount({ ...bankAccount, VTel })
               }
-            />
-            <InputRightElement
-            // children={
-            //   bankAccount.VTel != "" &&
-            //   bankAccount.VTel == bankAccount.tel ? (
-            //     <CheckIcon color="green.500" />
-            //   ) : (
-            //     ""
-            //   )
-            // }
             />
           </InputGroup>
         </GridItem>
@@ -209,22 +191,28 @@ const Account = ({ setBankAccount, bankAccount }) => {
           <Text className="font-thai">อีเมล / E-mail</Text>
         </GridItem>
         <GridItem w="100%">
-          <Input
-            variant="filled"
-            placeholder="อีเมล / E-mail"
-            size="sm"
-            type="email"
-            onChange={({ target: { value: email } }) =>
-              setBankAccount({ ...bankAccount, email })
-            }
-          />
+          <InputGroup size="sm">
+            <Input
+              placeholder="อีเมล / E-mail"
+              type="email"
+              onChange={({ target: { value: email } }) =>
+                setBankAccount({ ...bankAccount, email })
+              }
+            />
+            {bankAccount.VEmail != "" &&
+            bankAccount.VEmail == bankAccount.email ? (
+              <InputRightElement>
+                <CheckCircleIcon color="green.500" />
+              </InputRightElement>
+            ) : (
+              ""
+            )}
+          </InputGroup>
         </GridItem>
         <GridItem w="100%">
-          <InputGroup>
+          <InputGroup size="sm">
             <Input
-              variant="filled"
               placeholder="ยืนยันอีเมล / Verify E-mail"
-              size="sm"
               type="email"
               onChange={({ target: { value: VEmail } }) =>
                 setBankAccount({ ...bankAccount, VEmail })
@@ -233,7 +221,7 @@ const Account = ({ setBankAccount, bankAccount }) => {
             {bankAccount.VEmail != "" &&
             bankAccount.VEmail == bankAccount.email ? (
               <InputRightElement>
-                <BsCheck2All color="green.500" />
+                <CheckCircleIcon color="green.500" />
               </InputRightElement>
             ) : (
               ""
