@@ -1,45 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Text, Grid, GridItem, Select, Button } from "@chakra-ui/react";
 import Swal from "sweetalert2";
+import { fetchcompanylist } from "../../services/feth-api";
+import { useStoreCompanylist } from "../../store";
 
-const optionText = [
-  {
-    text: "SNC - เอส เอ็น ซี ฟอร์เมอร์ จำกัด",
-    value: "SNC",
-  },
-  {
-    text: "CL - เอส เอ็น ซี คูลลิ่ง ซัพพลาย จำกัด",
-    value: "CL",
-  },
-  {
-    text: "IMP - อิมมอทัล พาร์ท จำกัด",
-    value: "IMP",
-  },
-  {
-    text: "PRD - พาราไดซ์ พลาสติก จำกัด",
-    value: "PRD",
-  },
-  {
-    text: "MSPC - บริษัท เมอิโซะ เอส เอ็น ซี พริซิชั่น จำกัด",
-    value: "MSPC",
-  },
-  {
-    text: "SPEC - บริษัท เอส เอ็น ซี ไพยองซาน อีโวลูชั่น จำกัด",
-    value: "SPEC",
-  },
-  {
-    text: "IPC - อินฟินิตี้ พาร์ท จำกัด",
-    value: "IPC",
-  },
-  {
-    text: "SCAN - บริษัท เอส เอ็น ซี ครีเอติวิตี้ แอนโทโลจี จำกัด",
-    value: "SCAN",
-  },
-  {
-    text: "SAHP - บริษัท เอส เอ็น ซี แอตแลนติก ฮีต ปัมพ์ จำกัด",
-    value: "SAHP",
-  },
-];
 const buttonText = [
   {
     thai: "ภพ.20",
@@ -60,26 +24,9 @@ const mapText = [
   },
 ];
 
-export default function InputForm({ setReistor }) {
-  // const dataURItoBlob = (dataURI) => {
-  //   const byteString = window.atob(dataURI);
-  //   const arrayBuffer = new ArrayBuffer(byteString.length);
-  //   const int8Array = new Uint8Array(arrayBuffer);
-  //   for (let i = 0; i < byteString.length; i++) {
-  //     int8Array[i] = byteString.charCodeAt(i);
-  //   }
-  //   const blob = new Blob([int8Array], { type: "application/pdf" });
-  //   return blob;
-  // };
-
-  // const handleDownload = (base64) => {
-  //   const blob = dataURItoBlob(base64);
-  //   const url = URL.createObjectURL(blob);
-
-  //   Swal.close();
-  //   window.open(url, "_blank");
-  // };
-
+export default function InputForm() {
+  const { companylist, updateCompanylist } = useStoreCompanylist();
+  console.log(companylist);
   const getPdf = () => {
     Swal.fire({
       title: `<p class="font-thai">กำลังค้นหาข้อมูล </p><span>(Searching information)</span>`,
@@ -91,6 +38,26 @@ export default function InputForm({ setReistor }) {
       },
     });
   };
+
+  const getcompanilist = () => {
+    // fetchcompanylist().then((data) => {
+    //   updateCompanylist(data);
+    // });
+  };
+
+  //fechh companylist
+  useEffect(() => {
+    const initPage = setTimeout(() => {
+      getcompanilist();
+    }, 200);
+    const timer = setInterval(() => {
+      getcompanilist();
+    }, 5000);
+    return () => {
+      clearTimeout(initPage);
+      clearInterval(timer);
+    };
+  }, []);
 
   return (
     <>
@@ -133,15 +100,12 @@ export default function InputForm({ setReistor }) {
           <Select
             placeholder="Select the company you want to register."
             fontSize={"sm"}
-            onChange={({ target: { value: companyRegister } }) =>
-              setReistor(companyRegister)
-            }
           >
-            {optionText.map((info, i) => (
+            {/* {companylist?.map((info, i) => (
               <option key={i} value={info.value}>
                 {info.text}
               </option>
-            ))}
+            ))} */}
           </Select>
         </GridItem>
 

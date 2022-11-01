@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Text,
   Grid,
@@ -13,56 +13,130 @@ import {
   Textarea,
   Select,
 } from "@chakra-ui/react";
-import { currencyCodes } from "../currency/currency";
-
-const chkText = [
-  "ISO 9001:2000",
-  "ISO 14001:2004",
-  "ISO TS16949:2002",
-  "TIS 18001:1999",
-  "OHSAS 18001:2007",
-  "ISO 26000",
-  "มรท. 8001-2546",
-  "ไม่มี",
-  "อื่นๆ",
-];
-
-const bnf = [
-  "BOI",
-  "Free Zone",
-  "JTEPA",
-  "อื่นๆ",
-  "ไม่ได้รับ สิทธิประโยชน์ใดๆ",
-];
-const creditterm = [
-  "Cash",
-  "7 วัน",
-  "15 วัน",
-  "30 วัน",
-  "45 วัน",
-  "60 วัน",
-  "75 วัน",
-  "90 วัน",
-  "120 วัน",
-  "150 วัน",
-];
+import {
+  useCertifications,
+  useBenefit,
+  usePaymentmethods,
+  useCurrencycode,
+} from "../../store";
+import {
+  fetchcertificate,
+  fetchbenefitlist,
+  fetchpaymentmethods,
+  fetcurrencylist,
+} from "../../services/feth-api";
+import useFormInput from "../../store/forminput/forminput";
 
 export default function Standard() {
+  const { certifications, updateCertifications } = useCertifications();
+  const { paymentmethods, updatePaymentmethods } = usePaymentmethods();
+  const { currencycode, updateCurrencycode } = useCurrencycode();
+  const { benefit, updateBenefit } = useBenefit();
   const [checkedItems, setCheckedItems] = useState({});
   const [checkedItemsBenefits, setCheckedItemsBenefits] = useState({});
+  const {
+    //FormDetail,
+    updateCertificate,
+    getCertifications,
+    updateOtherCertificate,
+    updateBenefits,
+    getBenefits,
+    updateOtherBenefit,
+    updateCreditTerm,
+    updateEarnest,
+    updateFormDetail,
+  } = useFormInput();
 
   function onChangecheckbox(e) {
     const item = e.target.name;
     const isChecked = e.target.checked;
     setCheckedItems({ ...checkedItems, [item]: isChecked });
+    certifications.map((cert) => {
+      if (cert.name === item) {
+        updateCertificate(cert.name, isChecked, cert.label);
+      }
+    });
   }
+
+  function onChangeForminput(e) {
+    const { name, value } = e.target;
+    updateFormDetail(name, value);
+  }
+
+  function onChangeOther(e) {
+    updateOtherCertificate(e.target.value);
+  }
+
+  function onChangeOtherBenefits(e) {
+    updateOtherBenefit(e.target.value);
+  }
+
+  function onChangeCreditTerms(value) {
+    updateCreditTerm(value);
+  }
+
+  function onChangeEarnest(e) {
+    updateEarnest(e.target.value);
+  }
+
   function onChangecheckboxBenefits(e) {
     const item = e.target.name;
     const isChecked = e.target.checked;
     setCheckedItemsBenefits({ ...checkedItemsBenefits, [item]: isChecked });
+    benefit.map((bnf) => {
+      if (bnf.name === item) {
+        updateBenefits(bnf.name, isChecked, bnf.label);
+      }
+    });
   }
 
-  console.log(checkedItems);
+  const getcertificate = () => {
+    fetchcertificate().then((data) => {
+      updateCertifications(data);
+      getCertifications(data);
+    });
+  };
+
+  const getbenefit = () => {
+    fetchbenefitlist().then((data) => {
+      updateBenefit(data);
+      getBenefits(data);
+    });
+  };
+
+  const getcreditterm = () => {
+    fetchpaymentmethods().then((data) => {
+      updatePaymentmethods(data);
+    });
+  };
+
+  const getcurrency = () => {
+    fetcurrencylist().then((data) => {
+      updateCurrencycode(data);
+    });
+  };
+
+  //fechh companylist
+  var timer1 = 60 * 1000;
+  useEffect(() => {
+    const initPage = setTimeout(() => {
+      getcertificate();
+      getbenefit();
+      getcreditterm();
+      getcurrency();
+    }, 200);
+    const timer = setInterval(() => {
+      getcertificate();
+      getbenefit();
+      getcreditterm();
+      getcurrency();
+    }, timer1);
+    return () => {
+      clearTimeout(initPage);
+      clearInterval(timer);
+    };
+  }, []);
+
   return (
     <>
       <HStack mt={5} px="10px">
@@ -104,7 +178,7 @@ export default function Standard() {
               gap={2}
               fontSize={{ base: "sm", sm: "sm" }}
             >
-              {chkText.map((info, i) => (
+              {certifications?.map((info, i) => (
                 <GridItem
                   key={i}
                   w="100%"
@@ -113,18 +187,18 @@ export default function Standard() {
                 >
                   <Checkbox
                     key={i}
-                    value={info}
-                    name={info}
+                    name={info.name}
                     onChange={onChangecheckbox}
                   >
-                    {info}
+                    {info.label}
                   </Checkbox>
-                  {info == "อื่นๆ" ? (
+                  {info.label == "อื่นๆ" ? (
                     <Input
                       placeholder="โปรดระบุ"
                       ml={5}
                       size="sm"
-                      isDisabled={!checkedItems[info]}
+                      isDisabled={!checkedItems[info.name]}
+                      onChange={onChangeOther}
                     />
                   ) : (
                     ""
@@ -148,28 +222,30 @@ export default function Standard() {
               gap={2}
               fontSize={{ base: "sm", sm: "sm" }}
             >
-              {bnf.map((info, i) => (
+              {benefit?.map((info, i) => (
                 <GridItem
                   key={i}
                   w="100%"
                   display="flex"
-                  colSpan={checkedItemsBenefits.อื่นๆ ? "2" : "1"}
+                  colSpan={checkedItemsBenefits.Other ? "2" : "1"}
                 >
                   <Checkbox
                     key={i}
-                    value={info}
-                    name={info}
+                    name={info.name}
                     onChange={onChangecheckboxBenefits}
                   >
-                    {info}
+                    {info.label}
                   </Checkbox>
-                  {info == "อื่นๆ" ? (
+                  {info.name == "Other" ? (
                     <Input
                       placeholder="โปรดระบุ"
                       ml={5}
                       size="sm"
-                      display={checkedItemsBenefits[info] ? "block" : "none"}
-                      isDisabled={!checkedItemsBenefits[info]}
+                      display={
+                        !checkedItemsBenefits[info.name] ? "none" : "block"
+                      }
+                      isDisabled={!checkedItemsBenefits[info.name]}
+                      onChange={onChangeOtherBenefits}
                     />
                   ) : (
                     ""
@@ -190,27 +266,21 @@ export default function Standard() {
             <Text fontWeight={"bold"} py="10px" px="1.2rem">
               3.1 การชำระเงิน การให้เครดิตเทอม / <span>Credit Term</span>
             </Text>
-            <RadioGroup colorScheme="green" px="1.2rem">
+            <RadioGroup
+              colorScheme="green"
+              px="1.2rem"
+              onChange={onChangeCreditTerms}
+            >
               <Grid
                 templateColumns={{ base: "repeat(2,1fr)", md: "repeat(5,1fr)" }}
                 gap={2}
                 fontSize={{ base: "sm", sm: "sm" }}
               >
-                {creditterm.map((info, i) => (
-                  <GridItem
-                    key={i}
-                    w="100%"
-                    display="flex"
-                    colSpan={info == "อื่นๆ" ? "2" : "1"}
-                  >
-                    <Radio key={i} value={info}>
-                      {info}
+                {paymentmethods?.map((info, i) => (
+                  <GridItem key={i} w="100%" display="flex">
+                    <Radio key={i} value={info.value}>
+                      {info.label}
                     </Radio>
-                    {info == "อื่นๆ" ? (
-                      <Input placeholder="Other certificate" ml={5} size="sm" />
-                    ) : (
-                      ""
-                    )}
                   </GridItem>
                 ))}
                 <GridItem></GridItem>
@@ -225,6 +295,7 @@ export default function Standard() {
             size="sm"
             rows={3}
             px="1.2rem"
+            onChange={onChangeEarnest}
           />
         </GridItem>
         <GridItem w="100%" colSpan={{ base: "3", md: "1" }}>
@@ -243,14 +314,19 @@ export default function Standard() {
             w="100%"
             type="number"
             placeholder="กรุณาระบุตัวเลขเท่านั้น / Please enter numbers only"
+            name={"ApprovalLimit"}
+            //value={Number(FormDetail.ApprovalLimit).toLocaleString("en-US")}
+            onChange={onChangeForminput}
           />
         </GridItem>
         <GridItem w="100%" fontSize={{ base: "sm", sm: "sm" }}>
           <Select
             placeholder="Select Currency"
             fontSize={{ base: "sm", sm: "sm" }}
+            onChange={onChangeForminput}
+            name={"Currency"}
           >
-            {currencyCodes.map((info, i) => (
+            {currencycode?.map((info, i) => (
               <option key={i}>{info}</option>
             ))}
           </Select>

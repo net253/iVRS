@@ -276,7 +276,7 @@ export default function Upload(props) {
           </Box>
           {textOption.map((info, i) => (
             <Stack key={i} mb={8}>
-              <Text className="font-thai" isDisabled={!accept}>
+              <Text className="font-thai">
                 {i + 1}. {info.thai} /<span> {info.eng}</span>
               </Text>
               <Input
@@ -284,7 +284,7 @@ export default function Upload(props) {
                 accept=".pdf"
                 variant="unstyled"
                 size="sm"
-                isDisabled={!accept}
+                // isDisabled={!accept}
                 bgColor={upload[info.value] ? "green.100" : "white"}
                 onChange={(e) => handleUpload(info.value, e.target.files)}
               />

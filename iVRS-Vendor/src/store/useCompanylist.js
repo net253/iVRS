@@ -6,7 +6,10 @@ const initialstate = [];
 const useCompanylist = crate(
   devtools((set) => ({
     companylist: initialstate,
-    setCompanylist: (companylist) => set({ companylist }),
+    updateCompanylist: (data) =>
+      set(() => ({
+        companylist: data,
+      })),
   }))
 );
 

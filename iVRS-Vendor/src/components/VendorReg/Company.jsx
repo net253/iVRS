@@ -8,15 +8,15 @@ import {
   Spacer,
   Textarea,
 } from "@chakra-ui/react";
-import useStoreCompany from "../../store/useStoreCompany";
+import useFormInput from "../../store/forminput/forminput";
 
 export default function Company() {
-  const { CompanyDetail, updateCompanyDetail } = useStoreCompany();
-  console.log(CompanyDetail);
+  const { FormDetail, updateFormDetail } = useFormInput();
+  console.log(FormDetail);
 
   const handleCompany = (e) => {
     const { name, value } = e.target;
-    updateCompanyDetail(name, value);
+    updateFormDetail(name, value);
   };
 
   return (
@@ -53,7 +53,7 @@ export default function Company() {
           <Input
             placeholder="Company Name (English)"
             size="sm"
-            name="engCompany"
+            name="CompanyNameEn"
             onChange={handleCompany}
           />
         </GridItem>
@@ -65,7 +65,7 @@ export default function Company() {
           <Input
             placeholder="Company Name (Thai)"
             size="sm"
-            name="thaiCompany"
+            name="CompanyNameTH"
             onChange={handleCompany}
           />
         </GridItem>
@@ -77,7 +77,7 @@ export default function Company() {
           <Textarea
             placeholder="Address (English)"
             size="sm"
-            name="engAddress"
+            name="AddressEN"
             onChange={handleCompany}
           />
         </GridItem>
@@ -87,7 +87,7 @@ export default function Company() {
           <Textarea
             placeholder="Address (Thai)"
             size="sm"
-            name="thaiAddress"
+            name="AddressTH"
             onChange={handleCompany}
           />
         </GridItem>
@@ -99,7 +99,7 @@ export default function Company() {
           <Input
             placeholder="Nature of Business"
             size="sm"
-            name="natureBusiness"
+            name="NatureBusiness"
             onChange={handleCompany}
           />
         </GridItem>
@@ -109,7 +109,7 @@ export default function Company() {
           <Input
             placeholder="Company Website"
             size="sm"
-            name="companyWeb"
+            name="Website"
             onChange={handleCompany}
           />
         </GridItem>
@@ -121,7 +121,7 @@ export default function Company() {
             type="number"
             size="sm"
             maxLength={10}
-            name="tel"
+            name="Tel"
             onChange={handleCompany}
           />
         </GridItem>
@@ -132,7 +132,7 @@ export default function Company() {
             placeholder="Fax No."
             type="number"
             size="sm"
-            name="fax"
+            name="Fax"
             onChange={handleCompany}
           />
         </GridItem>
@@ -143,7 +143,7 @@ export default function Company() {
             type="number"
             max={13}
             size="sm"
-            name="fax"
+            name="JuristicID"
             onChange={handleCompany}
           />
         </GridItem>

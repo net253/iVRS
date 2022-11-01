@@ -87,3 +87,9 @@ export const validateNameThaiAndEnglish = (name) => {
   const re = /^[a-zA-Zก-๙ ]+$/;
   return re.test(String(name));
 };
+
+// Validate NoQuotesInText
+export const validateNoQuotesInText = (text) => {
+  const re = /^[^'"]*$/;
+  return re.test(String(text));
+};

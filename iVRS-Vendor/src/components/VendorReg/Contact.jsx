@@ -11,14 +11,33 @@ import {
   InputRightElement,
   InputGroup,
 } from "@chakra-ui/react";
+import useFormInput from "../../store/forminput/forminput";
 
 const textInput = [
-  { thai: "งานขาย", eng: "Sales" },
-  { thai: "ผู้จัดการฝ่ายขาย", eng: "Manager" },
-  { thai: "งานแผนกบัญชี", eng: "Accountant" },
+  { thai: "งานขาย", name: "SaleName", email: "SaleEmail", phone: "SaleTel" },
+  {
+    thai: "ผู้จัดการฝ่ายขาย",
+    name: "SaleManagerName",
+    email: "SaleManagerEmail",
+    phone: "SaleManagerTel",
+  },
+  {
+    thai: "งานแผนกบัญชี",
+    name: "AccountName",
+    email: "AccountEmail",
+    phone: "AccountTel",
+  },
 ];
 
 export default function Contact() {
+  const { FormDetail, updateFormDetail } = useFormInput();
+  console.log(FormDetail);
+
+  const handleForminput = (e) => {
+    const { name, value } = e.target;
+    updateFormDetail(name, value);
+  };
+
   const lineShow = useBreakpoint();
 
   return (
@@ -59,16 +78,17 @@ export default function Contact() {
                 </Text>
               ) : (
                 <Text className="font-thai" fontWeight="bold">
-                  {info.thai} / {info.eng}
+                  {info.thai} / {info.name}
                 </Text>
               )}
               <Input
-                placeholder={`${info.eng}`}
+                placeholder={info.eng}
                 size="sm"
-                name={`${info.eng.toLowerCase()}Name`}
+                name={info.name}
+                onChange={handleForminput}
               />
               <Input
-                mt={4}
+                mt={3}
                 size="sm"
                 variant="unstyled"
                 disabled
@@ -83,7 +103,8 @@ export default function Contact() {
                 placeholder="E-mail"
                 type="email"
                 size="sm"
-                name={`${info.eng.toLowerCase()}Email`}
+                name={info.email}
+                onChange={handleForminput}
               />
               <InputGroup>
                 <Input
@@ -91,7 +112,7 @@ export default function Contact() {
                   type="email"
                   size="sm"
                   mt={2}
-                  name={`${info.eng.toLowerCase()}VEmail`}
+                  onChange={handleForminput}
                 />
               </InputGroup>
             </GridItem>
@@ -103,8 +124,9 @@ export default function Contact() {
                 placeholder="Ext. No."
                 type="text"
                 size="sm"
-                name={`${info.eng.toLowerCase()}Tel`}
+                name={info.phone}
                 maxLength={10}
+                onChange={handleForminput}
               />
               <InputGroup>
                 <Input
@@ -112,8 +134,8 @@ export default function Contact() {
                   type="text"
                   size="sm"
                   mt={2}
-                  name={`${info.eng.toLowerCase()}VTel`}
                   maxLength={10}
+                  onChange={handleForminput}
                 />
                 <InputRightElement />
               </InputGroup>

@@ -1,7 +1,7 @@
 import axios from "axios";
-import { useActionpolicy, useBenefit } from "../store";
 
-const API = "http://localhost/iVRS-Vendor-Backend/ivrs-vendor/public";
+const API = "http://localhost/iVRS-Vendor-Backend/ivrs-vendor/api";
+const API_AUTH = "http://localhost/iVRS-Vendor-Backend/ivrs-vendor/api/auth";
 
 function getAxiosConfig() {
   const token = window.localStorage.getItem("token");
@@ -15,12 +15,23 @@ function getAxiosConfig() {
 }
 
 export async function fetchactionpolicylist() {
-  const { updateActionpolicy } = useActionpolicy();
   try {
     const { data } = await axios.get(
-      "https://snc-services.sncformer.com/ivrs/json/action-policy.json"
+      "https://snc-services.sncformer.com/ivrs/admin/api/index.php/json/action-policy"
     );
-    updateActionpolicy(data);
+    return data;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
+export async function fetcurrencylist() {
+  try {
+    const { data } = await axios.get(
+      "https://snc-services.sncformer.com/ivrs/admin/api/index.php/json/currency-codes"
+    );
+    return data;
   } catch (error) {
     console.log(error);
     return false;
@@ -28,12 +39,35 @@ export async function fetchactionpolicylist() {
 }
 
 export async function fetchbenefitlist() {
-  const { updateBenefit } = useBenefit();
   try {
     const { data } = await axios.get(
-      "https://snc-services.sncformer.com/ivrs/json/benefits.json"
+      "https://snc-services.sncformer.com/ivrs/admin/api/index.php/json/benefits"
     );
-    updateBenefit(data);
+    return data;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
+export async function fetchpaymentmethods() {
+  try {
+    const { data } = await axios.get(
+      "https://snc-services.sncformer.com/ivrs/admin/api/index.php/json/payment-methods"
+    );
+    return data;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
+export async function fetchcertificate() {
+  try {
+    const { data } = await axios.get(
+      "https://snc-services.sncformer.com/ivrs/admin/api/index.php/json/certifications"
+    );
+    return data;
   } catch (error) {
     console.log(error);
     return false;
@@ -53,7 +87,7 @@ export async function fetchregister(reqData) {
 
 export async function fetchlogin(reqData) {
   try {
-    const { data } = await axios.post(API + "/check-login", reqData);
+    const { data } = await axios.post(API_AUTH + "/check-login", reqData);
     return data;
   } catch (error) {
     console.log(error);
@@ -61,7 +95,7 @@ export async function fetchlogin(reqData) {
   }
 }
 
-export async function fetchcompany() {
+export async function fetchcompanylist() {
   if (!window.localStorage.isLoggedIn) return;
   try {
     const { data } = await axios.get(API + "/company", getAxiosConfig());

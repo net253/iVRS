@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Text,
   Grid,
@@ -12,7 +12,10 @@ import {
   Input,
 } from "@chakra-ui/react";
 
-import { Bnflist } from "./Actionpolicycomponent/Bnflist";
+import { useActionpolicy } from "../../store";
+import { fetchactionpolicylist } from "../../services/feth-api";
+import useFormInput from "../../store/forminput/forminput";
+
 const question = [
   {
     thai: "5. มีการกำหนดมาตรฐานการบรรจุ (Standard Packing) หรือไม่",
@@ -26,9 +29,12 @@ const question = [
   },
 ];
 
-const Actionpolicy = () => {
+const ActionpolicyComponents = () => {
   const [moq, setMoq] = React.useState(false);
   const [std, setStd] = React.useState(false);
+
+  const { Actionpolicy, updateActionpolicy } = useActionpolicy();
+  const { getActionPolicy } = useFormInput();
 
   const handleQuest = (text, value) => {
     if (text == "stdPacking") {
@@ -46,6 +52,35 @@ const Actionpolicy = () => {
     }
   };
 
+  function onChangeActionpolicy(value) {
+    Actionpolicy.map((item) => {
+      if (item.value == value) {
+        item.checked = !item.checked;
+      }
+    });
+  }
+
+  const getActionpolicyfunction = async () => {
+    fetchactionpolicylist().then((data) => {
+      updateActionpolicy(data);
+      getActionPolicy(data);
+    });
+  };
+
+  var timer1 = 60 * 1000;
+  useEffect(() => {
+    const initPage = setTimeout(() => {
+      getActionpolicyfunction();
+    }, 200);
+    const timer = setInterval(() => {
+      getActionpolicyfunction();
+    }, timer1);
+    return () => {
+      clearTimeout(initPage);
+      clearInterval(timer);
+    };
+  }, []);
+
   return (
     <div>
       <Grid
@@ -60,7 +95,7 @@ const Actionpolicy = () => {
             4. นโยบายการดำเนินการ / <span>Operation Policy</span>
           </Text>
         </GridItem>
-        {Bnflist.map((info, i) => (
+        {Actionpolicy?.map((info, i) => (
           <GridItem
             w="100%"
             colSpan={3}
@@ -71,17 +106,23 @@ const Actionpolicy = () => {
             <Flex>
               <Box w="30rem">
                 <Text>
-                  4.{i + 1} {info.title}
+                  4. {i + 1} {"  "}
+                  {info.label}
                 </Text>
               </Box>
               <Grid colSpan={3} w="100%" px="10rem">
-                <RadioGroup>
+                <RadioGroup onChange={onChangeActionpolicy}>
                   <Stack direction="row" colSpan={3}>
                     <GridItem w="14rem">
-                      <Radio value="1">{info.isRadio1}</Radio>
+                      <Radio value={`${info.valueChecked1}`}>
+                        {info.labelChecked1}
+                      </Radio>
                     </GridItem>
                     <GridItem w="14rem">
-                      <Radio value="2"> {info.isRadio2}</Radio>
+                      <Radio value={`${info.valueChecked2}`}>
+                        {" "}
+                        {info.labelChecked3}
+                      </Radio>
                     </GridItem>
                   </Stack>
                 </RadioGroup>
@@ -138,4 +179,4 @@ const Actionpolicy = () => {
   );
 };
 
-export default Actionpolicy;
+export default ActionpolicyComponents;
