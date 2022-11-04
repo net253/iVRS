@@ -2,6 +2,8 @@ import create from "zustand";
 import { devtools } from "zustand/middleware";
 
 const initailState = {
+  isNewDoc: "",
+  DocNo: "",
   JuristicID: "",
   CompanyAdmin: "",
   CompanyNameEN: "",
@@ -12,26 +14,31 @@ const initailState = {
   Website: "",
   Tel: "",
   Fax: "",
-  Status: "",
   IsDraft: "",
   SaleName: "",
   SaleEmail: "",
+  VSaleEmail: "",
   SaleTel: "",
+  VSaleTel: "",
   SaleManagerName: "",
   SaleManagerEmail: "",
+  VSaleManagerEmail: "",
   SaleManagerTel: "",
+  VSaleManagerTel: "",
   AccountName: "",
   AccountEmail: "",
   AccountTel: "",
+  VAccountEmail: "",
+  VAccountTel: "",
   Certificate: [],
   Benefits: [],
-  CreditTerm: "",
+  CreditTerm: [],
   Remarks: "",
   ApprovalLimit: "",
   Currency: "",
   ActionPolicy: [],
   IsSTDPacking: "",
-  IsMOQ: "111",
+  IsMOQ: "",
   STDPackingBase64: "",
   MOQBase64: "",
   BookBankBase64: "",
@@ -48,7 +55,9 @@ const initailState = {
   ContactPerson: "",
   TelBank: "",
   Email: "",
-  MonetaryPolicy: "",
+  VTelBank: "",
+  VEmail: "",
+  MonetaryPolicy: [],
 };
 
 const useFormInput = create(
@@ -74,6 +83,14 @@ const useFormInput = create(
       set((state) => ({
         FormDetail: { ...state.FormDetail, ActionPolicy: data },
       })),
+    getCreditTerm: (data) =>
+      set((state) => ({
+        FormDetail: { ...state.FormDetail, CreditTerm: data },
+      })),
+    getMonetaryPolicy: (data) =>
+      set((state) => ({
+        FormDetail: { ...state.FormDetail, MonetaryPolicy: data },
+      })),
     updateCreditTerm: (data) =>
       set((state) => ({
         FormDetail: { ...state.FormDetail, CreditTerm: data },
@@ -81,6 +98,25 @@ const useFormInput = create(
     updateEarnest: (data) =>
       set((state) => ({
         FormDetail: { ...state.FormDetail, Remarks: data },
+      })),
+    updateisSTD: (isDetail, value) =>
+      set((state) => ({
+        FormDetail: {
+          ...state.FormDetail,
+          [isDetail]: JSON.parse(value),
+        },
+      })),
+    updateisDraft: (value) =>
+      set((state) => ({
+        FormDetail: {
+          ...state.FormDetail,
+          IsDraft: value == false ? false : true,
+          isNewDoc: value == false ? true : false,
+        },
+      })),
+    UpdatePDFMOQSTD: (topics, data) =>
+      set((state) => ({
+        FormDetail: { ...state.FormDetail, [topics]: data },
       })),
     updateCertificate: (name, isChecked) =>
       set((state) => ({
@@ -106,13 +142,13 @@ const useFormInput = create(
           }),
         },
       })),
-    updateActionPolicy: (name, isChecked) =>
+    updateActionPolicy: (name, value) =>
       set((state) => ({
         FormDetail: {
           ...state.FormDetail,
           ActionPolicy: state.FormDetail.ActionPolicy.map((item) => {
             if (item.name === name) {
-              item.isChecked = isChecked;
+              item.value = value;
             }
             return item;
           }),
@@ -140,6 +176,39 @@ const useFormInput = create(
             }
             return item;
           }),
+        },
+      })),
+    updateBank: (value) =>
+      set((state) => ({
+        FormDetail: {
+          ...state.FormDetail,
+          Bank: value,
+        },
+      })),
+    updateCompany: (value) =>
+      set((state) => ({
+        FormDetail: {
+          ...state.FormDetail,
+          CompanyAdmin: value,
+        },
+      })),
+    updateMonetaryPolicy: (name, value) =>
+      set((state) => ({
+        FormDetail: {
+          ...state.FormDetail,
+          MonetaryPolicy: state.FormDetail.MonetaryPolicy.map((item) => {
+            if (item.name === name) {
+              item.value = value;
+            }
+            return item;
+          }),
+        },
+      })),
+    updatepdfDoc: (text, data) =>
+      set((state) => ({
+        FormDetail: {
+          ...state.FormDetail,
+          [text]: data,
         },
       })),
   }))

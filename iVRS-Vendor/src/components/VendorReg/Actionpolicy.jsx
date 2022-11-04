@@ -12,20 +12,24 @@ import {
   Input,
 } from "@chakra-ui/react";
 
-import { useActionpolicy } from "../../store";
 import { fetchactionpolicylist } from "../../services/feth-api";
 import useFormInput from "../../store/forminput/forminput";
+//import { convertPdfToBase64, convertBase64ToPdf } from "../../libs/Base64";
 
 const question = [
   {
+    topics: "STDPackingBase64",
     thai: "5. มีการกำหนดมาตรฐานการบรรจุ (Standard Packing) หรือไม่",
     eng: "Do you have standard packing?",
-    value: "stdPacking",
+    accept: "stdPacking",
+    isDetail: "IsSTDPacking",
   },
   {
+    topics: "MOQBase64",
     thai: "6. มีการกำหนดจำนวนการสั่งซื้อ (MOQ) หรือไม่",
     eng: "Do you have MOQ?",
-    value: "moq",
+    accept: "moq",
+    isDetail: "IsMOQ",
   },
 ];
 
@@ -33,18 +37,24 @@ const ActionpolicyComponents = () => {
   const [moq, setMoq] = React.useState(false);
   const [std, setStd] = React.useState(false);
 
-  const { Actionpolicy, updateActionpolicy } = useActionpolicy();
-  const { getActionPolicy } = useFormInput();
+  const {
+    getActionPolicy,
+    FormDetail,
+    updateActionPolicy,
+    updateisSTD,
+    UpdatePDFMOQSTD,
+  } = useFormInput();
+  const { ActionPolicy } = FormDetail;
 
   const handleQuest = (text, value) => {
-    if (text == "stdPacking") {
-      if (value == "Yes") {
+    if (text == "STDPackingBase64") {
+      if (value == "true") {
         setStd(true);
       } else {
         setStd(false);
       }
     } else {
-      if (value == "Yes") {
+      if (value == "true") {
         setMoq(true);
       } else {
         setMoq(false);
@@ -52,33 +62,33 @@ const ActionpolicyComponents = () => {
     }
   };
 
-  function onChangeActionpolicy(value) {
-    Actionpolicy.map((item) => {
-      if (item.value == value) {
-        item.checked = !item.checked;
-      }
-    });
-  }
-
   const getActionpolicyfunction = async () => {
     fetchactionpolicylist().then((data) => {
-      updateActionpolicy(data);
       getActionPolicy(data);
     });
   };
 
-  var timer1 = 60 * 1000;
+  const onChangePDF = async (topics, e) => {
+    const file = e.target.files[0];
+    const base64 = await convertBase64(file);
+    UpdatePDFMOQSTD(topics, base64);
+  };
+
+  const convertBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+      fileReader.onload = () => {
+        resolve(fileReader.result);
+      };
+      fileReader.onerror = (error) => {
+        reject(error);
+      };
+    });
+  };
+
   useEffect(() => {
-    const initPage = setTimeout(() => {
-      getActionpolicyfunction();
-    }, 200);
-    const timer = setInterval(() => {
-      getActionpolicyfunction();
-    }, timer1);
-    return () => {
-      clearTimeout(initPage);
-      clearInterval(timer);
-    };
+    getActionpolicyfunction();
   }, []);
 
   return (
@@ -95,7 +105,7 @@ const ActionpolicyComponents = () => {
             4. นโยบายการดำเนินการ / <span>Operation Policy</span>
           </Text>
         </GridItem>
-        {Actionpolicy?.map((info, i) => (
+        {ActionPolicy?.map((info, i) => (
           <GridItem
             w="100%"
             colSpan={3}
@@ -111,18 +121,15 @@ const ActionpolicyComponents = () => {
                 </Text>
               </Box>
               <Grid colSpan={3} w="100%" px="10rem">
-                <RadioGroup onChange={onChangeActionpolicy}>
+                <RadioGroup
+                  onChange={(value) => updateActionPolicy(info.name, value)}
+                >
                   <Stack direction="row" colSpan={3}>
                     <GridItem w="14rem">
-                      <Radio value={`${info.valueChecked1}`}>
-                        {info.labelChecked1}
-                      </Radio>
+                      <Radio value={"1"}>{info.labelChecked1}</Radio>
                     </GridItem>
                     <GridItem w="14rem">
-                      <Radio value={`${info.valueChecked2}`}>
-                        {" "}
-                        {info.labelChecked3}
-                      </Radio>
+                      <Radio value={"3"}> {info.labelChecked3}</Radio>
                     </GridItem>
                   </Stack>
                 </RadioGroup>
@@ -140,20 +147,22 @@ const ActionpolicyComponents = () => {
           </GridItem>
           <GridItem w="100%" colSpan={3}>
             <HStack spacing={10} justifyContent="center">
-              <RadioGroup>
+              <RadioGroup
+                onChange={(value) => updateisSTD(text.isDetail, value)}
+              >
                 <Stack direction="row">
                   <Radio
-                    name={text.value}
-                    value="No"
+                    name={text.topics}
+                    value={"false"}
                     px="1rem"
-                    onChange={(e) => handleQuest(text.value, e.target.value)}
+                    onChange={(e) => handleQuest(text.topics, e.target.value)}
                   >
                     ไม่มี
                   </Radio>
                   <Radio
-                    value="Yes"
-                    name={text.value}
-                    onChange={(e) => handleQuest(text.value, e.target.value)}
+                    value={"true"}
+                    name={text.topics}
+                    onChange={(e) => handleQuest(text.topics, e.target.value)}
                   >
                     มี
                   </Radio>
@@ -164,7 +173,8 @@ const ActionpolicyComponents = () => {
                   แนบเอกสาร / <span>Attach file</span>
                 </Text>
                 <Input
-                  isDisabled={text.value == "stdPacking" ? !std : !moq}
+                  onChange={(e) => onChangePDF(text.topics, e)}
+                  isDisabled={text.accept == "stdPacking" ? !std : !moq}
                   type="file"
                   accept=".pdf"
                   variant="unstyled"

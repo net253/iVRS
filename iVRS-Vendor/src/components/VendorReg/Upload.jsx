@@ -17,62 +17,66 @@ import {
 } from "@chakra-ui/react";
 import { TiTimes, TiMediaPlay } from "react-icons/ti";
 import Swal from "sweetalert2";
+//import { convertPdfToBase64 } from "../../libs/Base64";
+import useFormDetail from "../../store/forminput/forminput";
+import { fetchuploadform } from "../../services/feth-api";
+import { validatevendorRegister } from "../Validateupload";
 
 const textOption = [
   {
     thai: "หมายเหตุ: สำเนา ภพ.20",
     eng: "Copy of Vat License",
-    value: "vat",
+    value: "VatLicenseBase64",
   },
   {
     thai: "หมายเหตุ: สำเนาหนังสือรับรองบริษัทฉบับล่าสุด",
     eng: "Copy of Lasted Company Affidavit",
-    value: "affidavit",
+    value: "AffidavitBase64",
   },
   {
     thai: "แผนที่บริษัท",
     eng: "Company Map",
-    value: "map",
+    value: "MapBase64",
   },
   {
     thai: "หมายเหตุ: สำเนาหน้าบัญชีธนาคาร",
     eng: "Copy of Book Bank",
-    value: "BookBank",
+    value: "BookBankBase64",
   },
   {
     thai: "หมายเหตุ: สำเนากรรมการผู้จัดการ",
     eng: "Copy of Managing Director",
-    value: "ManagingDirector",
+    value: "BookMDBase64",
   },
   {
     thai: "หมายเหตุ: สำเนาเอกสารงบการเงินย้อยหลัง 5 ปี",
     eng: "Copy of Lasted 5 Yrs. Financial Document",
-    value: "Finance",
+    value: "FiStmtsBase64",
   },
   {
     thai: "หมายเหตุ: เอกสารอื่นๆ (ถ้ามี)",
     eng: "Other Document (if any)",
-    value: "other",
+    value: "OtherBase64",
   },
 ];
 
-export default function Upload(props) {
+export default function Upload() {
   const [accept, setAccept] = useState(false);
+  const { updatepdfDoc, FormDetail, updateisDraft } = useFormDetail();
   console.log(accept);
   const navigate = useNavigate();
   const [time, setTime] = useState("");
-  const [upload, setUpload] = useState({
-    vat: "",
-    affidavit: "",
-    map: "",
-    mapLink: "",
-    finance: "",
-    other: "",
-  });
-  const [userName, setUserName] = useState("");
-  const [check, setCheck] = useState(false);
 
-  const { registor, company, contact, certificate } = props;
+  const [upload, setUpload] = useState({
+    VatLicenseBase64: "",
+    AffidavitBase64: "",
+    MapBase64: "",
+    BookBankBase64: "",
+    BookMDBase64: "",
+    FiStmtsBase6: "",
+    OtherBase64: "",
+  });
+  const [check, setCheck] = useState(false);
 
   const getTime = () => {
     var dt = new Date();
@@ -102,119 +106,97 @@ export default function Upload(props) {
   };
 
   const handleNext = () => {
-    Swal.fire({
-      icon: "warning",
-      title: `<p class="font-thai">ยืนยันการลงทะเบียนใช่หรือไม่?  <br /> <span>Confirm registration?</span></p>`,
-      showCancelButton: true,
-      confirmButtonText: `<p class="font-thai">ใช่ / <span>Yes</span></p>`,
-      cancelButtonText: `<p class="font-thai">ไม่ใช่ / <span>No</span></p>`,
-      confirmButtonColor: "green",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          icon: "success",
-          title: `<p class="font-thai">บันทึกสำเร็จ / <span>Success</span></p>`,
-          timer: 2000,
-          showConfirmButton: false,
-        }).then(() => navigate("/paymethod"));
-      }
-    });
-  };
-
-  const handleUpload = (text, file) => {
-    if (text == "vat") {
-      setUpload({ ...upload, vat: file });
-    } else if (text == "affidavit") {
-      setUpload({ ...upload, affidavit: file });
-    } else if (text == "map") {
-      setUpload({ ...upload, map: file });
-    } else if (text == "finance") {
-      setUpload({ ...upload, finance: file });
+    updateisDraft(false);
+    const { isValid, error } = validatevendorRegister(FormDetail);
+    if (!isValid) {
+      Swal.fire({
+        icon: "error",
+        title: `<p class="font-thai">${error}</p>`,
+        confirmButtonText: `<p>ตกลง</span></p>`,
+      });
     } else {
-      setUpload({ ...upload, other: file });
+      Swal.fire({
+        icon: "warning",
+        title: `<p class="font-thai">ยืนยันการลงทะเบียนใช่หรือไม่?  <br /> <span>Confirm registration?</span></p>`,
+        showCancelButton: true,
+        confirmButtonText: `<p class="font-thai">ใช่ / <span>Yes</span></p>`,
+        cancelButtonText: `<p class="font-thai">ไม่ใช่ / <span>No</span></p>`,
+        confirmButtonColor: "green",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          fetchuploadform(FormDetail).then((data) => {
+            if (data.state) {
+              Swal.fire({
+                icon: "success",
+                title: `<p class="font-thai">ลงทะเบียนสำเร็จ <br /> <span>Registration successful</span></p>`,
+                showConfirmButton: false,
+                timer: 1500,
+              });
+            } else {
+              Swal.fire({
+                icon: "error",
+                title: `<p class="font-thai">ลงทะเบียนไม่สำเร็จ <br /> <span>Registration failed</span></p>`,
+                showConfirmButton: false,
+                timer: 1500,
+              });
+            }
+          });
+        }
+      });
     }
   };
 
-  const handlePdf = async () => {};
-
-  const handleState = () => {
-    if (registor == "") {
-      handleError(`<b class="font-thai">กรุณาเลือกบริษัทที่ต้องการขึ้นทะเบียน <br />
-        <span>Please select the company you want to register.</span></b>`);
-    } else if (
-      company.thaiCompany == "" ||
-      company.engCompany == "" ||
-      company.thaiAddress == "" ||
-      company.engAddress == "" ||
-      company.natureBusiness == "" ||
-      company.companyWeb == "" ||
-      company.tel == "" ||
-      company.fax == ""
-    ) {
-      handleError(`<b class="font-thai">กรุณากรอกรายละเอียดบริษัทให้ครบถ้วน <br />
-        <span>Please complete the company details.</span></b>`);
-    } else if (
-      contact.salesName == "" ||
-      contact.salesEmail == "" ||
-      contact.salesTel == "" ||
-      contact.salesVEmail == "" ||
-      contact.salesVTel == ""
-    ) {
-      handleError(`<b class="font-thai">กรุณากรอกรายละเอียดบุคคลติดต่อให้ครบถ้วน <br />
-        <span>Please complete the contact person.</span></b>`);
-    } else if (
-      contact.salesVEmail != contact.salesEmail ||
-      contact.salesVTel != contact.salesTel ||
-      contact.managerVEmail != contact.managerEmail ||
-      contact.managerVTel != contact.managerTel ||
-      contact.othersVEmail != contact.othersEmail ||
-      contact.othersVTel != contact.othersTel
-    ) {
-      handleError(`<b class="font-thai">กรุณาตรวจสอบรายละเอียดบุคคลติดต่อให้ถูกต้อง <br />
-        <span>Please make sure your contact details are correct.</span></b>`);
-    } else if (
-      certificate.cerArray.length == 0 ||
-      certificate.payment == "" ||
-      certificate.limit == "" ||
-      certificate.currency == "" ||
-      certificate.stdPacking == "" ||
-      certificate.moq == ""
-    ) {
-      handleError(`<b class="font-thai">กรุณากรอกรายละเอียดมาตรฐานและการรองรับให้ครบถ้วน <br />
-        <span>Please complete the current standards and certifications.</span></b>`);
-    } else if (upload.map == "") {
-      handleError(`<b class="font-thai">กรุณาอัพโหลดเอกสารให้ครบถ้วน <br />
-        <span>Please upload documents.</span></b>`);
-    } else if (upload.mapLink == "") {
-      handleError(`<b class="font-thai">กรุณาใส่ลิ้งค์แผนที่บริษัท <br />
-        <span>Please enter a google map link.</span></b>`);
+  const handleUpload = async (text, e) => {
+    const file = e.target.files[0];
+    if (text == "VatLicenseBase64") {
+      setUpload({ ...upload, VatLicenseBase64: file });
+    } else if (text == "AffidavitBase64") {
+      setUpload({ ...upload, AffidavitBase64: file });
+    } else if (text == "MapBase64") {
+      setUpload({ ...upload, MapBase64: file });
+    } else if (text == "BookBankBase64") {
+      setUpload({ ...upload, BookBankBase64: file });
+    } else if (text == "BookMDBase64") {
+      setUpload({ ...upload, BookMDBase64: file });
+    } else if (text == "FiStmtsBase64") {
+      setUpload({ ...upload, FiStmtsBase64: file });
     } else {
-      handlePdf();
+      setUpload({ ...upload, OtherBase64: file });
     }
-    // handlePdf();
+    // validate pdf size < 1MB
+    if (file.size > 1000000) {
+      Swal.fire({
+        icon: "error",
+        title: `<p class="font-thai">ขนาดไฟล์เกิน 1 MB <br /> <span>File size exceeds 1 MB</span></p>`,
+        timer: 2000,
+        showConfirmButton: false,
+      }).then(() => {
+        //clear file
+        e.target.value = "";
+        setUpload({ ...upload, [text]: "" });
+      });
+    } else {
+      const base64 = await convertBase64(file);
+      setUpload({ ...upload, [text]: base64 });
+      updatepdfDoc(text, base64);
+    }
   };
 
-  const handleError = (text) => {
-    Swal.fire({
-      icon: "warning",
-      html: text,
-      timer: 4000,
-      showConfirmButton: false,
+  const convertBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+      fileReader.onload = () => {
+        resolve(fileReader.result);
+      };
+      fileReader.onerror = (error) => {
+        reject(error);
+      };
     });
   };
 
   useEffect(() => {
-    const initPage = setTimeout(() => {
-      getTime();
-    }, 100);
-    const timer1m = setInterval(() => {
-      getTime();
-    }, 3600000);
-
-    return () => {
-      clearTimeout(initPage);
-      clearInterval(timer1m);
-    };
+    getTime();
   }, []);
 
   return (
@@ -284,9 +266,9 @@ export default function Upload(props) {
                 accept=".pdf"
                 variant="unstyled"
                 size="sm"
-                // isDisabled={!accept}
+                isDisabled={!accept}
                 bgColor={upload[info.value] ? "green.100" : "white"}
-                onChange={(e) => handleUpload(info.value, e.target.files)}
+                onChange={(e) => handleUpload(info.value, e)}
               />
               {info.thai == "แผนที่บริษัท" ? (
                 <Input
@@ -294,9 +276,6 @@ export default function Upload(props) {
                   size="sm"
                   mt={3}
                   w="80%"
-                  onChange={({ target: { value: mapLink } }) =>
-                    setUpload({ ...upload, mapLink })
-                  }
                 />
               ) : (
                 ""
@@ -347,7 +326,7 @@ export default function Upload(props) {
               placeholder="กรุณาระบุคำนำหน้า / Please specify name title"
               my={5}
               fontSize={"sm"}
-              onChange={({ target: { value: name } }) => setUserName(name)}
+              isDisabled={!check}
             />
           </FormControl>
           <Text>(ผู้ให้ข้อมูล)</Text>
@@ -376,8 +355,7 @@ export default function Upload(props) {
               colorScheme="green"
               rounded="xl"
               className="font-thai"
-              onClick={() => handleState()}
-              disabled={!check || userName == ""}
+              onClick={() => handleNext()}
             >
               ยืนยันขึ้นทะเบียน / Confirm
             </Button>

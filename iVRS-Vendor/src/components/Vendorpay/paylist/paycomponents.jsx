@@ -1,5 +1,4 @@
-import React from "react";
-import { paylist } from "./paylist";
+import React, { useEffect } from "react";
 import {
   GridItem,
   Text,
@@ -9,8 +8,22 @@ import {
   Box,
   Flex,
 } from "@chakra-ui/react";
+import useFormDetail from "../../../store/forminput/forminput";
+import { fetchmonetary } from "../../../services/feth-api";
 
 const paycomponents = () => {
+  const { getMonetaryPolicy, FormDetail, updateMonetaryPolicy } =
+    useFormDetail();
+  const { MonetaryPolicy } = FormDetail;
+  const getMonetaryPolicylist = () => {
+    fetchmonetary().then((data) => {
+      getMonetaryPolicy(data);
+    });
+  };
+
+  useEffect(() => {
+    getMonetaryPolicylist();
+  }, []);
   return (
     <>
       <Grid
@@ -25,7 +38,7 @@ const paycomponents = () => {
             2. นโยบายการเงิน / Monetary Policy
           </Text>
         </GridItem>
-        {paylist.map((info, i) => (
+        {MonetaryPolicy.map((info, i) => (
           <GridItem
             w="100%"
             colSpan={3}
@@ -36,27 +49,38 @@ const paycomponents = () => {
             <Flex>
               <Box w="30rem">
                 <Text>
-                  2.{i + 1} {info.title}
+                  2.{i + 1}{" "}
+                  {info.label == "แจ้งระเบียบวางบิล รับเช็ค"
+                    ? "ศึกษารายละเอียดการวางบิล"
+                    : info.label}
                 </Text>
               </Box>
               <Grid colSpan={3} w="100%" px="10rem">
-                <RadioGroup>
+                <RadioGroup
+                  onChange={(value) => updateMonetaryPolicy(info.name, value)}
+                >
                   <Grid templateColumns="repeat(3, 1fr)" gap={3}>
                     <GridItem w={"14rem"}>
-                      <Radio value="1">{info.isRadioGroup.isRadio1}</Radio>
+                      <Radio value={info.valueChecked1}>
+                        {info.labelChecked1 == "แจ้ง"
+                          ? "ศึกษารายละเอยดและรับทราบ"
+                          : info.labelChecked1}
+                      </Radio>
                     </GridItem>
                     <GridItem w="14rem">
-                      {info.isRadioGroup.isRadio2 == "" ? (
+                      {info.labelChecked2 == "" ? (
                         ""
                       ) : (
-                        <Radio value="2">{info.isRadioGroup.isRadio2}</Radio>
+                        <Radio value={info.valueChecked2}>{info.label}</Radio>
                       )}
                     </GridItem>
                     <GridItem w="14rem">
-                      {info.isRadioGroup.isRadio3 == "" ? (
+                      {info.labelChecked3 == "" ? (
                         ""
                       ) : (
-                        <Radio value="2">{info.isRadioGroup.isRadio3}</Radio>
+                        <Radio value={info.valueChecked3}>
+                          {info.labelChecked3}
+                        </Radio>
                       )}
                     </GridItem>
                   </Grid>

@@ -3,6 +3,7 @@ import { Text, Grid, GridItem, Select, Button } from "@chakra-ui/react";
 import Swal from "sweetalert2";
 import { fetchcompanylist } from "../../services/feth-api";
 import { useStoreCompanylist } from "../../store";
+import uuseFormDetail from "../../store/forminput/forminput";
 
 const buttonText = [
   {
@@ -26,6 +27,7 @@ const mapText = [
 
 export default function InputForm() {
   const { companylist, updateCompanylist } = useStoreCompanylist();
+  const { updateCompany } = uuseFormDetail();
   console.log(companylist);
   const getPdf = () => {
     Swal.fire({
@@ -40,23 +42,19 @@ export default function InputForm() {
   };
 
   const getcompanilist = () => {
-    // fetchcompanylist().then((data) => {
-    //   updateCompanylist(data);
-    // });
+    fetchcompanylist().then((data) => {
+      updateCompanylist(data);
+    });
+  };
+
+  const onChangeCompany = (e) => {
+    const { value } = e.target;
+    updateCompany(value);
   };
 
   //fechh companylist
   useEffect(() => {
-    const initPage = setTimeout(() => {
-      getcompanilist();
-    }, 200);
-    const timer = setInterval(() => {
-      getcompanilist();
-    }, 5000);
-    return () => {
-      clearTimeout(initPage);
-      clearInterval(timer);
-    };
+    getcompanilist();
   }, []);
 
   return (
@@ -100,12 +98,13 @@ export default function InputForm() {
           <Select
             placeholder="Select the company you want to register."
             fontSize={"sm"}
+            onChange={onChangeCompany}
           >
-            {/* {companylist?.map((info, i) => (
-              <option key={i} value={info.value}>
-                {info.text}
+            {companylist?.map((info, i) => (
+              <option key={i} value={info.Company}>
+                [{info.Company}] {info.CompanyFullName}
               </option>
-            ))} */}
+            ))}
           </Select>
         </GridItem>
 

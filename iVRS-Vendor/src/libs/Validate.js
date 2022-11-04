@@ -93,3 +93,33 @@ export const validateNoQuotesInText = (text) => {
   const re = /^[^'"]*$/;
   return re.test(String(text));
 };
+
+// Validate Text Engish and Number space
+export const validateTextEngishAndNumberSpace = (text) => {
+  const re = /^[a-zA-Z0-9 ]+$/;
+  return re.test(String(text));
+};
+
+// Validate Address Thai and English full name and number
+export const validateAddressThaiAndEnglish = (address) => {
+  const re = /^[a-zA-Z0-9ก-๙ ]+$/;
+  return re.test(String(address));
+};
+
+// validate website url
+export const validateWebsiteUrl = (url) => {
+  const re = /^(http|https):\/\/[^ "]+$/;
+  return re.test(String(url));
+};
+
+// validate Fax number
+export const validateFaxNumber = (fax) => {
+  const re = /^[0-9]+$/;
+  return re.test(String(fax));
+};
+
+// validate juristic id
+export const validateJuristicID = (juristicId) => {
+  const re = /^[0-9]+$/;
+  return re.test(String(juristicId));
+};

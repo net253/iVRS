@@ -13,12 +13,7 @@ import {
   Textarea,
   Select,
 } from "@chakra-ui/react";
-import {
-  useCertifications,
-  useBenefit,
-  usePaymentmethods,
-  useCurrencycode,
-} from "../../store";
+import { usePaymentmethods, useCurrencycode } from "../../store";
 import {
   fetchcertificate,
   fetchbenefitlist,
@@ -28,14 +23,12 @@ import {
 import useFormInput from "../../store/forminput/forminput";
 
 export default function Standard() {
-  const { certifications, updateCertifications } = useCertifications();
   const { paymentmethods, updatePaymentmethods } = usePaymentmethods();
   const { currencycode, updateCurrencycode } = useCurrencycode();
-  const { benefit, updateBenefit } = useBenefit();
   const [checkedItems, setCheckedItems] = useState({});
   const [checkedItemsBenefits, setCheckedItemsBenefits] = useState({});
   const {
-    //FormDetail,
+    FormDetail,
     updateCertificate,
     getCertifications,
     updateOtherCertificate,
@@ -47,15 +40,13 @@ export default function Standard() {
     updateFormDetail,
   } = useFormInput();
 
+  const { Benefits, Certificate } = FormDetail;
+
   function onChangecheckbox(e) {
     const item = e.target.name;
     const isChecked = e.target.checked;
     setCheckedItems({ ...checkedItems, [item]: isChecked });
-    certifications.map((cert) => {
-      if (cert.name === item) {
-        updateCertificate(cert.name, isChecked, cert.label);
-      }
-    });
+    updateCertificate(item, isChecked);
   }
 
   function onChangeForminput(e) {
@@ -83,23 +74,17 @@ export default function Standard() {
     const item = e.target.name;
     const isChecked = e.target.checked;
     setCheckedItemsBenefits({ ...checkedItemsBenefits, [item]: isChecked });
-    benefit.map((bnf) => {
-      if (bnf.name === item) {
-        updateBenefits(bnf.name, isChecked, bnf.label);
-      }
-    });
+    updateBenefits(item, isChecked);
   }
 
   const getcertificate = () => {
     fetchcertificate().then((data) => {
-      updateCertifications(data);
       getCertifications(data);
     });
   };
 
   const getbenefit = () => {
     fetchbenefitlist().then((data) => {
-      updateBenefit(data);
       getBenefits(data);
     });
   };
@@ -117,24 +102,11 @@ export default function Standard() {
   };
 
   //fechh companylist
-  var timer1 = 60 * 1000;
   useEffect(() => {
-    const initPage = setTimeout(() => {
-      getcertificate();
-      getbenefit();
-      getcreditterm();
-      getcurrency();
-    }, 200);
-    const timer = setInterval(() => {
-      getcertificate();
-      getbenefit();
-      getcreditterm();
-      getcurrency();
-    }, timer1);
-    return () => {
-      clearTimeout(initPage);
-      clearInterval(timer);
-    };
+    getcertificate();
+    getbenefit();
+    getcreditterm();
+    getcurrency();
   }, []);
 
   return (
@@ -178,7 +150,7 @@ export default function Standard() {
               gap={2}
               fontSize={{ base: "sm", sm: "sm" }}
             >
-              {certifications?.map((info, i) => (
+              {Certificate?.map((info, i) => (
                 <GridItem
                   key={i}
                   w="100%"
@@ -222,7 +194,7 @@ export default function Standard() {
               gap={2}
               fontSize={{ base: "sm", sm: "sm" }}
             >
-              {benefit?.map((info, i) => (
+              {Benefits?.map((info, i) => (
                 <GridItem
                   key={i}
                   w="100%"

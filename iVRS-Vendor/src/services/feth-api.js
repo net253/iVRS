@@ -2,6 +2,7 @@ import axios from "axios";
 
 const API = "http://localhost/iVRS-Vendor-Backend/ivrs-vendor/api";
 const API_AUTH = "http://localhost/iVRS-Vendor-Backend/ivrs-vendor/api/auth";
+//const API_JSON = "http://localhost/iVRS-Vendor-Backend/ivrs-vendor/api/json";
 
 function getAxiosConfig() {
   const token = window.localStorage.getItem("token");
@@ -98,10 +99,39 @@ export async function fetchlogin(reqData) {
 export async function fetchcompanylist() {
   if (!window.localStorage.isLoggedIn) return;
   try {
-    const { data } = await axios.get(API + "/company", getAxiosConfig());
+    const { data } = await axios.get(API + "/vendor/company", getAxiosConfig());
     return data;
   } catch (error) {
     console.error(error);
     return { state: true, msg: "Something went wrong" };
+  }
+}
+
+export async function fetchmonetary() {
+  if (!window.localStorage.isLoggedIn) return;
+  try {
+    const { data } = await axios.get(
+      "https://snc-services.sncformer.com/ivrs/admin/api/index.php/json/monetary-policy"
+    );
+    return data;
+  } catch (error) {
+    console.error(error);
+    return { state: true, msg: "Something went wrong" };
+  }
+}
+
+export async function fetchuploadform(reqData) {
+  //console.log(JSON.stringify(reqData));
+  try {
+    const { data } = await axios.post(
+      API + "/vendor/save-form-register",
+      reqData,
+      getAxiosConfig()
+    );
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.log(error);
+    return false;
   }
 }
