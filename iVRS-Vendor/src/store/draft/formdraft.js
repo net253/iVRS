@@ -5,10 +5,10 @@ const initialState = [];
 
 const useFormDraft = create(
   devtools((set) => ({
-    FormDraft: initialState,
-    getFormDraft: (data) =>
+    FormEditDraft: initialState,
+    getFormEditDraft: (data) =>
       set(() => ({
-        FormDraft: data,
+        FormEditDraft: data,
       })),
   }))
 );

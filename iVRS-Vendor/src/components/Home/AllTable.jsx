@@ -12,10 +12,12 @@ import {
 } from "@chakra-ui/react";
 import { Loadinglottie } from "../lottie";
 import useDoclist from "../../store/Doclist/Doclist";
+import useFormDraft from "../../store/draft/formdraft";
 import { fetchdocumentlistdraft } from "../../services/feth-api";
 
 const AllTable = () => {
   const { Doclist, getDoclistDraft } = useDoclist();
+  const { getFormEditDraft } = useFormDraft();
   // lock the table header
 
   function fetchFormDraft() {
@@ -24,6 +26,10 @@ const AllTable = () => {
     });
   }
 
+  function onClickEdit(info) {
+    console.log(info);
+    getFormEditDraft(info);
+  }
   useEffect(() => {
     const initpage = setInterval(() => {
       fetchFormDraft();
@@ -68,7 +74,7 @@ const AllTable = () => {
                     key={i}
                     _hover={{ bg: "gray.100" }}
                     cursor={"pointer"}
-                    onClick={() => console.log(info)}
+                    onClick={() => onClickEdit(info)}
                   >
                     <Td fontSize={"sm"}>{i + 1}</Td>
                     <Td fontSize={"sm"}>
