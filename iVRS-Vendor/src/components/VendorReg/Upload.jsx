@@ -111,33 +111,44 @@ export default function Upload() {
     if (!isValid) {
       Swal.fire({
         icon: "error",
-        title: `<p class="font-thai">${error}</p>`,
+        title: `<p class="font-sweetalert" >${error}</p>`,
         confirmButtonText: `<p>ตกลง</span></p>`,
       });
     } else {
       Swal.fire({
         icon: "warning",
-        title: `<p class="font-thai">ยืนยันการลงทะเบียนใช่หรือไม่?  <br /> <span>Confirm registration?</span></p>`,
+        title: `<p class="font-sweetalert">ยืนยันการลงทะเบียนใช่หรือไม่?  <br /> <span>Confirm registration?</span></p>`,
         showCancelButton: true,
-        confirmButtonText: `<p class="font-thai">ใช่ / <span>Yes</span></p>`,
-        cancelButtonText: `<p class="font-thai">ไม่ใช่ / <span>No</span></p>`,
+        confirmButtonText: `<p class="font-sweetalert">ใช่ / <span>Yes</span></p>`,
+        cancelButtonText: `<p class="font-sweetalert">ไม่ใช่ / <span>No</span></p>`,
         confirmButtonColor: "green",
       }).then((result) => {
         if (result.isConfirmed) {
+          //sweealert loading here
+          Swal.fire({
+            title: `<p class="font-sweetalert">กำลังลงทะเบียน <br /> <span>
+            Registering</span></p>`,
+            didOpen: () => {
+              Swal.showLoading();
+            },
+          });
           fetchuploadform(FormDetail).then((data) => {
             if (data.state) {
               Swal.fire({
                 icon: "success",
-                title: `<p class="font-thai">ลงทะเบียนสำเร็จ <br /> <span>Registration successful</span></p>`,
-                showConfirmButton: false,
-                timer: 1500,
+                title: `<p class="font-sweetalert">ลงทะเบียนสำเร็จ <br /> <span>
+                Successful registration</span></p>`,
+                isConfirmed: false,
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  //navigate("/Home");
+                }
               });
             } else {
               Swal.fire({
                 icon: "error",
-                title: `<p class="font-thai">ลงทะเบียนไม่สำเร็จ <br /> <span>Registration failed</span></p>`,
-                showConfirmButton: false,
-                timer: 1500,
+                title: `<p class="font-sweetalert">ลงทะเบียนไม่สำเร็จ <br /> <span>
+                Failed to register</span></p>`,
               });
             }
           });
@@ -270,16 +281,6 @@ export default function Upload() {
                 bgColor={upload[info.value] ? "green.100" : "white"}
                 onChange={(e) => handleUpload(info.value, e)}
               />
-              {info.thai == "แผนที่บริษัท" ? (
-                <Input
-                  placeholder="Google Map Link => https://goo.gl/maps/DbHkSj8ZUHu88p9M7"
-                  size="sm"
-                  mt={3}
-                  w="80%"
-                />
-              ) : (
-                ""
-              )}
             </Stack>
           ))}
         </GridItem>

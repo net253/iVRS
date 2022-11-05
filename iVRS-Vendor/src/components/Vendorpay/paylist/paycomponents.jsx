@@ -7,9 +7,12 @@ import {
   RadioGroup,
   Box,
   Flex,
+  Icon,
 } from "@chakra-ui/react";
 import useFormDetail from "../../../store/forminput/forminput";
 import { fetchmonetary } from "../../../services/feth-api";
+import {} from "../../../libs/Validate";
+import { FaExclamationCircle, FaCheckCircle } from "react-icons/fa";
 
 const paycomponents = () => {
   const { getMonetaryPolicy, FormDetail, updateMonetaryPolicy } =
@@ -34,9 +37,16 @@ const paycomponents = () => {
         px="10px"
       >
         <GridItem w="100%" colSpan={3}>
-          <Text className="font-thai" fontWeight="bold">
-            2. นโยบายการเงิน / Monetary Policy
-          </Text>
+          <Flex h="100%" alignItems={"center"}>
+            <Text className="font-thai" fontWeight="bold">
+              2. นโยบายการเงิน / Monetary Policy
+            </Text>
+            {MonetaryPolicy.length != 0 ? (
+              <Icon as={FaCheckCircle} color="green.500" mx="5px" />
+            ) : (
+              <Icon as={FaExclamationCircle} color="red.500" mx="5px" />
+            )}
+          </Flex>
         </GridItem>
         {MonetaryPolicy.map((info, i) => (
           <GridItem
@@ -58,12 +68,13 @@ const paycomponents = () => {
               <Grid colSpan={3} w="100%" px="10rem">
                 <RadioGroup
                   onChange={(value) => updateMonetaryPolicy(info.name, value)}
+                  defaultValue={info.value}
                 >
                   <Grid templateColumns="repeat(3, 1fr)" gap={3}>
                     <GridItem w={"14rem"}>
                       <Radio value={info.valueChecked1}>
                         {info.labelChecked1 == "แจ้ง"
-                          ? "ศึกษารายละเอยดและรับทราบ"
+                          ? "ศึกษารายละเอียดและรับทราบ"
                           : info.labelChecked1}
                       </Radio>
                     </GridItem>

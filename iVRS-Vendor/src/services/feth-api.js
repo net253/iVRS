@@ -121,7 +121,7 @@ export async function fetchmonetary() {
 }
 
 export async function fetchuploadform(reqData) {
-  //console.log(JSON.stringify(reqData));
+  console.log(JSON.stringify(reqData));
   try {
     const { data } = await axios.post(
       API + "/vendor/save-form-register",

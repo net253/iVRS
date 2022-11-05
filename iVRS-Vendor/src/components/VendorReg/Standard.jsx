@@ -12,6 +12,10 @@ import {
   RadioGroup,
   Textarea,
   Select,
+  Icon,
+  Flex,
+  InputGroup,
+  InputRightElement,
 } from "@chakra-ui/react";
 import { usePaymentmethods, useCurrencycode } from "../../store";
 import {
@@ -21,6 +25,11 @@ import {
   fetcurrencylist,
 } from "../../services/feth-api";
 import useFormInput from "../../store/forminput/forminput";
+import { FaExclamationCircle, FaCheckCircle } from "react-icons/fa";
+import {
+  validateNumber,
+  validateTextEngishAndTextThaiAndNumber,
+} from "../../libs/Validate";
 
 export default function Standard() {
   const { paymentmethods, updatePaymentmethods } = usePaymentmethods();
@@ -40,7 +49,15 @@ export default function Standard() {
     updateFormDetail,
   } = useFormInput();
 
-  const { Benefits, Certificate } = FormDetail;
+  const {
+    Benefits,
+    Certificate,
+    Remarks,
+    ApprovalLimit,
+    Currency,
+    CreditTerm,
+  } = FormDetail;
+  console.log(FormDetail);
 
   function onChangecheckbox(e) {
     const item = e.target.name;
@@ -73,6 +90,7 @@ export default function Standard() {
   function onChangecheckboxBenefits(e) {
     const item = e.target.name;
     const isChecked = e.target.checked;
+    console.log(item, isChecked);
     setCheckedItemsBenefits({ ...checkedItemsBenefits, [item]: isChecked });
     updateBenefits(item, isChecked);
   }
@@ -139,9 +157,25 @@ export default function Standard() {
       >
         {/* Q1 */}
         <GridItem w="100%" colSpan={3}>
-          <Text className="font-thai" fontWeight="bold">
-            1. การรับรองที่ได้รับ / <span>Kind of certificate approved</span>
-          </Text>
+          <Flex h="100%" alignItems={"center"}>
+            <Text className="font-thai" fontWeight="bold">
+              1. การรับรองที่ได้รับ / <span>Kind of certificate approved</span>
+            </Text>
+            {/* {checkedItems &&
+            Object.keys(checkedItems).length === 0 &&
+            Object.getPrototypeOf(checkedItems) === Object.prototype ? (
+              <Icon as={FaCheckCircle} color="green.500" mx="5px" />
+            ) : (
+              <Icon as={FaExclamationCircle} color="red.500" />
+            )} */}
+            {Certificate?.every(({ isChecked }) => {
+              return isChecked == false;
+            }) ? (
+              <Icon as={FaExclamationCircle} color="red.500" mx="5px" />
+            ) : (
+              <Icon as={FaCheckCircle} color="green.500" mx="5px" />
+            )}
+          </Flex>
         </GridItem>
         <GridItem w="100%" colSpan={3} fontSize={{ base: "sm", sm: "sm" }}>
           <CheckboxGroup colorScheme="green">
@@ -161,6 +195,7 @@ export default function Standard() {
                     key={i}
                     name={info.name}
                     onChange={onChangecheckbox}
+                    isChecked={checkedItems[info.name] && true}
                   >
                     {info.label}
                   </Checkbox>
@@ -183,9 +218,16 @@ export default function Standard() {
         </GridItem>
 
         <GridItem w="100%" colSpan={3}>
-          <Text className="font-thai" fontWeight="bold">
-            2. สิทธิประโยชน์ที่ได้รับ / <span>Benefits</span>
-          </Text>
+          <Flex h="100%" alignItems={"center"}>
+            <Text className="font-thai" fontWeight="bold">
+              2. สิทธิประโยชน์ที่ได้รับ / <span>Benefits</span>
+            </Text>
+            {Benefits?.every(({ isChecked }) => isChecked == false) ? (
+              <Icon as={FaExclamationCircle} color="red.500" mx="5px" />
+            ) : (
+              <Icon as={FaCheckCircle} color="green.500" mx="5px" />
+            )}
+          </Flex>
         </GridItem>
         <GridItem w="100%" colSpan={3} fontSize={{ base: "sm", sm: "sm" }}>
           <CheckboxGroup colorScheme="green">
@@ -231,9 +273,16 @@ export default function Standard() {
 
         {/* Q2 */}
         <GridItem w="100%" colSpan={3}>
-          <Text className="font-thai" fontWeight="bold">
-            3. เงื่อนไขการชำระเงิน / <span>Term of payment</span>
-          </Text>
+          <Flex h="100%" alignItems={"center"}>
+            <Text className="font-thai" fontWeight="bold">
+              3. เงื่อนไขการชำระเงิน / <span>Term of payment</span>
+            </Text>
+            {CreditTerm != "" && Currency != "" && ApprovalLimit != "" ? (
+              <Icon as={FaCheckCircle} color="green.500" mx="10px" />
+            ) : (
+              <Icon as={FaExclamationCircle} color="red.500" mx="10px" />
+            )}
+          </Flex>
           <GridItem w="100%" colSpan={3} fontSize={{ base: "sm", sm: "sm" }}>
             <Text fontWeight={"bold"} py="10px" px="1.2rem">
               3.1 การชำระเงิน การให้เครดิตเทอม / <span>Credit Term</span>
@@ -242,6 +291,7 @@ export default function Standard() {
               colorScheme="green"
               px="1.2rem"
               onChange={onChangeCreditTerms}
+              defaultValue={"cash"}
             >
               <Grid
                 templateColumns={{ base: "repeat(2,1fr)", md: "repeat(5,1fr)" }}
@@ -262,13 +312,24 @@ export default function Standard() {
           <Text className="font-thai" fontWeight="bold" px="1.2rem">
             3.2 การวางมัดจำ / <span>Earnest</span>
           </Text>
-          <Textarea
-            placeholder="กรุณาระบบเงื่อนไขการชำระสินค้า เช่น ชำระเงินสด 30% เมื่อยืนยันการสั่งซื้อ และชำระส่วนที่เหลือเมื่อจัดส่งสินค้าเสร็จสมบูรณ์"
-            size="sm"
-            rows={3}
-            px="1.2rem"
-            onChange={onChangeEarnest}
-          />
+          <InputGroup>
+            <Textarea
+              placeholder="กรุณาระบบเงื่อนไขการชำระสินค้า เช่น ชำระเงินสด 30% เมื่อยืนยันการสั่งซื้อ และชำระส่วนที่เหลือเมื่อจัดส่งสินค้าเสร็จสมบูรณ์"
+              size="sm"
+              rows={3}
+              px="1.2rem"
+              onChange={onChangeEarnest}
+            />
+            {validateTextEngishAndTextThaiAndNumber(Remarks) ? (
+              <InputRightElement>
+                <Icon as={FaCheckCircle} color="green.500" />
+              </InputRightElement>
+            ) : (
+              <InputRightElement>
+                <Icon as={FaExclamationCircle} color="red.500" />
+              </InputRightElement>
+            )}
+          </InputGroup>
         </GridItem>
         <GridItem w="100%" colSpan={{ base: "3", md: "1" }}>
           <Text
@@ -281,15 +342,26 @@ export default function Standard() {
           </Text>
         </GridItem>
         <GridItem w="100%" colSpan={{ base: "2", md: "1" }}>
-          <Input
-            fontSize={{ base: "sm", sm: "sm" }}
-            w="100%"
-            type="number"
-            placeholder="กรุณาระบุตัวเลขเท่านั้น / Please enter numbers only"
-            name={"ApprovalLimit"}
-            //value={Number(FormDetail.ApprovalLimit).toLocaleString("en-US")}
-            onChange={onChangeForminput}
-          />
+          <InputGroup>
+            <Input
+              fontSize={{ base: "sm", sm: "sm" }}
+              w="100%"
+              type="number"
+              placeholder="กรุณาระบุตัวเลขเท่านั้น / Please enter numbers only"
+              name={"ApprovalLimit"}
+              //value={Number(FormDetail.ApprovalLimit).toLocaleString("en-US")}
+              onChange={onChangeForminput}
+            />
+            {validateNumber(ApprovalLimit) && Currency != "" ? (
+              <InputRightElement>
+                <Icon as={FaCheckCircle} color="green.500" />
+              </InputRightElement>
+            ) : (
+              <InputRightElement>
+                <Icon as={FaExclamationCircle} color="red.500" />
+              </InputRightElement>
+            )}
+          </InputGroup>
         </GridItem>
         <GridItem w="100%" fontSize={{ base: "sm", sm: "sm" }}>
           <Select

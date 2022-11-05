@@ -2,7 +2,9 @@ import {
   validateEmail,
   validatePhone,
   validateNameThaiAndEnglish,
-  //validateThaiText,
+  validateJuristicID,
+  validateWebsiteUrl,
+  validateTextEngishAndNumberSpace,
   validateNumber,
 } from "../libs/validate.js";
 export const validatevendorRegister = ({
@@ -18,27 +20,50 @@ export const validatevendorRegister = ({
   Fax,
   SaleName,
   SaleEmail,
+  VSaleEmail,
   SaleManagerName,
   SaleTel,
+  VSaleTel,
   SaleManagerEmail,
+  VSaleManagerEmail,
   SaleManagerTel,
+  VSaleManagerTel,
   AccountName,
   AccountBankName,
   AccountNo,
   Branch,
   ContactPerson,
   AccountTel,
+  VAccountTel,
   AccountEmail,
+  VAccountEmail,
   Certificate,
+  Benefits,
+  IsSTDPacking,
+  IsMOQ,
+  STDPackingBase64,
+  MOQBase64,
+  VatLicenseBase64,
+  AffidavitBase64,
+  MapBase64,
+  BookBankBase64,
+  BookMDBase64,
+  FiStmtsBase64,
 }) => {
   console.log("validatevendorRegister");
   let isValid = true;
   let error = "";
-  if (!validateNumber(JuristicID)) {
-    error = "กรุณากรอกเลขประจำตัวผู้เสียภาษี";
+  if (
+    !validateJuristicID(JuristicID) ||
+    JuristicID === "" ||
+    JuristicID.length < 13 ||
+    JuristicID.length > 13
+  ) {
+    error =
+      "กรุณากรอกเลขประจำตัวผู้เสียภาษี หรือ รูปแบบเลขประจำตัวผู้เสียภาษีไม่ถูกต้อง";
     isValid = false;
-  } else if (!validateNameThaiAndEnglish(CompanyAdmin) || CompanyAdmin === "") {
-    error = "กรุณากรอกชื่อผู้ประสานงาน";
+  } else if (CompanyAdmin === "") {
+    error = "กรุณากรอกชื่อบริษัทที่ต้องการขึ้นทะเบียน";
     isValid = false;
   } else if (
     !validateNameThaiAndEnglish(CompanyNameEN) ||
@@ -52,7 +77,7 @@ export const validatevendorRegister = ({
   ) {
     error = "กรุณากรอกชื่อบริษัทภาษาไทย";
     isValid = false;
-  } else if (!validateNameThaiAndEnglish(AddressEN) || AddressEN === "") {
+  } else if (!validateTextEngishAndNumberSpace(AddressEN) || AddressEN === "") {
     error = "กรุณากรอกที่อยู่ภาษาอังกฤษ";
     isValid = false;
   } else if (!validateNameThaiAndEnglish(AddressTH) || AddressTH === "") {
@@ -64,23 +89,36 @@ export const validatevendorRegister = ({
   ) {
     error = "กรุณากรอกลักษณะธุรกิจ";
     isValid = false;
-  } else if (!validateNameThaiAndEnglish(Website) || Website === "") {
+  } else if (!validateWebsiteUrl(Website) || Website === "") {
     error = "กรุณากรอกเว็บไซต์";
     isValid = false;
-  } else if (!validatePhone(Tel) || Tel === "") {
+  } else if (
+    !validatePhone(Tel) ||
+    Tel === "" ||
+    Tel.length < 10 ||
+    Tel.length > 10
+  ) {
     error = "กรุณากรอกเบอร์โทรศัพท์";
     isValid = false;
-  } else if (!validatePhone(Fax) || Fax === "") {
+  } else if (!validateNumber(Fax) || Fax === "") {
     error = "กรุณากรอกเบอร์แฟกซ์";
     isValid = false;
   } else if (!validateNameThaiAndEnglish(SaleName) || SaleName === "") {
     error = "กรุณากรอกชื่อผู้ขาย";
     isValid = false;
-  } else if (!validateEmail(SaleEmail) || SaleEmail === "") {
+  } else if (
+    !validateEmail(SaleEmail) ||
+    SaleEmail === "" ||
+    SaleEmail != VSaleEmail
+  ) {
     error = "กรุณากรอกอีเมลผู้ขาย";
     isValid = false;
-  } else if (!validatePhone(SaleTel) || SaleTel === "") {
-    error = "กรุณากรอกเบอร์โทรผู้ขาย";
+  } else if (
+    ((!validatePhone(SaleTel) || SaleTel === "") && SaleTel.length < 10) ||
+    SaleTel.length > 10 ||
+    SaleTel != VSaleTel
+  ) {
+    error = "กรุณากรอกเบอร์โทรงานขาย";
     isValid = false;
   } else if (
     !validateNameThaiAndEnglish(SaleManagerName) ||
@@ -88,10 +126,20 @@ export const validatevendorRegister = ({
   ) {
     error = "กรุณากรอกชื่อผู้จัดการขาย";
     isValid = false;
-  } else if (!validateEmail(SaleManagerEmail) || SaleManagerEmail === "") {
+  } else if (
+    !validateEmail(SaleManagerEmail) ||
+    SaleManagerEmail === "" ||
+    SaleManagerEmail != VSaleManagerEmail
+  ) {
     error = "กรุณากรอกอีเมลผู้จัดการขาย";
     isValid = false;
-  } else if (!validatePhone(SaleManagerTel) || SaleManagerTel === "") {
+  } else if (
+    !validatePhone(SaleManagerTel) ||
+    SaleManagerTel === "" ||
+    SaleManagerTel.length < 10 ||
+    SaleManagerTel.length > 10 ||
+    SaleManagerTel != VSaleManagerTel
+  ) {
     error = "กรุณากรอกเบอร์โทรผู้จัดการขาย";
     isValid = false;
   } else if (!validateNameThaiAndEnglish(AccountName) || AccountName === "") {
@@ -103,7 +151,7 @@ export const validatevendorRegister = ({
   ) {
     error = "กรุณากรอกชื่อธนาคาร";
     isValid = false;
-  } else if (!validateNameThaiAndEnglish(AccountNo) || AccountNo === "") {
+  } else if (!validateNumber(AccountNo) || AccountNo === "") {
     error = "กรุณากรอกเลขที่บัญชี";
     isValid = false;
   } else if (!validateNameThaiAndEnglish(Branch) || Branch === "") {
@@ -115,17 +163,43 @@ export const validatevendorRegister = ({
   ) {
     error = "กรุณากรอกชื่อผู้ติดต่อ";
     isValid = false;
-  } else if (!validatePhone(AccountTel) || AccountTel === "") {
+  } else if (
+    !validatePhone(AccountTel) ||
+    AccountTel === "" ||
+    AccountTel.length < 10 ||
+    AccountTel.length > 10 ||
+    AccountTel != VAccountTel
+  ) {
     error = "กรุณากรอกเบอร์โทรศัพท์";
     isValid = false;
-  } else if (!validateEmail(AccountEmail) || AccountEmail === "") {
+  } else if (
+    !validateEmail(AccountEmail) ||
+    AccountEmail === "" ||
+    AccountEmail != VAccountEmail
+  ) {
     error = "กรุณากรอกอีเมล";
     isValid = false;
+  } else if (Certificate.every(({ isChecked }) => isChecked == false)) {
+    error = "กรุณาเลือกใบรับรองที่ได้รับ";
+    isValid = false;
+  } else if (Benefits.every(({ isChecked }) => isChecked == false)) {
+    error = "กรุณาเลือกสิทธิประโยชน์ที่ได้รับ";
+    isValid = false;
+  } else if (IsSTDPacking == true && STDPackingBase64 == "") {
+    error = "กรุณาแนบไฟล์มาตราฐานการบรรจุ";
+    isValid = false;
+  } else if (IsMOQ == true && MOQBase64 == "") {
+    error = "กรุณาแนบไฟล์มาตราฐาน MOQ";
+    isValid = false;
   } else if (
-    !validateNameThaiAndEnglish(Certificate) ||
-    Certificate.length == 0
+    VatLicenseBase64 == "" ||
+    AffidavitBase64 == "" ||
+    MapBase64 == "" ||
+    BookBankBase64 == "" ||
+    FiStmtsBase64 == "" ||
+    BookMDBase64 == ""
   ) {
-    error = "กรุณากรอกใบรับรอง";
+    error = "กรุณากรอกข้อมูล";
     isValid = false;
   }
   console.log("error", error);

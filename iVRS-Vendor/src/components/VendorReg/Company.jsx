@@ -170,7 +170,7 @@ export default function Company() {
               name="NatureBusiness"
               onChange={handleCompany}
             />
-            {validateTextEngishAndNumberSpace(NatureBusiness) ? (
+            {validateNameThaiAndEnglish(NatureBusiness) ? (
               <InputRightElement>
                 <Icon as={FaCheckCircle} color="green.500" />
               </InputRightElement>

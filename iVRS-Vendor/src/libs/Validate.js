@@ -96,7 +96,7 @@ export const validateNoQuotesInText = (text) => {
 
 // Validate Text Engish and Number space
 export const validateTextEngishAndNumberSpace = (text) => {
-  const re = /^[a-zA-Z0-9 ]+$/;
+  const re = /^[a-zA-Z0-9 /]+$/;
   return re.test(String(text));
 };
 
@@ -122,4 +122,10 @@ export const validateFaxNumber = (fax) => {
 export const validateJuristicID = (juristicId) => {
   const re = /^[0-9]+$/;
   return re.test(String(juristicId));
+};
+
+// validate text engish and text thai and number
+export const validateTextEngishAndTextThaiAndNumber = (text) => {
+  const re = /^[a-zA-Z0-9ก-๙ /%]+$/;
+  return re.test(String(text));
 };

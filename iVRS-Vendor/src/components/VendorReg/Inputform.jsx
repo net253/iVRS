@@ -1,9 +1,18 @@
 import React, { useEffect } from "react";
-import { Text, Grid, GridItem, Select, Button } from "@chakra-ui/react";
+import {
+  Text,
+  Grid,
+  GridItem,
+  Select,
+  Button,
+  Icon,
+  Flex,
+} from "@chakra-ui/react";
 import Swal from "sweetalert2";
 import { fetchcompanylist } from "../../services/feth-api";
 import { useStoreCompanylist } from "../../store";
-import uuseFormDetail from "../../store/forminput/forminput";
+import useFormDetail from "../../store/forminput/forminput";
+import { FaExclamationCircle, FaCheckCircle } from "react-icons/fa";
 
 const buttonText = [
   {
@@ -27,7 +36,8 @@ const mapText = [
 
 export default function InputForm() {
   const { companylist, updateCompanylist } = useStoreCompanylist();
-  const { updateCompany } = uuseFormDetail();
+  const { updateCompany, FormDetail } = useFormDetail();
+  const { CompanyAdmin } = FormDetail;
   console.log(companylist);
   const getPdf = () => {
     Swal.fire({
@@ -87,9 +97,16 @@ export default function InputForm() {
         </GridItem>
 
         <GridItem w="100%" fontWeight="bold" colSpan={{ base: "4", lg: "1" }}>
-          <Text className="font-thai" fontSize={"sm"}>
-            เลือกบริษัทที่ต้องการขึ้นทะเบียน
-          </Text>
+          <Flex h="100%" alignItems={"center"}>
+            <Text className="font-thai" fontSize={"sm"}>
+              เลือกบริษัทที่ต้องการขึ้นทะเบียน
+            </Text>
+            {CompanyAdmin != "" ? (
+              <Icon as={FaCheckCircle} color="green.500" mx="5px" />
+            ) : (
+              <Icon as={FaExclamationCircle} color="red.500" mx="5px" />
+            )}
+          </Flex>
           <Text fontSize="small">Select the company you want to register.</Text>
         </GridItem>
 

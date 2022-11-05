@@ -32,7 +32,7 @@ const initailState = {
   VAccountTel: "",
   Certificate: [],
   Benefits: [],
-  CreditTerm: [],
+  CreditTerm: "",
   Remarks: "",
   ApprovalLimit: "",
   Currency: "",

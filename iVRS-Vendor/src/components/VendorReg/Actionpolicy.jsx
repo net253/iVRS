@@ -10,11 +10,13 @@ import {
   Box,
   HStack,
   Input,
+  Icon,
 } from "@chakra-ui/react";
 
 import { fetchactionpolicylist } from "../../services/feth-api";
 import useFormInput from "../../store/forminput/forminput";
 //import { convertPdfToBase64, convertBase64ToPdf } from "../../libs/Base64";
+import { FaExclamationCircle, FaCheckCircle } from "react-icons/fa";
 
 const question = [
   {
@@ -71,6 +73,7 @@ const ActionpolicyComponents = () => {
   const onChangePDF = async (topics, e) => {
     const file = e.target.files[0];
     const base64 = await convertBase64(file);
+    console.log(base64);
     UpdatePDFMOQSTD(topics, base64);
   };
 
@@ -101,9 +104,16 @@ const ActionpolicyComponents = () => {
         px="10px"
       >
         <GridItem w="100%" colSpan={3}>
-          <Text className="font-thai" fontWeight="bold">
-            4. นโยบายการดำเนินการ / <span>Operation Policy</span>
-          </Text>
+          <Flex h="100%" alignItems={"center"}>
+            <Text className="font-thai" fontWeight="bold">
+              4. นโยบายการดำเนินการ / <span>Operation Policy</span>
+            </Text>
+            {ActionPolicy.length != 0 ? (
+              <Icon as={FaCheckCircle} color="green.500" mx="5px" />
+            ) : (
+              <Icon as={FaExclamationCircle} color="red.500" mx="5px" />
+            )}
+          </Flex>
         </GridItem>
         {ActionPolicy?.map((info, i) => (
           <GridItem
@@ -123,6 +133,7 @@ const ActionpolicyComponents = () => {
               <Grid colSpan={3} w="100%" px="10rem">
                 <RadioGroup
                   onChange={(value) => updateActionPolicy(info.name, value)}
+                  defaultValue={info.value}
                 >
                   <Stack direction="row" colSpan={3}>
                     <GridItem w="14rem">
@@ -141,9 +152,16 @@ const ActionpolicyComponents = () => {
       {question.map((text, i) => (
         <React.Fragment key={i}>
           <GridItem w="100%" colSpan={3} px="10px" py="10px">
-            <Text fontWeight="bold" fontSize={{ base: "sm", sm: "sm" }}>
-              {text.thai} /<span> {text.eng}</span>
-            </Text>
+            <Flex h="100%" alignItems={"center"}>
+              <Text fontWeight="bold" fontSize={{ base: "sm", sm: "sm" }}>
+                {text.thai} /<span> {text.eng}</span>
+              </Text>
+              {FormDetail[text.topics] != "" ? (
+                <Icon as={FaCheckCircle} color="green.500" mx="5px" />
+              ) : (
+                <Icon as={FaExclamationCircle} color="red.500" mx="5px" />
+              )}
+            </Flex>
           </GridItem>
           <GridItem w="100%" colSpan={3}>
             <HStack spacing={10} justifyContent="center">
@@ -179,6 +197,9 @@ const ActionpolicyComponents = () => {
                   accept=".pdf"
                   variant="unstyled"
                   size="sm"
+                  bgColor={
+                    FormDetail[text.isDetail] != "" ? "green.100" : "white"
+                  }
                 />
               </Stack>
             </HStack>

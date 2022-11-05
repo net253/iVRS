@@ -14,7 +14,11 @@ import {
 import Paycpn from "./paylist/paycomponents";
 import { FaExclamationCircle, FaCheckCircle } from "react-icons/fa";
 import useFormInput from "../../store/forminput/forminput";
-import { validateEmail, validatePhone } from "../.././libs/Validate";
+import {
+  validatePhone,
+  validateNameThaiAndEnglish,
+  validateNumber,
+} from "../.././libs/Validate";
 
 const bankList = [
   "ธนาคารกสิกรไทย / Kasikornbank Public Company Limited",
@@ -48,7 +52,14 @@ const bankList = [
 
 const Account = () => {
   const { updateFormDetail, FormDetail, updateBank } = useFormInput();
-  const { Email, VEmail, VTelBank, TelBank } = FormDetail;
+  const {
+    ContactPerson,
+    AccountNo,
+    VTelBank,
+    TelBank,
+    AccountBankName,
+    Branch,
+  } = FormDetail;
 
   const onChangeAccount = (e) => {
     const { name, value } = e.target;
@@ -91,24 +102,46 @@ const Account = () => {
           <Text className="font-thai">ชื่อบัญชี / Account Name</Text>
         </GridItem>
         <GridItem w="100%" colSpan={2}>
-          <Input
-            placeholder="ชื่อบัญชี / Account Name"
-            size="sm"
-            name="AccountBankName"
-            onChange={onChangeAccount}
-          />
+          <InputGroup size={"sm"} alignItems="center">
+            <Input
+              placeholder="ชื่อบัญชี / Account Name"
+              size="sm"
+              name="AccountBankName"
+              onChange={onChangeAccount}
+            />
+            {validateNameThaiAndEnglish(AccountBankName) ? (
+              <InputRightElement>
+                <Icon as={FaCheckCircle} color="green.500" />
+              </InputRightElement>
+            ) : (
+              <InputRightElement>
+                <Icon as={FaExclamationCircle} color="red.500" />
+              </InputRightElement>
+            )}
+          </InputGroup>
         </GridItem>
 
         <GridItem w="100%" px="10px">
           <Text className="font-thai">เลขบัญชี / Account No.</Text>
         </GridItem>
         <GridItem w="100%" colSpan={2}>
-          <Input
-            placeholder="กรุณาระบุตัวเลขเท่านั้น / Please enter numbers only."
-            size="sm"
-            name="AccountNo"
-            onChange={onChangeAccount}
-          />
+          <InputGroup size={"sm"} alignItems="center">
+            <Input
+              placeholder="กรุณาระบุตัวเลขเท่านั้น / Please enter numbers only."
+              size="sm"
+              name="AccountNo"
+              onChange={onChangeAccount}
+            />
+            {validateNumber(AccountNo) ? (
+              <InputRightElement>
+                <Icon as={FaCheckCircle} color="green.500" />
+              </InputRightElement>
+            ) : (
+              <InputRightElement>
+                <Icon as={FaExclamationCircle} color="red.500" />
+              </InputRightElement>
+            )}
+          </InputGroup>
         </GridItem>
 
         <GridItem w="100%" px="10px">
@@ -145,24 +178,46 @@ const Account = () => {
           <Text className="font-thai">สาขา / Branch</Text>
         </GridItem>
         <GridItem w="100%" colSpan={2}>
-          <Input
-            placeholder="สาขา / Branch"
-            size="sm"
-            name="Branch"
-            onChange={onChangeAccount}
-          />
+          <InputGroup size={"sm"} alignItems="center">
+            <Input
+              placeholder="สาขา / Branch"
+              size="sm"
+              name="Branch"
+              onChange={onChangeAccount}
+            />
+            {validateNameThaiAndEnglish(Branch) ? (
+              <InputRightElement>
+                <Icon as={FaCheckCircle} color="green.500" />
+              </InputRightElement>
+            ) : (
+              <InputRightElement>
+                <Icon as={FaExclamationCircle} color="red.500" />
+              </InputRightElement>
+            )}
+          </InputGroup>
         </GridItem>
 
         <GridItem w="100%" px="10px">
           <Text className="font-thai">ชื่อผู้ติดต่อ / Contact Person</Text>
         </GridItem>
         <GridItem w="100%" colSpan={2}>
-          <Input
-            placeholder="กรุณาระบุคำนำหน้า / Please specify name title"
-            size="sm"
-            name="ContactPerson"
-            onChange={onChangeAccount}
-          />
+          <InputGroup size={"sm"} alignItems="center">
+            <Input
+              placeholder="กรุณาระบุคำนำหน้า / Please specify name title"
+              size="sm"
+              name="ContactPerson"
+              onChange={onChangeAccount}
+            />
+            {validateNameThaiAndEnglish(ContactPerson) ? (
+              <InputRightElement>
+                <Icon as={FaCheckCircle} color="green.500" />
+              </InputRightElement>
+            ) : (
+              <InputRightElement>
+                <Icon as={FaExclamationCircle} color="red.500" />
+              </InputRightElement>
+            )}
+          </InputGroup>
         </GridItem>
 
         <GridItem w="100%" colSpan={{ base: "2", md: "1" }} px="10px">
@@ -200,48 +255,6 @@ const Account = () => {
             {validatePhone(VTelBank) &&
             VTelBank != "" &&
             VTelBank == TelBank ? (
-              <InputRightElement>
-                <Icon as={FaCheckCircle} color="green.500" />
-              </InputRightElement>
-            ) : (
-              <InputRightElement>
-                <Icon as={FaExclamationCircle} color="red.500" />
-              </InputRightElement>
-            )}
-          </InputGroup>
-        </GridItem>
-
-        <GridItem w="100%" colSpan={{ base: "2", md: "1" }} px="10px">
-          <Text className="font-thai">อีเมล / E-mail</Text>
-        </GridItem>
-        <GridItem w="100%">
-          <InputGroup size="sm">
-            <Input
-              placeholder="อีเมล / E-mail"
-              type="email"
-              name="Email"
-              onChange={onChangeAccount}
-            />
-            {validateEmail(Email) && Email != "" && Email == VEmail ? (
-              <InputRightElement>
-                <Icon as={FaCheckCircle} color="green.500" />
-              </InputRightElement>
-            ) : (
-              <InputRightElement>
-                <Icon as={FaExclamationCircle} color="red.500" />
-              </InputRightElement>
-            )}
-          </InputGroup>
-        </GridItem>
-        <GridItem w="100%">
-          <InputGroup size="sm">
-            <Input
-              placeholder="ยืนยันอีเมล / Verify E-mail"
-              type="email"
-              name="VEmail"
-              onChange={onChangeAccount}
-            />
-            {validateEmail(VEmail) && VEmail != "" && VEmail == Email ? (
               <InputRightElement>
                 <Icon as={FaCheckCircle} color="green.500" />
               </InputRightElement>

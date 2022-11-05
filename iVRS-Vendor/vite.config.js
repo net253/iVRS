@@ -1,6 +1,6 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-//const path = require("path");
+// eslint-disable-next-line no-undef
 
 //https://vitejs.dev/config/
 export default defineConfig({
@@ -11,6 +11,10 @@ export default defineConfig({
       usePolling: true,
     },
   },
+  // resolve: {
+  //   // eslint-disable-next-line no-undef
+  //   alias: [{ find: "@", replacement: path.resolve(__dirname, "src") }],
+  // },
 });
 
 // export default defineConfig({
