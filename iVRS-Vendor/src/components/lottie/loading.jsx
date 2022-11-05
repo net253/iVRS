@@ -3,7 +3,7 @@ import loading from "./loading.json";
 import React from "react";
 
 const style = {
-  height: "50vh",
+  height: "57vh",
   width: "100%",
 };
 

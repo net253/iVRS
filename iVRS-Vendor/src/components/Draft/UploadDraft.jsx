@@ -60,7 +60,7 @@ const textOption = [
   },
 ];
 
-export default function Upload() {
+export default function UploadDraft() {
   const [accept, setAccept] = useState(false);
   const { updatepdfDoc, FormDetail } = useFormDetail();
   console.log(accept);

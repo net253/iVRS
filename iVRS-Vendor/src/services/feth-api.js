@@ -122,6 +122,7 @@ export async function fetchmonetary() {
 
 export async function fetchuploadform(reqData) {
   console.log(JSON.stringify(reqData));
+  console.log(reqData);
   try {
     const { data } = await axios.post(
       API + "/vendor/save-form-register",
@@ -133,5 +134,33 @@ export async function fetchuploadform(reqData) {
   } catch (error) {
     console.log(error);
     return false;
+  }
+}
+
+export async function fetchdocumentlistpending() {
+  if (!window.localStorage.isLoggedIn) return;
+  try {
+    const { data } = await axios.get(
+      API + "/vendor/draft-regis/0",
+      getAxiosConfig()
+    );
+    return data;
+  } catch (error) {
+    console.error(error);
+    return { state: true, msg: "Something went wrong" };
+  }
+}
+
+export async function fetchdocumentlistdraft() {
+  if (!window.localStorage.isLoggedIn) return;
+  try {
+    const { data } = await axios.get(
+      API + "/vendor/draft-regis/1",
+      getAxiosConfig()
+    );
+    return data;
+  } catch (error) {
+    console.error(error);
+    return { state: true, msg: "Something went wrong" };
   }
 }

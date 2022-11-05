@@ -10,50 +10,23 @@ import {
   Text,
   Box,
 } from "@chakra-ui/react";
-
-import useDoclist from "../../store/Doclist/Doclist";
 import { Loadinglottie } from "../lottie";
-import { fetchdocumentlistpending } from "../../services/feth-api";
+import useDoclist from "../../store/Doclist/Doclist";
+import { fetchdocumentlistdraft } from "../../services/feth-api";
 
-// create format date time for thai
-function formatDate(date) {
-  let options = {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "numeric",
-    minute: "numeric",
-  };
-  return new Date(date).toLocaleDateString("th-TH", options);
-}
+const AllTable = () => {
+  const { Doclist, getDoclistDraft } = useDoclist();
+  // lock the table header
 
-const PendingTable = ({ onChangeSearch }) => {
-  const { getDoclistPending, DoclistPending } = useDoclist();
-  function fetchFormPending() {
-    fetchdocumentlistpending().then((data) => {
-      console.log(data);
-      getDoclistPending(data);
+  function fetchFormDraft() {
+    fetchdocumentlistdraft().then((data) => {
+      getDoclistDraft(data);
     });
-  }
-
-  function Searchfilter(info) {
-    console.log(onChangeSearch);
-    return (
-      info?.CompanyAdmin?.toLowerCase().includes(
-        onChangeSearch.toLowerCase()
-      ) ||
-      info?.Status?.toLowerCase().includes(onChangeSearch.toLowerCase()) ||
-      info?.CompanyFullName?.toLowerCase().includes(
-        onChangeSearch.toLowerCase()
-      ) ||
-      info?.DocNo?.toLowerCase().includes(onChangeSearch.toLowerCase()) ||
-      info?.SaveDatetime?.toLowerCase().includes(onChangeSearch.toLowerCase())
-    );
   }
 
   useEffect(() => {
     const initpage = setInterval(() => {
-      fetchFormPending();
+      fetchFormDraft();
     }, 3000);
     return () => clearInterval(initpage);
   }, []);
@@ -83,15 +56,20 @@ const PendingTable = ({ onChangeSearch }) => {
               </Tr>
             </Thead>
             <Tbody fontSize={"sm"}>
-              {!DoclistPending?.length ? (
+              {!Doclist?.length ? (
                 <Tr>
                   <Th colSpan={5}>
                     <Loadinglottie />
                   </Th>
                 </Tr>
               ) : (
-                DoclistPending?.filter(Searchfilter)?.map((info, i) => (
-                  <Tr key={i} _hover={{ bg: "gray.100" }} cursor={"pointer"}>
+                Doclist?.map((info, i) => (
+                  <Tr
+                    key={i}
+                    _hover={{ bg: "gray.100" }}
+                    cursor={"pointer"}
+                    onClick={() => console.log(info)}
+                  >
                     <Td fontSize={"sm"}>{i + 1}</Td>
                     <Td fontSize={"sm"}>
                       <Text fontSize={"sm"}>{info?.DocNo}</Text>
@@ -100,7 +78,7 @@ const PendingTable = ({ onChangeSearch }) => {
                       {info?.CompanyAdmin}&nbsp;
                       {info?.CompanyFullName}
                     </Td>
-                    <Td fontSize={"sm"}>{formatDate(info?.SaveDatetime)}</Td>
+                    <Td fontSize={"sm"}>{info?.SaveDatetime}</Td>
                     <Td fontSize={"sm"}>
                       <Text
                         fontSize={"sm"}
@@ -108,9 +86,9 @@ const PendingTable = ({ onChangeSearch }) => {
                           info?.Status == "pending" ? "orange" : "green"
                         }`}
                       >
-                        {info?.Status == "pending"
-                          ? "รออนุมัติ"
-                          : "อนุมัติแล้ว"}
+                        {info?.Status == "pending" && info.IsDraft
+                          ? "แบบร่าง"
+                          : "รอการพิจารณา"}
                       </Text>
                     </Td>
                   </Tr>
@@ -124,4 +102,4 @@ const PendingTable = ({ onChangeSearch }) => {
   );
 };
 
-export default PendingTable;
+export default AllTable;

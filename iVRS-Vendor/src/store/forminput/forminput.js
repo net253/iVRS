@@ -54,9 +54,7 @@ const initailState = {
   Branch: "",
   ContactPerson: "",
   TelBank: "",
-  Email: "",
   VTelBank: "",
-  VEmail: "",
   MonetaryPolicy: [],
 };
 
@@ -110,8 +108,8 @@ const useFormInput = create(
       set((state) => ({
         FormDetail: {
           ...state.FormDetail,
-          IsDraft: value == false ? false : true,
-          isNewDoc: value == false ? true : false,
+          IsDraft: value,
+          isNewDoc: value,
         },
       })),
     UpdatePDFMOQSTD: (topics, data) =>

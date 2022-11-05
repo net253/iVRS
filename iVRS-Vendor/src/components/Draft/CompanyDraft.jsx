@@ -23,7 +23,7 @@ import {
   validateJuristicID,
 } from "../../libs/Validate";
 
-export default function Company() {
+export default function CompanyDraft() {
   const { FormDetail, updateFormDetail } = useFormInput();
   const {
     JuristicID,

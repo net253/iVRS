@@ -1,9 +1,15 @@
 import React from "react";
 import { Button, Flex } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import useFromDetail from "../../store/forminput/forminput";
 
 const Buttoncomponents = () => {
+  const { updateisDraft } = useFromDetail();
   const navigate = useNavigate();
+  function onClickisNewDocument() {
+    updateisDraft(true);
+    navigate("/Vendor");
+  }
 
   return (
     <>
@@ -15,11 +21,7 @@ const Buttoncomponents = () => {
         borderTop={"1px solid #E2E8F0"}
         py="3px"
       >
-        <Button
-          colorScheme={"green"}
-          px="2rem"
-          onClick={() => navigate("/vendor")}
-        >
+        <Button colorScheme={"green"} px="2rem" onClick={onClickisNewDocument}>
           ขึ้นทะเบียนผู้ขายใหม่ (New Vendor Registation)
         </Button>
       </Flex>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Tabs,
   TabList,
@@ -13,9 +13,15 @@ import {
   Box,
 } from "@chakra-ui/react";
 import { BiSearch } from "react-icons/bi";
-import { Pending } from "../Home";
+import { Pending, AllTable } from "../Home";
 
 const Home = () => {
+  const [search, setSearch] = useState("");
+  const onChangeSearch = (e) => {
+    const { value } = e.target;
+    setSearch(value);
+  };
+
   return (
     <>
       <Box h="83vh">
@@ -30,10 +36,7 @@ const Home = () => {
                   รอดำเนินการ
                 </Tab>
                 <Tab fontSize={"sm"} color={"black"}>
-                  ดำเนินการสำเร็จ
-                </Tab>
-                <Tab fontSize={"sm"} color={"black"}>
-                  ประวัติการทำรายการ
+                  รายการทั้งหมด
                 </Tab>
               </Flex>
               <Flex>
@@ -41,20 +44,21 @@ const Home = () => {
                   <InputLeftAddon>
                     <BiSearch />
                   </InputLeftAddon>
-                  <Input type="text" placeholder="ค้นหา" />
+                  <Input
+                    type="text"
+                    placeholder="ค้นหา"
+                    onChange={onChangeSearch}
+                  />
                 </InputGroup>
               </Flex>
             </Flex>
           </TabList>
           <TabPanels overflow={"auto"}>
             <TabPanel>
-              <Pending />
+              <Pending onChangeSearch={search} />
             </TabPanel>
             <TabPanel>
-              <Pending />
-            </TabPanel>
-            <TabPanel>
-              <Pending />
+              <AllTable onChangeSearch={search} />
             </TabPanel>
           </TabPanels>
         </Tabs>

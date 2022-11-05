@@ -2,7 +2,13 @@ import React from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import "./App.css";
-import { Loginpages, Registerpages, Vendorpage, Homepage } from "./pages";
+import {
+  Loginpages,
+  Registerpages,
+  Vendorpage,
+  Homepage,
+  Draftpage,
+} from "./pages";
 import ContentWrapper from "./components/wrapper/ContentWarpper";
 function App() {
   const location = useLocation();
@@ -22,6 +28,10 @@ function App() {
           <Route
             path="/Home"
             element={<ContentWrapper content={Homepage} page="true" />}
+          />{" "}
+          <Route
+            path="/Draft"
+            element={<ContentWrapper content={Draftpage} page="true" />}
           />
         </Routes>
       </AnimatePresence>

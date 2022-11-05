@@ -1,19 +1,20 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
-  Header,
-  Company,
-  Inputform,
-  Contact,
-  Statdard,
-  Upload,
-  Actionpolicy,
+  HeaderDraft,
+  CompanyDraft,
+  InputformDraft,
+  ContractDraft,
+  StatdardDraft,
+  UploadDraft,
+  ActionpolicyDraft,
+  AccountDraft,
+  HeaderpayDraft,
   SubmitDraft,
-} from "../components/VendorReg";
-import { Account, Headerpay } from "../components/Vendorpay";
+} from "../components/Draft";
 import { useNavigate } from "react-router-dom";
 import { Loadinglottie } from "../components/lottie";
 
-const vendor = () => {
+const Draft = () => {
   const navigate = useNavigate();
 
   //create function detect refresh show confirm
@@ -22,7 +23,7 @@ const vendor = () => {
     return (e.returnValue = "Are you sure you want to leave?");
   }
 
-  useEffect(() => {
+  React.useEffect(() => {
     window.addEventListener("beforeunload", detectRefresh, {
       capture: true,
     });
@@ -49,7 +50,7 @@ const vendor = () => {
     }, waitTime);
   }
 
-  useEffect(() => {
+  React.useEffect(() => {
     const initPage = setTimeout(() => {
       checklocalstorafe();
     }, 100);
@@ -64,18 +65,18 @@ const vendor = () => {
 
   return (
     <>
-      <Header />
-      <Inputform />
-      <Company />
-      <Contact />
-      <Statdard />
-      <Actionpolicy />
-      <Headerpay />
-      <Account />
-      <Upload />
+      <HeaderDraft />
+      <InputformDraft />
+      <CompanyDraft />
+      <ContractDraft />
+      <StatdardDraft />
+      <ActionpolicyDraft />
+      <HeaderpayDraft />
+      <AccountDraft />
+      <UploadDraft />
       <SubmitDraft />
     </>
   );
 };
 
-export default vendor;
+export default Draft;

@@ -26,16 +26,12 @@ const Resetpassword = ({ isOpen, onClose }) => {
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Reset</ModalHeader>
+          <ModalHeader>ลืมรหัสผ่าน</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
             <FormControl>
-              <FormLabel>Old Password</FormLabel>
-              <Input
-                ref={initialRef}
-                placeholder="Old Password"
-                type={"password"}
-              />
+              <FormLabel>Email</FormLabel>
+              <Input ref={initialRef} placeholder="Email" type={"password"} />
             </FormControl>
 
             <FormControl mt={4}>
@@ -45,7 +41,7 @@ const Resetpassword = ({ isOpen, onClose }) => {
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="twitter" mr={3}>
+            <Button colorScheme="messenger" mr={3}>
               Comfirm
             </Button>
             <Button onClick={onClose}>Cancel</Button>

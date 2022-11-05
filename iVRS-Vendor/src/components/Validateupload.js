@@ -118,7 +118,8 @@ export const validatevendorRegister = ({
     SaleTel.length > 10 ||
     SaleTel != VSaleTel
   ) {
-    error = "กรุณากรอกเบอร์โทรงานขาย";
+    error =
+      "กรุณากรอกเบอร์โทรงานขาย หรือ รูปแบบเบอร์โทรงานขายไม่ถูกต้อง หรือ ไม่ตรงกัน";
     isValid = false;
   } else if (
     !validateNameThaiAndEnglish(SaleManagerName) ||
@@ -140,7 +141,8 @@ export const validatevendorRegister = ({
     SaleManagerTel.length > 10 ||
     SaleManagerTel != VSaleManagerTel
   ) {
-    error = "กรุณากรอกเบอร์โทรผู้จัดการขาย";
+    error =
+      "กรุณากรอกเบอร์โทรผู้จัดการขาย หรือ รูปแบบเบอร์โทรผู้จัดการขายไม่ถูกต้อง หรือ ไม่ตรงกัน";
     isValid = false;
   } else if (!validateNameThaiAndEnglish(AccountName) || AccountName === "") {
     error = "กรุณากรอกชื่อผู้ติดต่อบัญชี";
@@ -199,7 +201,7 @@ export const validatevendorRegister = ({
     FiStmtsBase64 == "" ||
     BookMDBase64 == ""
   ) {
-    error = "กรุณากรอกข้อมูล";
+    error = "แนบไฟล์เอกสารไม่ครบ";
     isValid = false;
   }
   console.log("error", error);
