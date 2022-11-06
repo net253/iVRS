@@ -13,9 +13,11 @@ import {
 } from "../components/Draft";
 import { useNavigate } from "react-router-dom";
 import { Loadinglottie } from "../components/lottie";
+import useDraftEdit from "../store/DrafStore/DraftEdit";
 
 const Draft = () => {
   const navigate = useNavigate();
+  const draftEdit = useDraftEdit((state) => state.draftEdit);
 
   //create function detect refresh show confirm
   async function detectRefresh(e) {
@@ -33,6 +35,8 @@ const Draft = () => {
       });
     };
   }, []);
+
+  console.log(Object.keys(draftEdit).length);
 
   const checklocalstorafe = () => {
     if (!window.localStorage.isLoggedIn) {
@@ -63,20 +67,25 @@ const Draft = () => {
     };
   }, []);
 
-  return (
-    <>
-      <HeaderDraft />
-      <InputformDraft />
-      <CompanyDraft />
-      <ContractDraft />
-      <StatdardDraft />
-      <ActionpolicyDraft />
-      <HeaderpayDraft />
-      <AccountDraft />
-      <UploadDraft />
-      <SubmitDraft />
-    </>
-  );
+  if (window.localStorage.isLoggedIn && draftEdit.CompanyAdmin != "") {
+    return (
+      <>
+        <HeaderDraft />
+        <InputformDraft />
+        <CompanyDraft />
+        <ContractDraft />
+        <StatdardDraft />
+        <ActionpolicyDraft />
+        <HeaderpayDraft />
+        <AccountDraft />
+        <UploadDraft />
+        <SubmitDraft />
+      </>
+    );
+  } else {
+    setTimeout(() => navigate("/Home"), 2000);
+    return <Loadinglottie />;
+  }
 };
 
 export default Draft;

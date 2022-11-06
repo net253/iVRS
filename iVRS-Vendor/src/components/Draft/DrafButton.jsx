@@ -4,14 +4,23 @@ import { Button, Flex } from "@chakra-ui/react";
 import { FiSave } from "react-icons/fi";
 import Swal from "sweetalert2";
 import { fetchuploadform } from "../../services/feth-api";
-import { validatevendorRegister } from "../../components/Validateupload";
-import useFormDetail from "../../store/forminput/forminput";
+import { validatevendorDraft } from "../Validateupload";
+import useDraftEdit from "../../store/DrafStore/DraftEdit";
+import shallow from "zustand/shallow";
+import { useNavigate } from "react-router-dom";
 
 const DraftButton = () => {
-  const { FormDetail, updateisDraft } = useFormDetail();
+  const navigate = useNavigate();
+  const { draftEdit, updateisDraft } = useDraftEdit(
+    (state) => ({
+      draftEdit: state.draftEdit,
+      updateisDraft: state.updateisDraft,
+    }),
+    shallow
+  );
   const handledraft = () => {
     updateisDraft(true);
-    const { isValid, error } = validatevendorRegister(FormDetail);
+    const { isValid, error } = validatevendorDraft(draftEdit);
     if (!isValid) {
       Swal.fire({
         icon: "error",
@@ -29,17 +38,20 @@ const DraftButton = () => {
       }).then((result) => {
         if (result.isConfirmed) {
           Swal.fire({
-            title: `<p class="font-thai">กำลังบันทึกแบบร่าง <br /> <span>Sending data</span></p>`,
+            title: `<p class="font-thai">กำลังบันทึกแบบร่าง <br /> <span>Saving a draft</span></p>`,
             didOpen: () => {
               Swal.showLoading();
             },
           });
-          fetchuploadform(FormDetail).then((data) => {
+          fetchuploadform(draftEdit).then((data) => {
             if (data.state) {
               Swal.fire({
                 icon: "success",
-                title: `<p class="font-thai">บันทึกแบบร่างสำเร็จ <br /> <span>Send data successfully</span></p>`,
-                confirmButton: false,
+                title: `<p class="font-thai">บันทึกแบบร่างสำเร็จ <br /> <span>Save the draft successfully.</span></p>`,
+                showConfirmButton: false,
+                timer: 1500,
+              }).then(() => {
+                navigate("/Home");
               });
             } else {
               Swal.fire({

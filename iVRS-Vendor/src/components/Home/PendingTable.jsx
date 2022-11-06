@@ -80,6 +80,7 @@ const PendingTable = ({ onChangeSearch }) => {
                 <Th fontSize={"sm"} w="max-content" color={"black"}>
                   สถานะการทำรายการ
                 </Th>
+                <Th fontSize={"sm"} w="max-content" color={"black"}></Th>
               </Tr>
             </Thead>
             <Tbody fontSize={"sm"}>

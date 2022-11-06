@@ -11,7 +11,6 @@ import {
   InputRightElement,
   Icon,
 } from "@chakra-ui/react";
-import useFormInput from "../../store/forminput/forminput";
 import { FaExclamationCircle, FaCheckCircle } from "react-icons/fa";
 import {
   validateTextEngishAndNumberSpace,
@@ -22,9 +21,10 @@ import {
   validateFaxNumber,
   validateJuristicID,
 } from "../../libs/Validate";
+import useDraftEdit from "../../store/DrafStore/DraftEdit";
 
 export default function CompanyDraft() {
-  const { FormDetail, updateFormDetail } = useFormInput();
+  const { draftEdit, updateDraftEdit } = useDraftEdit();
   const {
     JuristicID,
     Fax,
@@ -35,11 +35,11 @@ export default function CompanyDraft() {
     AddressTH,
     NatureBusiness,
     Tel,
-  } = FormDetail;
+  } = draftEdit;
 
   const handleCompany = (e) => {
     const { name, value } = e.target;
-    updateFormDetail(name, value);
+    updateDraftEdit(name, value);
   };
 
   return (
@@ -79,6 +79,7 @@ export default function CompanyDraft() {
               size="sm"
               name="CompanyNameEN"
               onChange={handleCompany}
+              defaultValue={CompanyNameEN}
             />
             {validateTextEngishAndNumberSpace(CompanyNameEN) ? (
               <InputRightElement>
@@ -102,6 +103,7 @@ export default function CompanyDraft() {
               size="sm"
               name="CompanyNameTH"
               onChange={handleCompany}
+              defaultValue={CompanyNameTH}
             />
             {validateNameThaiAndEnglish(CompanyNameTH) ? (
               <InputRightElement>
@@ -125,6 +127,7 @@ export default function CompanyDraft() {
               size="sm"
               name="AddressEN"
               onChange={handleCompany}
+              defaultValue={AddressEN}
             />
             {validateAddressThaiAndEnglish(AddressEN) ? (
               <InputRightElement>
@@ -146,6 +149,7 @@ export default function CompanyDraft() {
               size="sm"
               name="AddressTH"
               onChange={handleCompany}
+              defaultValue={AddressTH}
             />
             {validateAddressThaiAndEnglish(AddressTH) ? (
               <InputRightElement>
@@ -169,6 +173,7 @@ export default function CompanyDraft() {
               size="sm"
               name="NatureBusiness"
               onChange={handleCompany}
+              defaultValue={NatureBusiness}
             />
             {validateNameThaiAndEnglish(NatureBusiness) ? (
               <InputRightElement>
@@ -190,6 +195,7 @@ export default function CompanyDraft() {
               size="sm"
               name="Website"
               onChange={handleCompany}
+              defaultValue={Website}
             />
             {validateWebsiteUrl(Website) ? (
               <InputRightElement>
@@ -213,6 +219,7 @@ export default function CompanyDraft() {
               maxLength={10}
               name="Tel"
               onChange={handleCompany}
+              defaultValue={Tel}
             />
             {validatePhone(Tel) ? (
               <InputRightElement>
@@ -235,6 +242,7 @@ export default function CompanyDraft() {
               size="sm"
               name="Fax"
               onChange={handleCompany}
+              defaultValue={Fax}
             />
             {validateFaxNumber(Fax) ? (
               <InputRightElement>
@@ -257,10 +265,11 @@ export default function CompanyDraft() {
               size="sm"
               name="JuristicID"
               onChange={handleCompany}
+              defaultValue={JuristicID}
             />
             {validateJuristicID(JuristicID) &&
-            FormDetail.JuristicID.length <= 13 &&
-            FormDetail.JuristicID.length >= 13 ? (
+            JuristicID.length <= 13 &&
+            JuristicID.length >= 13 ? (
               <InputRightElement>
                 <Icon as={FaCheckCircle} color="green.500" />
               </InputRightElement>

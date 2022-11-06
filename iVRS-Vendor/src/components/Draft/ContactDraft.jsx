@@ -12,7 +12,7 @@ import {
   InputGroup,
   Icon,
 } from "@chakra-ui/react";
-import useFormInput from "../../store/forminput/forminput";
+import useDraftEdit from "../../store/DrafStore/DraftEdit";
 import { FaExclamationCircle, FaCheckCircle } from "react-icons/fa";
 import {
   validateEmail,
@@ -48,10 +48,10 @@ const textInput = [
 ];
 
 export default function ContactDraft() {
-  const { FormDetail, updateFormDetail } = useFormInput();
+  const { draftEdit, updateDraftEdit } = useDraftEdit();
   const handleForminput = (e) => {
     const { name, value } = e.target;
-    updateFormDetail(name, value);
+    updateDraftEdit(name, value);
   };
 
   const lineShow = useBreakpoint();
@@ -103,8 +103,9 @@ export default function ContactDraft() {
                   size="sm"
                   name={info.name}
                   onChange={handleForminput}
+                  defaultValue={draftEdit[info.name]}
                 />
-                {validateNameThaiAndEnglish(FormDetail[info.name]) ? (
+                {validateNameThaiAndEnglish(draftEdit[info.name]) ? (
                   <InputRightElement>
                     <Icon as={FaCheckCircle} color="green.500" />
                   </InputRightElement>
@@ -133,8 +134,9 @@ export default function ContactDraft() {
                   size="sm"
                   name={info.email}
                   onChange={handleForminput}
+                  defaultValue={draftEdit[info.email]}
                 />
-                {validateEmail(FormDetail[info.email]) ? (
+                {validateEmail(draftEdit[info.email]) ? (
                   <InputRightElement>
                     <Icon as={FaCheckCircle} color="green.500" />
                   </InputRightElement>
@@ -152,9 +154,10 @@ export default function ContactDraft() {
                   mt={2}
                   name={info.vemail}
                   onChange={handleForminput}
+                  defaultValue={draftEdit[info?.vemail]}
                 />
-                {validateEmail(FormDetail[info.vemail]) &&
-                FormDetail[info.vemail] == FormDetail[info.email] ? (
+                {validateEmail(draftEdit[info.vemail]) &&
+                draftEdit[info.vemail] == draftEdit[info.email] ? (
                   <InputRightElement>
                     <Icon as={FaCheckCircle} color="green.500" />
                   </InputRightElement>
@@ -174,11 +177,12 @@ export default function ContactDraft() {
                   placeholder="Ext. No."
                   type="text"
                   size="sm"
-                  name={info.phone}
+                  name={info?.phone}
                   maxLength={10}
                   onChange={handleForminput}
+                  defaultValue={draftEdit[info?.phone]}
                 />
-                {validatePhone(FormDetail[info.phone]) ? (
+                {validatePhone(draftEdit[info?.phone]) ? (
                   <InputRightElement>
                     <Icon as={FaCheckCircle} color="green.500" />
                   </InputRightElement>
@@ -195,10 +199,11 @@ export default function ContactDraft() {
                   size="sm"
                   mt={2}
                   maxLength={10}
-                  name={info.vphone}
+                  name={info?.vphone}
                   onChange={handleForminput}
+                  defaultValue={draftEdit[info?.vphone]}
                 />
-                {validatePhone(FormDetail[info.vphone]) ? (
+                {validatePhone(draftEdit[info?.vphone]) ? (
                   <InputRightElement>
                     <Icon as={FaCheckCircle} color="green.500" />
                   </InputRightElement>

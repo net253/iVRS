@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import Paycpn from "./PayComponents";
 import { FaExclamationCircle, FaCheckCircle } from "react-icons/fa";
-import useFormInput from "../../store/forminput/forminput";
+import useDraftEdit from "../../store/DrafStore/DraftEdit";
 import {
   validatePhone,
   validateNameThaiAndEnglish,
@@ -51,7 +51,7 @@ const bankList = [
 ];
 
 const AccountDraft = () => {
-  const { updateFormDetail, FormDetail, updateBank } = useFormInput();
+  const { draftEdit, updateDraftEdit, updateBank } = useDraftEdit();
   const {
     ContactPerson,
     AccountNo,
@@ -59,11 +59,12 @@ const AccountDraft = () => {
     TelBank,
     AccountBankName,
     Branch,
-  } = FormDetail;
+    Bank,
+  } = draftEdit;
 
   const onChangeAccount = (e) => {
     const { name, value } = e.target;
-    updateFormDetail(name, value);
+    updateDraftEdit(name, value);
   };
   return (
     <div>
@@ -108,6 +109,7 @@ const AccountDraft = () => {
               size="sm"
               name="AccountBankName"
               onChange={onChangeAccount}
+              value={AccountBankName}
             />
             {validateNameThaiAndEnglish(AccountBankName) ? (
               <InputRightElement>
@@ -131,6 +133,7 @@ const AccountDraft = () => {
               size="sm"
               name="AccountNo"
               onChange={onChangeAccount}
+              defaultValue={AccountNo}
             />
             {validateNumber(AccountNo) ? (
               <InputRightElement>
@@ -152,6 +155,7 @@ const AccountDraft = () => {
             placeholder="กรุณาระบุธนาคาร / Please enter Bank."
             size="sm"
             onChange={(e) => updateBank(e.target.value)}
+            defaultValue={Bank}
           >
             {bankList.map((info, i) => (
               <option value={info} key={i}>
@@ -184,6 +188,7 @@ const AccountDraft = () => {
               size="sm"
               name="Branch"
               onChange={onChangeAccount}
+              defaultValue={Branch}
             />
             {validateNameThaiAndEnglish(Branch) ? (
               <InputRightElement>
@@ -207,6 +212,7 @@ const AccountDraft = () => {
               size="sm"
               name="ContactPerson"
               onChange={onChangeAccount}
+              defaultValue={ContactPerson}
             />
             {validateNameThaiAndEnglish(ContactPerson) ? (
               <InputRightElement>
@@ -231,6 +237,7 @@ const AccountDraft = () => {
               type="number"
               name="TelBank"
               onChange={onChangeAccount}
+              defaultValue={TelBank}
             />
             {validatePhone(TelBank) && TelBank != "" && TelBank == VTelBank ? (
               <InputRightElement>
@@ -251,6 +258,7 @@ const AccountDraft = () => {
               type="number"
               name="VTelBank"
               onChange={onChangeAccount}
+              defaultValue={VTelBank}
             />
             {validatePhone(VTelBank) &&
             VTelBank != "" &&

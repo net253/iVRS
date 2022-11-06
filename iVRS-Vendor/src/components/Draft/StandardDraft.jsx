@@ -25,6 +25,7 @@ import {
   fetcurrencylist,
 } from "../../services/feth-api";
 import useFormInput from "../../store/forminput/forminput";
+import useDraftEdit from "../../store/DrafStore/DraftEdit";
 import { FaExclamationCircle, FaCheckCircle } from "react-icons/fa";
 import {
   validateNumber,
@@ -37,17 +38,16 @@ export default function StandardDraft() {
   const [checkedItems, setCheckedItems] = useState({});
   const [checkedItemsBenefits, setCheckedItemsBenefits] = useState({});
   const {
-    FormDetail,
+    draftEdit,
     updateCertificate,
-    getCertifications,
     updateOtherCertificate,
-    updateBenefits,
-    getBenefits,
+    updateBenefit,
     updateOtherBenefit,
     updateCreditTerm,
     updateEarnest,
-    updateFormDetail,
-  } = useFormInput();
+    updateDraftEdit,
+  } = useDraftEdit();
+  const { getCertifications, getBenefits } = useFormInput();
 
   const {
     Benefits,
@@ -56,8 +56,7 @@ export default function StandardDraft() {
     ApprovalLimit,
     Currency,
     CreditTerm,
-  } = FormDetail;
-  console.log(FormDetail);
+  } = draftEdit;
 
   function onChangecheckbox(e) {
     const item = e.target.name;
@@ -66,9 +65,9 @@ export default function StandardDraft() {
     updateCertificate(item, isChecked);
   }
 
-  function onChangeForminput(e) {
+  function onChangeDraftEdit(e) {
     const { name, value } = e.target;
-    updateFormDetail(name, value);
+    updateDraftEdit(name, value);
   }
 
   function onChangeOther(e) {
@@ -90,9 +89,8 @@ export default function StandardDraft() {
   function onChangecheckboxBenefits(e) {
     const item = e.target.name;
     const isChecked = e.target.checked;
-    console.log(item, isChecked);
     setCheckedItemsBenefits({ ...checkedItemsBenefits, [item]: isChecked });
-    updateBenefits(item, isChecked);
+    updateBenefit(item, isChecked);
   }
 
   const getcertificate = () => {
@@ -119,7 +117,10 @@ export default function StandardDraft() {
     });
   };
 
-  //fechh companylist
+  // if (draftEdit.length < 6) {
+  //   navigate("/Home");
+  // }
+
   useEffect(() => {
     getcertificate();
     getbenefit();
@@ -161,13 +162,6 @@ export default function StandardDraft() {
             <Text className="font-thai" fontWeight="bold">
               1. การรับรองที่ได้รับ / <span>Kind of certificate approved</span>
             </Text>
-            {/* {checkedItems &&
-            Object.keys(checkedItems).length === 0 &&
-            Object.getPrototypeOf(checkedItems) === Object.prototype ? (
-              <Icon as={FaCheckCircle} color="green.500" mx="5px" />
-            ) : (
-              <Icon as={FaExclamationCircle} color="red.500" />
-            )} */}
             {Certificate?.every(({ isChecked }) => {
               return isChecked == false;
             }) ? (
@@ -184,7 +178,7 @@ export default function StandardDraft() {
               gap={2}
               fontSize={{ base: "sm", sm: "sm" }}
             >
-              {Certificate?.map((info, i) => (
+              {draftEdit.Certificate?.map((info, i) => (
                 <GridItem
                   key={i}
                   w="100%"
@@ -196,6 +190,7 @@ export default function StandardDraft() {
                     name={info.name}
                     onChange={onChangecheckbox}
                     isChecked={checkedItems[info.name] && true}
+                    defaultChecked={info.isChecked}
                   >
                     {info.label}
                   </Checkbox>
@@ -247,6 +242,7 @@ export default function StandardDraft() {
                     key={i}
                     name={info.name}
                     onChange={onChangecheckboxBenefits}
+                    defaultChecked={info.isChecked}
                   >
                     {info.label}
                   </Checkbox>
@@ -291,7 +287,7 @@ export default function StandardDraft() {
               colorScheme="green"
               px="1.2rem"
               onChange={onChangeCreditTerms}
-              defaultValue={"cash"}
+              defaultValue={CreditTerm}
             >
               <Grid
                 templateColumns={{ base: "repeat(2,1fr)", md: "repeat(5,1fr)" }}
@@ -319,6 +315,7 @@ export default function StandardDraft() {
               rows={3}
               px="1.2rem"
               onChange={onChangeEarnest}
+              defaultValue={Remarks}
             />
             {validateTextEngishAndTextThaiAndNumber(Remarks) ? (
               <InputRightElement>
@@ -349,8 +346,8 @@ export default function StandardDraft() {
               type="number"
               placeholder="กรุณาระบุตัวเลขเท่านั้น / Please enter numbers only"
               name={"ApprovalLimit"}
-              //value={Number(FormDetail.ApprovalLimit).toLocaleString("en-US")}
-              onChange={onChangeForminput}
+              onChange={onChangeDraftEdit}
+              defaultValue={ApprovalLimit}
             />
             {validateNumber(ApprovalLimit) && Currency != "" ? (
               <InputRightElement>
@@ -367,8 +364,9 @@ export default function StandardDraft() {
           <Select
             placeholder="Select Currency"
             fontSize={{ base: "sm", sm: "sm" }}
-            onChange={onChangeForminput}
+            onChange={onChangeDraftEdit}
             name={"Currency"}
+            defaultValue={Currency}
           >
             {currencycode?.map((info, i) => (
               <option key={i}>{info}</option>

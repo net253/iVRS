@@ -13,9 +13,7 @@ import {
   Icon,
 } from "@chakra-ui/react";
 
-import { fetchactionpolicylist } from "../../services/feth-api";
-import useFormInput from "../../store/forminput/forminput";
-//import { convertPdfToBase64, convertBase64ToPdf } from "../../libs/Base64";
+import useDraftEdit from "../../store/DrafStore/DraftEdit";
 import { FaExclamationCircle, FaCheckCircle } from "react-icons/fa";
 
 const question = [
@@ -35,18 +33,12 @@ const question = [
   },
 ];
 
-const ActionpolicyComponents = () => {
+const ActionpolicyDraft = () => {
   const [moq, setMoq] = React.useState(false);
   const [std, setStd] = React.useState(false);
-
-  const {
-    getActionPolicy,
-    FormDetail,
-    updateActionPolicy,
-    updateisSTD,
-    UpdatePDFMOQSTD,
-  } = useFormInput();
-  const { ActionPolicy } = FormDetail;
+  const { draftEdit, updateActionPolicy, updateisSTD, updatePDFMOQSTD } =
+    useDraftEdit();
+  const { ActionPolicy } = draftEdit;
 
   const handleQuest = (text, value) => {
     if (text == "STDPackingBase64") {
@@ -64,17 +56,10 @@ const ActionpolicyComponents = () => {
     }
   };
 
-  const getActionpolicyfunction = async () => {
-    fetchactionpolicylist().then((data) => {
-      getActionPolicy(data);
-    });
-  };
-
   const onChangePDF = async (topics, e) => {
     const file = e.target.files[0];
     const base64 = await convertBase64(file);
-    console.log(base64);
-    UpdatePDFMOQSTD(topics, base64);
+    updatePDFMOQSTD(topics, base64);
   };
 
   const convertBase64 = (file) => {
@@ -90,12 +75,10 @@ const ActionpolicyComponents = () => {
     });
   };
 
-  useEffect(() => {
-    getActionpolicyfunction();
-  }, []);
+  useEffect(() => {}, []);
 
   return (
-    <div>
+    <>
       <Grid
         templateColumns="repeat(3, 1fr)"
         gap={3}
@@ -108,7 +91,7 @@ const ActionpolicyComponents = () => {
             <Text className="font-thai" fontWeight="bold">
               4. นโยบายการดำเนินการ / <span>Operation Policy</span>
             </Text>
-            {ActionPolicy.length != 0 ? (
+            {ActionPolicy.length != 0 || ActionPolicy == undefined ? (
               <Icon as={FaCheckCircle} color="green.500" mx="5px" />
             ) : (
               <Icon as={FaExclamationCircle} color="red.500" mx="5px" />
@@ -156,7 +139,7 @@ const ActionpolicyComponents = () => {
               <Text fontWeight="bold" fontSize={{ base: "sm", sm: "sm" }}>
                 {text.thai} /<span> {text.eng}</span>
               </Text>
-              {FormDetail[text.topics] != "" ? (
+              {draftEdit[text.topics] != "" ? (
                 <Icon as={FaCheckCircle} color="green.500" mx="5px" />
               ) : (
                 <Icon as={FaExclamationCircle} color="red.500" mx="5px" />
@@ -167,6 +150,7 @@ const ActionpolicyComponents = () => {
             <HStack spacing={10} justifyContent="center">
               <RadioGroup
                 onChange={(value) => updateisSTD(text.isDetail, value)}
+                defaultValue={draftEdit[text.isDetail].toString()}
               >
                 <Stack direction="row">
                   <Radio
@@ -198,7 +182,7 @@ const ActionpolicyComponents = () => {
                   variant="unstyled"
                   size="sm"
                   bgColor={
-                    FormDetail[text.isDetail] != "" ? "green.100" : "white"
+                    draftEdit[text.isDetail] != "" ? "green.100" : "white"
                   }
                 />
               </Stack>
@@ -206,8 +190,8 @@ const ActionpolicyComponents = () => {
           </GridItem>
         </React.Fragment>
       ))}
-    </div>
+    </>
   );
 };
 
-export default ActionpolicyComponents;
+export default ActionpolicyDraft;

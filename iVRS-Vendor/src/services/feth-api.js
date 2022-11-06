@@ -1,7 +1,8 @@
 import axios from "axios";
 
-const API = "http://localhost/iVRS-Vendor-Backend/ivrs-vendor/api";
-const API_AUTH = "http://localhost/iVRS-Vendor-Backend/ivrs-vendor/api/auth";
+const API = "https://snc-services.sncformer.com/ivrs/vendor/api/index.php";
+const API_AUTH =
+  "https://snc-services.sncformer.com/ivrs/vendor/api/index.php/auth";
 //const API_JSON = "http://localhost/iVRS-Vendor-Backend/ivrs-vendor/api/json";
 
 function getAxiosConfig() {

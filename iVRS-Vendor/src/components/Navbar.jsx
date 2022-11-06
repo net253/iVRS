@@ -100,7 +100,7 @@ export default function Simple() {
           </Flex>
           <Flex alignItems={"center"}>
             <HStack px="2rem">
-              <Link px="1rem" fontWeight={"semibold"}>
+              <Link px="1rem" fontWeight={"semibold"} to="/Home">
                 หน้าหลัก
               </Link>
               {/* <Link fontWeight={"semibold"}>ประวัติ</Link> */}

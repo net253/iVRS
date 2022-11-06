@@ -3,7 +3,7 @@ export { default as InputformDraft } from "./Inputformdraft";
 export { default as CompanyDraft } from "./CompanyDraft";
 export { default as ContractDraft } from "./ContactDraft";
 export { default as StatdardDraft } from "./StandardDraft";
-export { default as ActionpolicyDraft } from "./ActionpolicyDraft";
+export { default as ActionpolicyDraft } from "./ActionPolicyDraft";
 export { default as HeaderpayDraft } from "./HeaderpayDraft";
 export { default as AccountDraft } from "./AccountDraft";
 export { default as UploadDraft } from "./UploadDraft";

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   GridItem,
   Text,
@@ -9,23 +9,12 @@ import {
   Flex,
   Icon,
 } from "@chakra-ui/react";
-import useFormDetail from "../../store/forminput/forminput";
-import { fetchmonetary } from "../../services/feth-api";
+import useDraftEdit from "../../store/DrafStore/DraftEdit";
 import { FaExclamationCircle, FaCheckCircle } from "react-icons/fa";
 
 const paycomponentsDraft = () => {
-  const { getMonetaryPolicy, FormDetail, updateMonetaryPolicy } =
-    useFormDetail();
-  const { MonetaryPolicy } = FormDetail;
-  const getMonetaryPolicylist = () => {
-    fetchmonetary().then((data) => {
-      getMonetaryPolicy(data);
-    });
-  };
-
-  useEffect(() => {
-    getMonetaryPolicylist();
-  }, []);
+  const { draftEdit, updateMonetaryPolicy } = useDraftEdit();
+  const { MonetaryPolicy } = draftEdit;
   return (
     <>
       <Grid

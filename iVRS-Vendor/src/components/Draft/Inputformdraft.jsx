@@ -11,8 +11,10 @@ import {
 import Swal from "sweetalert2";
 import { fetchcompanylist } from "../../services/feth-api";
 import { useStoreCompanylist } from "../../store";
-import useFormDetail from "../../store/forminput/forminput";
+import useDraftEdit from "../../store/DrafStore/DraftEdit";
 import { FaExclamationCircle, FaCheckCircle } from "react-icons/fa";
+import shallow from "zustand/shallow";
+//import useDraftEdit from "../../store/DrafStore/DraftEdit";
 
 const buttonText = [
   {
@@ -35,10 +37,23 @@ const mapText = [
 ];
 
 export default function InputFormDraft() {
-  const { companylist, updateCompanylist } = useStoreCompanylist();
-  const { updateCompany, FormDetail } = useFormDetail();
-  const { CompanyAdmin } = FormDetail;
-  console.log(companylist);
+  const { companylist, updateCompanylist } = useStoreCompanylist(
+    (state) => ({
+      companylist: state.companylist,
+      updateCompanylist: state.updateCompanylist,
+    }),
+    shallow
+  );
+
+  const { draftEdit, updateCompanyAdmin } = useDraftEdit(
+    (state) => ({
+      draftEdit: state.draftEdit,
+      updateCompanyAdmin: state.updateCompanyAdmin,
+    }),
+    shallow
+  );
+
+  const { CompanyAdmin } = draftEdit;
   const getPdf = () => {
     Swal.fire({
       title: `<p class="font-thai">กำลังค้นหาข้อมูล </p><span>(Searching information)</span>`,
@@ -59,7 +74,7 @@ export default function InputFormDraft() {
 
   const onChangeCompany = (e) => {
     const { value } = e.target;
-    updateCompany(value);
+    updateCompanyAdmin(value);
   };
 
   //fechh companylist
@@ -116,6 +131,7 @@ export default function InputFormDraft() {
             placeholder="Select the company you want to register."
             fontSize={"sm"}
             onChange={onChangeCompany}
+            defaultValue={CompanyAdmin}
           >
             {companylist?.map((info, i) => (
               <option key={i} value={info.Company}>

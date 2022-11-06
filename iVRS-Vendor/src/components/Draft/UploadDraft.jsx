@@ -18,9 +18,10 @@ import {
 import { TiTimes, TiMediaPlay } from "react-icons/ti";
 import Swal from "sweetalert2";
 //import { convertPdfToBase64 } from "../../libs/Base64";
-import useFormDetail from "../../store/forminput/forminput";
+import useDraftEdit from "../../store/DrafStore/DraftEdit";
 import { fetchuploadform } from "../../services/feth-api";
 import { validatevendorRegister } from "../Validateupload";
+import shallow from "zustand/shallow";
 
 const textOption = [
   {
@@ -62,8 +63,13 @@ const textOption = [
 
 export default function UploadDraft() {
   const [accept, setAccept] = useState(false);
-  const { updatepdfDoc, FormDetail } = useFormDetail();
-  console.log(accept);
+  const { updatepdfDoc, DraftEdit } = useDraftEdit(
+    (state) => ({
+      updatepdfDoc: state.updatepdfDoc,
+      DraftEdit: state.DraftEdit,
+    }),
+    shallow
+  );
   const navigate = useNavigate();
   const [time, setTime] = useState("");
 
@@ -100,58 +106,66 @@ export default function UploadDraft() {
       confirmButtonColor: "red",
     }).then((result) => {
       if (result.isConfirmed) {
-        navigate("/");
+        navigate("/Home");
       }
     });
   };
 
   const handleNext = () => {
-    const { isValid, error } = validatevendorRegister(FormDetail);
-    if (!isValid) {
-      Swal.fire({
-        icon: "error",
-        title: `<p class="font-sweetalert" >${error}</p>`,
-        confirmButtonText: `<p>ตกลง</span></p>`,
-      });
+    if (check) {
+      const { isValid, error } = validatevendorRegister(DraftEdit);
+      if (!isValid) {
+        Swal.fire({
+          icon: "error",
+          title: `<p class="font-sweetalert" >${error}</p>`,
+          confirmButtonText: `<p>ตกลง</span></p>`,
+        });
+      } else {
+        Swal.fire({
+          icon: "warning",
+          title: `<p class="font-sweetalert">ยืนยันการลงทะเบียนใช่หรือไม่?  <br /> <span>Confirm registration?</span></p>`,
+          showCancelButton: true,
+          confirmButtonText: `<p class="font-sweetalert">ใช่ / <span>Yes</span></p>`,
+          cancelButtonText: `<p class="font-sweetalert">ไม่ใช่ / <span>No</span></p>`,
+          confirmButtonColor: "green",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            //sweealert loading here
+            Swal.fire({
+              title: `<p class="font-sweetalert">กำลังลงทะเบียน <br /> <span>
+            Registering</span></p>`,
+              didOpen: () => {
+                Swal.showLoading();
+              },
+            });
+            fetchuploadform(DraftEdit).then((data) => {
+              if (data.state) {
+                Swal.fire({
+                  icon: "success",
+                  title: `<p class="font-sweetalert">ลงทะเบียนสำเร็จ <br /> <span>
+                Successful registration</span></p>`,
+                  isConfirmed: false,
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    //navigate("/Home");
+                  }
+                });
+              } else {
+                Swal.fire({
+                  icon: "error",
+                  title: `<p class="font-sweetalert">ลงทะเบียนไม่สำเร็จ <br /> <span>
+                Failed to register</span></p>`,
+                });
+              }
+            });
+          }
+        });
+      }
     } else {
       Swal.fire({
-        icon: "warning",
-        title: `<p class="font-sweetalert">ยืนยันการลงทะเบียนใช่หรือไม่?  <br /> <span>Confirm registration?</span></p>`,
-        showCancelButton: true,
-        confirmButtonText: `<p class="font-sweetalert">ใช่ / <span>Yes</span></p>`,
-        cancelButtonText: `<p class="font-sweetalert">ไม่ใช่ / <span>No</span></p>`,
-        confirmButtonColor: "green",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          //sweealert loading here
-          Swal.fire({
-            title: `<p class="font-sweetalert">กำลังลงทะเบียน <br /> <span>
-            Registering</span></p>`,
-            didOpen: () => {
-              Swal.showLoading();
-            },
-          });
-          fetchuploadform(FormDetail).then((data) => {
-            if (data.state) {
-              Swal.fire({
-                icon: "success",
-                title: `<p class="font-sweetalert">ลงทะเบียนสำเร็จ <br /> <span>
-                Successful registration</span></p>`,
-                isConfirmed: false,
-              }).then((result) => {
-                if (result.isConfirmed) {
-                  //navigate("/Home");
-                }
-              });
-            } else {
-              Swal.fire({
-                icon: "error",
-                title: `<p class="font-sweetalert">ลงทะเบียนไม่สำเร็จ <br /> <span>
-                Failed to register</span></p>`,
-              });
-            }
-          });
-        }
+        icon: "error",
+        title: `<p class="font-sweetalert">กรุณายอมรับข้อตกลง <br /> <span>
+        Please accept the terms and conditions</span></p>`,
       });
     }
   };
