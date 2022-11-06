@@ -1,1 +1,1 @@
-export { default as Resetpassword } from "./Resetpassword";
+export { default as ResetpasswordModal } from "./Resetpassword";

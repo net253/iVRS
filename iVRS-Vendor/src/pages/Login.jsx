@@ -12,7 +12,7 @@ import {
   Button,
   Text,
   Flex,
-  useDisclosure,
+  // useDisclosure,
 } from "@chakra-ui/react";
 import bg from "../assets/image/bg.png";
 import { FaUserAlt, FaLock } from "react-icons/fa";
@@ -21,7 +21,7 @@ import Swal from "sweetalert2";
 import { useLogin } from "../store/Login/useLogin";
 import { fetchlogin } from "../services/feth-api";
 import { toastMixin } from "../libs/swalCustom";
-import { Resetpassword } from "../components/modal";
+//import { Resetpassword } from "../components/modal";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -32,11 +32,11 @@ const Login = () => {
     updateLoginDetail(name, value);
   };
 
-  const {
-    isOpen: isOpenModalReset,
-    onClose: onCloseModalReset,
-    onOpen: onOpenModalReset,
-  } = useDisclosure();
+  // const {
+  //   isOpen: isOpenModalReset,
+  //   onClose: onCloseModalReset,
+  //   onOpen: onOpenModalReset,
+  // } = useDisclosure();
 
   const handleLogin = () => {
     if (LoginDetail.Username === "" || LoginDetail.Password === "") {
@@ -142,9 +142,9 @@ const Login = () => {
             <Text
               fontSize={"12px"}
               className={"cursor"}
-              onClick={() => {
-                onOpenModalReset();
-              }}
+              // onClick={() => {
+              //   onOpenModalReset();
+              // }}
             >
               ลืมรหัสผ่าน?
             </Text>
@@ -171,7 +171,7 @@ const Login = () => {
         </Box>
       </Center>
 
-      <Resetpassword isOpen={isOpenModalReset} onClose={onCloseModalReset} />
+      {/* <Resetpassword isOpen={isOpenModalReset} onClose={onCloseModalReset} /> */}
     </>
   );
 };

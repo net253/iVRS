@@ -117,13 +117,12 @@ export async function fetchmonetary() {
     return data;
   } catch (error) {
     console.error(error);
-    return { state: true, msg: "Something went wrong" };
+    return { state: false, msg: "Something went wrong" };
   }
 }
 
 export async function fetchuploadform(reqData) {
   console.log(JSON.stringify(reqData));
-  console.log(reqData);
   try {
     const { data } = await axios.post(
       API + "/vendor/save-form-register",
@@ -148,7 +147,7 @@ export async function fetchdocumentlistpending() {
     return data;
   } catch (error) {
     console.error(error);
-    return { state: true, msg: "Something went wrong" };
+    return { state: false, msg: "Something went wrong" };
   }
 }
 
@@ -162,6 +161,22 @@ export async function fetchdocumentlistdraft() {
     return data;
   } catch (error) {
     console.error(error);
-    return { state: true, msg: "Something went wrong" };
+    return { state: false, msg: "Something went wrong" };
+  }
+}
+
+export async function fetchResetPassword(reqData) {
+  console.log(reqData);
+  if (!window.localStorage.isLoggedIn) return;
+  try {
+    const { data } = await axios.post(
+      API_AUTH + "/change-password",
+      reqData,
+      getAxiosConfig()
+    );
+    return data;
+  } catch (error) {
+    console.error(error);
+    return { state: false, msg: "Something went wrong" };
   }
 }

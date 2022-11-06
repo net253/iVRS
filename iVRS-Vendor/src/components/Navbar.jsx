@@ -18,7 +18,7 @@ import { BsChevronDown } from "react-icons/bs";
 import logo from "../assets/image/logo.png";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import { Resetpassword } from "./modal";
+import { ResetpasswordModal } from "./modal";
 
 export default function Simple() {
   const {
@@ -134,7 +134,7 @@ export default function Simple() {
           </Flex>
         </Flex>
       </Box>
-      <Resetpassword
+      <ResetpasswordModal
         isOpen={isOpenResetpassword}
         onOpen={onOpenResetpassword}
         onClose={onCloseResetpassword}
