@@ -95,7 +95,7 @@ export default function Simple() {
               fontSize={{ base: "5px", xl: "5px", sm: "5px", md: "5px" }}
             >
               {" "}
-              บริษัท เอส เอ็น ซี ฟอร์เมอร์ จำกัด (มหาชน) และบริษัทในเครือ
+              บมจ. เอส เอ็น ซี ฟอร์เมอร์ และบริษัทในเครือฯ
             </Box>
           </Flex>
           <Flex alignItems={"center"}>

@@ -61,6 +61,7 @@ const initailState = {
 const useFormInput = create(
   devtools((set) => ({
     FormDetail: initailState,
+    ResetForm: () => set({ FormDetail: initailState }),
     updateFormDetail: (key, value) =>
       set((state) => ({
         FormDetail: { ...state.FormDetail, [key]: value },
@@ -109,6 +110,14 @@ const useFormInput = create(
         FormDetail: {
           ...state.FormDetail,
           IsDraft: value,
+          isNewDoc: value,
+        },
+      })),
+    updateRegister: (value) =>
+      set((state) => ({
+        FormDetail: {
+          ...state.FormDetail,
+          IsDraft: !value,
           isNewDoc: value,
         },
       })),

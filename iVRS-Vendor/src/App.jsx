@@ -16,7 +16,7 @@ function App() {
     <>
       <AnimatePresence exitBeforeEnter>
         <Routes location={location} key={location.pathname}>
-          <Route path="/" element={<ContentWrapper content={Loginpages} />} />
+          <Route path="/" element={<Loginpages />} />
           <Route
             path="/Register"
             element={<ContentWrapper content={Registerpages} />}

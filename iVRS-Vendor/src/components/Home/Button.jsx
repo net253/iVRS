@@ -2,12 +2,18 @@ import React from "react";
 import { Button, Flex } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import useFromDetail from "../../store/forminput/forminput";
+import shallow from "zustand/shallow";
 
 const Buttoncomponents = () => {
-  const { updateisDraft } = useFromDetail();
+  const { updateRegister } = useFromDetail(
+    (state) => ({
+      updateRegister: state.updateRegister,
+    }),
+    shallow
+  );
   const navigate = useNavigate();
   function onClickisNewDocument() {
-    updateisDraft(true);
+    updateRegister(true);
     navigate("/Vendor");
   }
 

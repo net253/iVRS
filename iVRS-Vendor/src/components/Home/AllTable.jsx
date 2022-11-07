@@ -9,7 +9,6 @@ import {
   TableContainer,
   Text,
   Box,
-  Button,
 } from "@chakra-ui/react";
 import { Loadinglottie } from "../lottie";
 import useDoclist from "../../store/Doclist/Doclist";
@@ -50,8 +49,6 @@ const AllTable = ({ onChangeSearch }) => {
     }
   }
 
-  console.log("draftEdit", draftEdit);
-
   function Searchfilter(info) {
     console.log(onChangeSearch);
     return (
@@ -70,85 +67,94 @@ const AllTable = ({ onChangeSearch }) => {
   useEffect(() => {
     fetchFormDraft();
     const initpage = setInterval(() => {
-      //fetchFormDraft();
-    }, 3000);
+      fetchFormDraft();
+    }, 30000);
     return () => clearInterval(initpage);
   }, []);
-  return (
-    <>
-      <Box h="65vh">
-        <TableContainer overflowX="auto" overflowY="auto" h="100%">
-          <Table variant="simple" size={"sm"} position={"relative"}>
-            {/* lock Thead no scolling */}
-            <Thead fontSize={"md"} position="sticky" top={0} zIndex={1}>
-              <Tr color={"black"} bg="gray.100" h="2rem">
-                <Th fontSize={"sm"} w="3rem" color={"black"}>
-                  ลำดับ
-                </Th>
-                <Th fontSize={"sm"} w="5rem" color={"black"}>
-                  หมายเลขเอกสาร
-                </Th>
-                <Th fontSize={"sm"} w="60rem" color={"black"}>
-                  บริษัทที่ขึ้นทะเบียน
-                </Th>
-                <Th fontSize={"sm"} w="5rem" color={"black"}>
-                  วันที่ทำรายการ
-                </Th>
-                <Th fontSize={"sm"} w="max-content" color={"black"}>
-                  สถานะการทำรายการ
-                </Th>
-                <Th fontSize={"sm"} w="max-content" color={"black"}>
-                  เพิ่มเติม
-                </Th>
-              </Tr>
-            </Thead>
-            <Tbody fontSize={"sm"}>
-              {!Doclist?.length ? (
-                <Tr>
-                  <Th colSpan={6}>
-                    <Loadinglottie />
+
+  if (Doclist == undefined) {
+    return (
+      <Box
+        display="grid"
+        placeItems="center"
+        height="90vh"
+        width="99vw"
+        alignItems="center"
+      >
+        <Loadinglottie />
+      </Box>
+    );
+  } else {
+    return (
+      <>
+        <Box h="65vh">
+          <TableContainer overflowX="auto" overflowY="auto" h="100%">
+            <Table variant="simple" size={"sm"} position={"relative"}>
+              <Thead fontSize={"md"} position="sticky" top={0} zIndex={1}>
+                <Tr color={"black"} bg="gray.100" h="2rem">
+                  <Th fontSize={"sm"} w="3rem" color={"black"}>
+                    ลำดับ
+                  </Th>
+                  <Th fontSize={"sm"} w="5rem" color={"black"}>
+                    หมายเลขเอกสาร
+                  </Th>
+                  <Th fontSize={"sm"} w="60rem" color={"black"}>
+                    บริษัทที่ขึ้นทะเบียน
+                  </Th>
+                  <Th fontSize={"sm"} w="5rem" color={"black"}>
+                    วันที่ทำรายการ
+                  </Th>
+                  <Th fontSize={"sm"} w="max-content" color={"black"}>
+                    สถานะการทำรายการ
+                  </Th>
+                  <Th fontSize={"sm"} w="max-content" color={"black"}>
+                    เพิ่มเติม
                   </Th>
                 </Tr>
-              ) : (
-                Doclist?.filter(Searchfilter)?.map((info, i) => (
-                  <Tr key={i} cursor={"pointer"}>
-                    <Td fontSize={"sm"}>{i + 1}</Td>
-                    <Td fontSize={"sm"}>
-                      <Text fontSize={"sm"}>{info?.DocNo}</Text>
-                    </Td>
-                    <Td fontSize={"sm"}>
-                      {info?.CompanyAdmin}&nbsp;
-                      {info?.CompanyFullName}
-                    </Td>
-                    <Td fontSize={"sm"}>{info?.SaveDatetime}</Td>
-                    <Td fontSize={"sm"}>
-                      <Text
-                        fontSize={"sm"}
-                        color={`${
-                          info?.Status == "pending" ? "orange" : "green"
-                        }`}
-                      >
-                        {info?.Status == "pending" && info.IsDraft
-                          ? "แบบร่าง"
-                          : "รอการพิจารณา"}
-                      </Text>
-                    </Td>
-                    <Td>
-                      <Button>
-                        <Text fontSize={"sm"} onClick={() => onClickEdit(info)}>
+              </Thead>
+              <Tbody fontSize={"sm"}>
+                {Doclist &&
+                  Doclist?.filter(Searchfilter)?.map((info, i) => (
+                    <Tr key={i} cursor={"pointer"}>
+                      <Td fontSize={"sm"}>{i + 1}</Td>
+                      <Td fontSize={"sm"}>
+                        <Text fontSize={"sm"}>{info?.DocNo}</Text>
+                      </Td>
+                      <Td fontSize={"sm"}>
+                        {info?.CompanyAdmin}&nbsp;
+                        {info?.CompanyFullName}
+                      </Td>
+                      <Td fontSize={"sm"}>{info?.SaveDatetime}</Td>
+                      <Td fontSize={"sm"}>
+                        <Text
+                          fontSize={"sm"}
+                          color={`${
+                            info?.Status == "pending" ? "orange" : "green"
+                          }`}
+                        >
+                          {info?.Status == "pending" && info.IsDraft
+                            ? "แบบร่าง"
+                            : "รอการพิจารณา"}
+                        </Text>
+                      </Td>
+                      <Td>
+                        <Text
+                          fontSize={"sm"}
+                          color={"blue.500"}
+                          onClick={() => onClickEdit(info)}
+                        >
                           แก้ไข
                         </Text>
-                      </Button>
-                    </Td>
-                  </Tr>
-                ))
-              )}
-            </Tbody>
-          </Table>
-        </TableContainer>
-      </Box>
-    </>
-  );
+                      </Td>
+                    </Tr>
+                  ))}
+              </Tbody>
+            </Table>
+          </TableContainer>
+        </Box>
+      </>
+    );
+  }
 };
 
 export default AllTable;

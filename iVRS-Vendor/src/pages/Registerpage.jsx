@@ -18,7 +18,7 @@ import bg from "../assets/image/bg.png";
 import { FaUserAlt, FaLock } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
+//import Swal from "sweetalert2";
 import { useRegister } from "../store/Register";
 import { FaExclamationCircle, FaCheckCircle } from "react-icons/fa";
 import { fetchregister } from "../services/feth-api";
@@ -46,33 +46,33 @@ const Registerpage = () => {
       RegisterDetail.Name === "" ||
       RegisterDetail.Username === ""
     ) {
-      Swal.fire({
+      toastMixin.fire({
         icon: "error",
-        title: "Oops...",
+        title: "กรุณากรอกข้อมูลให้ครบ",
         text: "กรุณากรอกข้อมูลให้ครบถ้วน",
       });
     } else if (!validateEmail(RegisterDetail.Email)) {
-      Swal.fire({
+      toastMixin.fire({
         icon: "error",
-        title: "Oops...",
+        title: "กรุณากรอกอีเมลให้ถูกต้อง",
         text: "รูปแบบอีเมล์ไม่ถูกต้อง",
       });
     } else if (!validatePassword(RegisterDetail.Password)) {
-      Swal.fire({
+      toastMixin.fire({
         icon: "error",
-        title: "Oops...",
+        title: "กรุณากรอกรหัสผ่านให้ถูกต้อง",
         text: "รูปแบบรหัสผ่านไม่ถูกต้อง",
       });
     } else if (!validateNameThaiAndEnglish(RegisterDetail.Name)) {
-      Swal.fire({
+      toastMixin.fire({
         icon: "error",
-        title: "Oops...",
+        title: "กรุณากรอกชื่อ-นามสกุลให้ถูกต้อง",
         text: "รูปแบบชื่อไม่ถูกต้อง",
       });
     } else if (!validateUsername(RegisterDetail.Username)) {
-      Swal.fire({
+      toastMixin.fire({
         icon: "error",
-        title: "Oops...",
+        title: "กรุณากรอกชื่อผู้ใช้ให้ถูกต้อง",
         text: "รูปแบบชื่อผู้ใช้ไม่ถูกต้อง",
       });
     } else {
@@ -92,9 +92,8 @@ const Registerpage = () => {
             });
           navigate("/");
         } else {
-          Swal.fire({
+          toastMixin.fire({
             icon: "error",
-            title: "Oops...",
             text: "มีบางอย่างผิดพลาด",
           });
         }
@@ -130,6 +129,11 @@ const Registerpage = () => {
 
           <FormControl my={3}>
             <FormLabel>ชื่อ-นามสกุล (Name)</FormLabel>
+            <Text>
+              <Text ml={2} fontSize="10px" color={"black"}>
+                หมายเหตุ: กรุณากรอกชื่อ-นามสกุลภาษาไทยหรือภาษาอังกฤษเท่านั้น
+              </Text>
+            </Text>
             <InputGroup>
               <InputLeftElement pointerEvents="none">
                 <Icon as={FaUserAlt} color="gray.300" />
@@ -155,6 +159,11 @@ const Registerpage = () => {
 
           <FormControl my={3}>
             <FormLabel>ชื่อผู้ใช้ (Username)</FormLabel>
+            <Text>
+              <Text ml={2} fontSize="10px" color={"black"}>
+                หมายเหตุ: กรุณากรอกชื่อผู้ใช้เป็นภาษาอังกฤษเท่านั้น
+              </Text>
+            </Text>
             <InputGroup>
               <InputLeftElement pointerEvents="none">
                 <Icon as={FaUserAlt} color="gray.300" />
@@ -180,8 +189,8 @@ const Registerpage = () => {
           <FormControl my={3}>
             <FormLabel>Email (@gmail.com)</FormLabel>
             <Text>
-              <Text ml={2} fontSize="10px" color={"red"}>
-                หมายเหตุ: กรุณาใช้อีเมล์ที่ใช้งานจริง เพื่อใช้ในการรับรหัสผ่าน
+              <Text ml={2} fontSize="10px" color={"black"}>
+                หมายเหตุ: กรุณาใช้อีเมลที่ใช้งานจริง เพื่อใช้ในการรับรหัสผ่าน
               </Text>
             </Text>
             <InputGroup>
@@ -208,7 +217,7 @@ const Registerpage = () => {
 
           <FormControl my={3}>
             <FormLabel>รหัสผ่าน (Password)</FormLabel>
-            <Text color={"red"} fontSize={"10px"}>
+            <Text color={"black"} fontSize={"10px"}>
               หมายเหตุ: รหัสผ่านต้องมีอย่างน้อย 8 ตัว และมีตัวอักษรและตัวเลข
             </Text>
             <InputGroup>

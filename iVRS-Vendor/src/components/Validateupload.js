@@ -275,10 +275,10 @@ export const validatevendorDraft = ({
     error = "กรุณากรอกเบอร์แฟกซ์";
     isValid = false;
   } else if (!validateNameThaiAndEnglish(SaleName)) {
-    error = "กรุณากรอกชื่อผู้ขาย";
+    error = "กรุณาข้อมูลบุคคลติดต่อให้ครบถ้วน";
     isValid = false;
   } else if (!validateEmail(SaleEmail)) {
-    error = "กรุณากรอกอีเมลผู้ขาย";
+    error = "กรุณาข้อมูลบุคคลติดต่อให้ครบถ้วน";
     isValid = false;
   } else if (
     (!validatePhone(SaleTel) && SaleTel.length < 10) ||
@@ -288,10 +288,10 @@ export const validatevendorDraft = ({
       "กรุณากรอกเบอร์โทรงานขาย หรือ รูปแบบเบอร์โทรงานขายไม่ถูกต้อง หรือ ไม่ตรงกัน";
     isValid = false;
   } else if (!validateNameThaiAndEnglish(SaleManagerName)) {
-    error = "กรุณากรอกชื่อผู้จัดการขาย";
+    error = "กรุณาข้อมูลบุคคลติดต่อให้ครบถ้วน";
     isValid = false;
   } else if (!validateEmail(SaleManagerEmail)) {
-    error = "กรุณากรอกอีเมลผู้จัดการขาย";
+    error = "กรุณาข้อมูลบุคคลติดต่อให้ครบถ้วน";
     isValid = false;
   } else if (
     !validatePhone(SaleManagerTel) ||
@@ -302,7 +302,7 @@ export const validatevendorDraft = ({
       "กรุณากรอกเบอร์โทรผู้จัดการขาย หรือ รูปแบบเบอร์โทรผู้จัดการขายไม่ถูกต้อง หรือ ไม่ตรงกัน";
     isValid = false;
   } else if (!validateNameThaiAndEnglish(AccountName)) {
-    error = "กรุณากรอกชื่อผู้ติดต่อบัญชี";
+    error = "กรุณาข้อมูลบุคคลติดต่อให้ครบถ้วน";
     isValid = false;
   } else if (!validateNameThaiAndEnglish(AccountBankName)) {
     error = "กรุณากรอกชื่อธนาคาร";
@@ -336,3 +336,5 @@ export async function test(DraftEdit) {
   let isValid = true;
   return { isValid };
 }
+
+//create async function

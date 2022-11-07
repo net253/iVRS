@@ -2,13 +2,20 @@ import Lottie from "lottie-react";
 import loading from "./loading.json";
 import React from "react";
 
-const style = {
-  height: "57vh",
-  width: "100%",
-};
-
 const Loading = () => {
-  return <Lottie animationData={loading} style={style} />;
+  return (
+    <div
+      style={{
+        display: "grid",
+        placeItems: "center",
+        height: "83vh",
+        width: "99vw",
+        alignItems: "center",
+      }}
+    >
+      <Lottie animationData={loading} style={{ width: "100px" }} />
+    </div>
+  );
 };
 
 export default Loading;

@@ -8,6 +8,7 @@ import {
   Box,
   Flex,
   Icon,
+  Link,
 } from "@chakra-ui/react";
 import useFormDetail from "../../../store/forminput/forminput";
 import { fetchmonetary } from "../../../services/feth-api";
@@ -58,12 +59,32 @@ const paycomponents = () => {
           >
             <Flex>
               <Box w="30rem">
-                <Text>
-                  2.{i + 1}{" "}
-                  {info.label == "แจ้งระเบียบวางบิล รับเช็ค"
-                    ? "ศึกษารายละเอียดการวางบิล"
-                    : info.label}
-                </Text>
+                <Flex>
+                  <Text>
+                    2.{i + 1}{" "}
+                    {info.label == "แจ้งระเบียบวางบิล รับเช็ค"
+                      ? "ศึกษารายละเอียดการวางบิล"
+                      : info.label}
+                  </Text>
+                  &nbsp;
+                  <Link
+                    href="https://accounting.sncformer.com/index.php?login=n"
+                    color={"blue"}
+                  >
+                    {info.label == "แจ้งระเบียบวางบิล รับเช็ค"
+                      ? "(ที่นี่)"
+                      : ""}
+                  </Link>
+                  &nbsp;
+                  <Link
+                    href="https://snc-services.sncformer.com/ivrs/vendor/companyDocument/SCAN_BillDoc.pdf"
+                    color={"blue"}
+                  >
+                    {info.label == "แจ้งระเบียบวางบิล รับเช็ค"
+                      ? "(รายละเอียด)"
+                      : ""}
+                  </Link>
+                </Flex>
               </Box>
               <Grid colSpan={3} w="100%" px="10rem">
                 <RadioGroup

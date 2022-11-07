@@ -17,11 +17,11 @@ import {
 } from "@chakra-ui/react";
 import { TiTimes, TiMediaPlay } from "react-icons/ti";
 import Swal from "sweetalert2";
-//import { convertPdfToBase64 } from "../../libs/Base64";
 import useDraftEdit from "../../store/DrafStore/DraftEdit";
 import { fetchuploadform } from "../../services/feth-api";
 import { validatevendorRegister } from "../Validateupload";
 import shallow from "zustand/shallow";
+import sequenceFunc from "../../libs/sequenceFunc";
 
 const textOption = [
   {
@@ -63,10 +63,11 @@ const textOption = [
 
 export default function UploadDraft() {
   const [accept, setAccept] = useState(false);
-  const { updatepdfDoc, DraftEdit } = useDraftEdit(
+  const { updatepdfDoc, draftEdit, updateisDraft } = useDraftEdit(
     (state) => ({
       updatepdfDoc: state.updatepdfDoc,
-      DraftEdit: state.DraftEdit,
+      draftEdit: state.draftEdit,
+      updateisDraft: state.updateisDraft,
     }),
     shallow
   );
@@ -111,9 +112,10 @@ export default function UploadDraft() {
     });
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
+    await sequenceFunc(updateisDraft(false));
     if (check) {
-      const { isValid, error } = validatevendorRegister(DraftEdit);
+      const { isValid, error } = validatevendorRegister(draftEdit);
       if (!isValid) {
         Swal.fire({
           icon: "error",
@@ -130,7 +132,6 @@ export default function UploadDraft() {
           confirmButtonColor: "green",
         }).then((result) => {
           if (result.isConfirmed) {
-            //sweealert loading here
             Swal.fire({
               title: `<p class="font-sweetalert">กำลังลงทะเบียน <br /> <span>
             Registering</span></p>`,
@@ -138,17 +139,13 @@ export default function UploadDraft() {
                 Swal.showLoading();
               },
             });
-            fetchuploadform(DraftEdit).then((data) => {
+            fetchuploadform(draftEdit).then((data) => {
               if (data.state) {
                 Swal.fire({
                   icon: "success",
                   title: `<p class="font-sweetalert">ลงทะเบียนสำเร็จ <br /> <span>
                 Successful registration</span></p>`,
                   isConfirmed: false,
-                }).then((result) => {
-                  if (result.isConfirmed) {
-                    //navigate("/Home");
-                  }
                 });
               } else {
                 Swal.fire({
@@ -270,8 +267,8 @@ export default function UploadDraft() {
               py="2rem"
             >
               <Text className="font-thai" fontSize={"sm"} textAlign={"start"}>
-                เอกสารสำเนาทุกฉบับจะต้อง
-                ลงรายมือชื่อรับรองสำเนาถูกต้องโดยผู้มีอำนาจตามกฎหมาย
+                เอกสารสำเนาทุกฉบับ
+                จะต้องลงลายมือชื่อรับรองสำเนาถูกต้องโดยผู้มีอำนาจตามกฎหมาย
                 และประทับตราบริษัททุกครั้ง{" "}
                 <span>
                   (Certified true copy by legal authority person and affixed

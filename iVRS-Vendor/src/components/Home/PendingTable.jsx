@@ -12,20 +12,19 @@ import {
 } from "@chakra-ui/react";
 
 import useDoclist from "../../store/Doclist/Doclist";
-import { Loadinglottie } from "../lottie";
 import { fetchdocumentlistpending } from "../../services/feth-api";
 
 // create format date time for thai
-function formatDate(date) {
-  let options = {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "numeric",
-    minute: "numeric",
-  };
-  return new Date(date).toLocaleDateString("th-TH", options);
-}
+// function formatDate(date) {
+//   let options = {
+//     year: "numeric",
+//     month: "long",
+//     day: "numeric",
+//     hour: "numeric",
+//     minute: "numeric",
+//   };
+//   return new Date(date).toLocaleDateString("th-TH", options);
+// }
 
 const PendingTable = ({ onChangeSearch }) => {
   const { getDoclistPending, DoclistPending } = useDoclist();
@@ -54,7 +53,7 @@ const PendingTable = ({ onChangeSearch }) => {
   useEffect(() => {
     const initpage = setInterval(() => {
       fetchFormPending();
-    }, 3000);
+    }, 30000);
     return () => clearInterval(initpage);
   }, []);
   return (
@@ -80,43 +79,42 @@ const PendingTable = ({ onChangeSearch }) => {
                 <Th fontSize={"sm"} w="max-content" color={"black"}>
                   สถานะการทำรายการ
                 </Th>
-                <Th fontSize={"sm"} w="max-content" color={"black"}></Th>
+                <Th fontSize={"sm"} w="max-content" color={"black"}>
+                  เพิ่มเติม
+                </Th>
               </Tr>
             </Thead>
             <Tbody fontSize={"sm"}>
-              {!DoclistPending?.length ? (
-                <Tr>
-                  <Th colSpan={5}>
-                    <Loadinglottie />
-                  </Th>
+              {DoclistPending?.filter(Searchfilter)?.map((info, i) => (
+                <Tr key={i} _hover={{ bg: "gray.100" }} cursor={"pointer"}>
+                  <Td fontSize={"sm"}>{i + 1}</Td>
+                  <Td fontSize={"sm"}>
+                    <Text fontSize={"sm"}>{info?.DocNo}</Text>
+                  </Td>
+                  <Td fontSize={"sm"}>
+                    {info?.CompanyAdmin}&nbsp;
+                    {info?.CompanyFullName}
+                  </Td>
+                  <Td fontSize={"sm"}>{info?.SaveDatetime}</Td>
+                  <Td fontSize={"sm"}>
+                    <Text
+                      fontSize={"sm"}
+                      color={`${
+                        info?.Status == "pending" ? "orange" : "green"
+                      }`}
+                    >
+                      {info?.Status == "pending"
+                        ? "รอการพิจารณา"
+                        : "อนุมัติแล้ว"}
+                    </Text>
+                  </Td>
+                  <Td fontSize={"sm"}>
+                    <Text fontSize={"sm"} color={"blue.500"}>
+                      ดูรายละเอียด
+                    </Text>
+                  </Td>
                 </Tr>
-              ) : (
-                DoclistPending?.filter(Searchfilter)?.map((info, i) => (
-                  <Tr key={i} _hover={{ bg: "gray.100" }} cursor={"pointer"}>
-                    <Td fontSize={"sm"}>{i + 1}</Td>
-                    <Td fontSize={"sm"}>
-                      <Text fontSize={"sm"}>{info?.DocNo}</Text>
-                    </Td>
-                    <Td fontSize={"sm"}>
-                      {info?.CompanyAdmin}&nbsp;
-                      {info?.CompanyFullName}
-                    </Td>
-                    <Td fontSize={"sm"}>{formatDate(info?.SaveDatetime)}</Td>
-                    <Td fontSize={"sm"}>
-                      <Text
-                        fontSize={"sm"}
-                        color={`${
-                          info?.Status == "pending" ? "orange" : "green"
-                        }`}
-                      >
-                        {info?.Status == "pending"
-                          ? "รออนุมัติ"
-                          : "อนุมัติแล้ว"}
-                      </Text>
-                    </Td>
-                  </Tr>
-                ))
-              )}
+              ))}
             </Tbody>
           </Table>
         </TableContainer>

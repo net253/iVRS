@@ -19,7 +19,8 @@ const DraftButton = () => {
     shallow
   );
   const handledraft = () => {
-    updateisDraft(true);
+    updateisDraft(false);
+    console.log(draftEdit);
     const { isValid, error } = validatevendorDraft(draftEdit);
     if (!isValid) {
       Swal.fire({

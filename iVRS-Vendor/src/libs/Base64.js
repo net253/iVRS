@@ -38,7 +38,6 @@ export async function convertBase64ToImage(base64) {
   var linkSource = "data:image/jpeg;base64," + base64;
   var downloadLink = document.createElement("a");
   var fileName = "file.jpeg";
-
   downloadLink.href = linkSource;
   downloadLink.download = fileName;
   downloadLink.click();
@@ -74,4 +73,27 @@ export async function getBase64(file) {
     reader.onload = () => resolve(reader.result);
     reader.onerror = (error) => reject(error);
   });
+}
+
+//create function show Base64 PDF file
+export async function showBase64Pdf(base64) {
+  var linkSource = "data:application/pdf;base64," + base64;
+  var downloadLink = document.createElement("a");
+  var fileName = "file.pdf";
+
+  downloadLink.href = linkSource;
+  downloadLink.download = fileName;
+  downloadLink.click();
+}
+
+//create function show Base64 to pdf open in new tab
+export async function showBase64PdfNewTab(base64) {
+  var linkSource = "data:application/pdf;base64," + base64;
+  var downloadLink = document.createElement("a");
+  var fileName = "file.pdf";
+
+  downloadLink.href = linkSource;
+  downloadLink.download = fileName;
+  downloadLink.target = "_blank";
+  downloadLink.click();
 }

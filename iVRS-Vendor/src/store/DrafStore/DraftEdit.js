@@ -186,7 +186,7 @@ const useDraftEdit = create(
         draftEdit: {
           ...state.draftEdit,
           IsDraft: value,
-          isNewDoc: !value,
+          isNewDoc: value,
         },
       }));
     },

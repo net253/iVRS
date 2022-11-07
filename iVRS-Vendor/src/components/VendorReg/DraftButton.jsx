@@ -6,11 +6,22 @@ import Swal from "sweetalert2";
 import { fetchuploadform } from "../../services/feth-api";
 import { validatevendorRegister } from "../../components/Validateupload";
 import useFormDetail from "../../store/forminput/forminput";
-
+import shallow from "zustand/shallow";
+import sequenceFunc from "../../libs/sequenceFunc";
+import { useNavigate } from "react-router-dom";
 const DraftButton = () => {
-  const { FormDetail, updateisDraft } = useFormDetail();
-  const handledraft = () => {
-    updateisDraft(true);
+  const navigate = useNavigate();
+  const { FormDetail, updateisDraft, ResetForm } = useFormDetail(
+    (state) => ({
+      FormDetail: state.FormDetail,
+      updateisDraft: state.updateisDraft,
+      ResetForm: state.ResetForm,
+    }),
+    shallow
+  );
+  const handledraft = async () => {
+    await sequenceFunc(updateisDraft(true));
+    console.log("FormDetail", FormDetail);
     const { isValid, error } = validatevendorRegister(FormDetail);
     if (!isValid) {
       Swal.fire({
@@ -29,7 +40,7 @@ const DraftButton = () => {
       }).then((result) => {
         if (result.isConfirmed) {
           Swal.fire({
-            title: `<p class="font-thai">กำลังบันทึกแบบร่าง <br /> <span>Sending data</span></p>`,
+            title: `<p class="font-thai">กำลังบันทึกแบบร่าง<br /> <span>Sending data</span></p>`,
             didOpen: () => {
               Swal.showLoading();
             },
@@ -38,13 +49,16 @@ const DraftButton = () => {
             if (data.state) {
               Swal.fire({
                 icon: "success",
-                title: `<p class="font-thai">บันทึกแบบร่างสำเร็จ <br /> <span>Send data successfully</span></p>`,
+                title: `<p class="font-thai">${data.msg}<br /> <span>Send data successfully</span></p>`,
                 confirmButton: false,
+              }).then(() => {
+                ResetForm();
+                navigate("/Home");
               });
             } else {
               Swal.fire({
                 icon: "error",
-                title: `<p class="font-thai">บันทึกแบบร่างไม่สำเร็จ <br /> <span>Send data failed</span></p>`,
+                title: `<p class="font-thai">${data.msg}<br /> <span>Send data failed</span></p>`,
                 confirmButtonText: `<p class="font-thai">ตกลง / <span>OK</span></p>`,
               });
             }

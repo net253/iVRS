@@ -93,6 +93,9 @@ const Login = () => {
         >
           <Heading mb={5} textAlign="center" fontSize={"30px"}>
             iVRS Vendor Registation
+            <Text fontSize="sm" fontWeight="normal" pt="10px">
+              บมจ. เอส เอ็น ซี ฟอร์เมอร์ และบริษัทในเครือฯ
+            </Text>
           </Heading>
 
           <FormControl isRequired>
@@ -166,7 +169,7 @@ const Login = () => {
             rounded="full"
             onClick={handleLogin}
           >
-            เข้าสู่ระบบ(Login)
+            เข้าสู่ระบบ (Login)
           </Button>
         </Box>
       </Center>

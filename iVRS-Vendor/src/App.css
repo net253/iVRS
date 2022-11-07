@@ -47,5 +47,14 @@
   font-weight: bold;
 }
 .font-sweetalert {
-  font-size: 18px;
+  font-size: 18px !important;
+}
+
+.css-4g6ai3 {
+  height: 10px !important;
+}
+
+.chakra-button css-xhkace {
+  height: 10px !important;
+  background-color: aquamarine !important;
 }

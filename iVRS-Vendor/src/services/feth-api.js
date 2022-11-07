@@ -79,7 +79,7 @@ export async function fetchcertificate() {
 export async function fetchregister(reqData) {
   console.log(reqData);
   try {
-    const { data } = await axios.post(API + "/register", reqData);
+    const { data } = await axios.post(API_AUTH + "/register", reqData);
     return data;
   } catch (error) {
     console.log(error);
@@ -100,7 +100,9 @@ export async function fetchlogin(reqData) {
 export async function fetchcompanylist() {
   if (!window.localStorage.isLoggedIn) return;
   try {
-    const { data } = await axios.get(API + "/vendor/company", getAxiosConfig());
+    const { data } = await axios.get(
+      "https://snc-services.sncformer.com/ivrs/admin/api/index.php/json/company-list"
+    );
     return data;
   } catch (error) {
     console.error(error);
@@ -122,6 +124,7 @@ export async function fetchmonetary() {
 }
 
 export async function fetchuploadform(reqData) {
+  console.log(reqData);
   console.log(JSON.stringify(reqData));
   try {
     const { data } = await axios.post(

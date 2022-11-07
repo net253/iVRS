@@ -21,15 +21,17 @@ import Swal from "sweetalert2";
 import useFormDetail from "../../store/forminput/forminput";
 import { fetchuploadform } from "../../services/feth-api";
 import { validatevendorRegister } from "../Validateupload";
+import shallow from "zustand/shallow";
+import sequenceFunc from "../../libs/sequenceFunc";
 
 const textOption = [
   {
-    thai: "หมายเหตุ: สำเนา ภพ.20",
+    thai: "สำเนา ภพ.20",
     eng: "Copy of Vat License",
     value: "VatLicenseBase64",
   },
   {
-    thai: "หมายเหตุ: สำเนาหนังสือรับรองบริษัทฉบับล่าสุด",
+    thai: "สำเนาหนังสือรับรองบริษัทฉบับล่าสุด",
     eng: "Copy of Lasted Company Affidavit",
     value: "AffidavitBase64",
   },
@@ -39,22 +41,22 @@ const textOption = [
     value: "MapBase64",
   },
   {
-    thai: "หมายเหตุ: สำเนาหน้าบัญชีธนาคาร",
+    thai: "สำเนาหน้าบัญชีธนาคาร",
     eng: "Copy of Book Bank",
     value: "BookBankBase64",
   },
   {
-    thai: "หมายเหตุ: สำเนากรรมการผู้จัดการ",
+    thai: "สำเนากรรมการผู้จัดการ",
     eng: "Copy of Managing Director",
     value: "BookMDBase64",
   },
   {
-    thai: "หมายเหตุ: สำเนาเอกสารงบการเงินย้อยหลัง 5 ปี",
+    thai: "สำเนาเอกสารงบการเงินย้อยหลัง 5 ปี",
     eng: "Copy of Lasted 5 Yrs. Financial Document",
     value: "FiStmtsBase64",
   },
   {
-    thai: "หมายเหตุ: เอกสารอื่นๆ (ถ้ามี)",
+    thai: "เอกสารอื่นๆ (ถ้ามี)",
     eng: "Other Document (if any)",
     value: "OtherBase64",
   },
@@ -62,8 +64,16 @@ const textOption = [
 
 export default function Upload() {
   const [accept, setAccept] = useState(false);
-  const { updatepdfDoc, FormDetail } = useFormDetail();
-  console.log(accept);
+
+  const { updatepdfDoc, FormDetail, updateRegister } = useFormDetail(
+    (state) => ({
+      updatepdfDoc: state.updatepdfDoc,
+      FormDetail: state.FormDetail,
+      updateRegister: state.updateRegister,
+    }),
+    shallow
+  );
+
   const navigate = useNavigate();
   const [time, setTime] = useState("");
 
@@ -105,7 +115,8 @@ export default function Upload() {
     });
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
+    await sequenceFunc(updateRegister(true));
     const { isValid, error } = validatevendorRegister(FormDetail);
     if (!isValid) {
       Swal.fire({
@@ -114,6 +125,7 @@ export default function Upload() {
         confirmButtonText: `<p>ตกลง</span></p>`,
       });
     } else {
+      console.log("FormDetail", FormDetail);
       Swal.fire({
         icon: "warning",
         title: `<p class="font-sweetalert">ยืนยันการลงทะเบียนใช่หรือไม่?  <br /> <span>Confirm registration?</span></p>`,
@@ -187,6 +199,7 @@ export default function Upload() {
       });
     } else {
       const base64 = await convertBase64(file);
+      console.log(base64);
       setUpload({ ...upload, [text]: base64 });
       updatepdfDoc(text, base64);
     }
@@ -204,6 +217,16 @@ export default function Upload() {
       };
     });
   };
+
+  // async function showBase64PdfNewTab(base64) {
+  //   var linkSource = base64;
+  //   var downloadLink = document.createElement("a");
+  //   var fileName = "file.pdf";
+  //   downloadLink.href = linkSource;
+  //   downloadLink.download = fileName;
+  //   downloadLink.click();
+  //   window.open(linkSource, "_blank");
+  // }
 
   useEffect(() => {
     getTime();
@@ -256,8 +279,8 @@ export default function Upload() {
               py="2rem"
             >
               <Text className="font-thai" fontSize={"sm"} textAlign={"start"}>
-                เอกสารสำเนาทุกฉบับจะต้อง
-                ลงรายมือชื่อรับรองสำเนาถูกต้องโดยผู้มีอำนาจตามกฎหมาย
+                เอกสารสำเนาทุกฉบับ
+                จะต้องลงลายมือชื่อรับรองสำเนาถูกต้องโดยผู้มีอำนาจตามกฎหมาย
                 และประทับตราบริษัททุกครั้ง{" "}
                 <span>
                   (Certified true copy by legal authority person and affixed
@@ -363,7 +386,7 @@ export default function Upload() {
           <Text py="2rem" textAlign={"start"}>
             <span className="customers">หมายเหตุ:</span> หลังจากที่ท่านกด
             &quot;ยืนยันการขึ้นทะเบียน&quot; เรียบร้อยแล้ว
-            ท่านสามารถติดตามผลการขึ้นทะเบียนได้จากสถานะเอกสารในหน้า{""}
+            ท่านสามารถติดตามผลการขึ้นทะเบียนได้จากสถานะเอกสารในหน้า
             <Link
               color={"blue"}
               onClick={() => {
@@ -371,8 +394,8 @@ export default function Upload() {
               }}
               target="_blank"
             >
-              Home Page
-            </Link>{" "}
+              &nbsp;หน้าหลัก&nbsp;
+            </Link>
             หรือทาง Email ที่ท่านแจ้งไว้
           </Text>
         </GridItem>
